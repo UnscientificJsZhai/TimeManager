@@ -1,0 +1,40 @@
+package cn.unscientificjszhai.timemanager.ui
+
+import android.content.Context
+import android.util.AttributeSet
+import android.view.ContextMenu
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
+
+class RecyclerViewWithContextMenu : RecyclerView {
+
+    class PositionMenuInfo : ContextMenu.ContextMenuInfo {
+
+        var position = -1
+    }
+
+    constructor(context: Context) : super(context)
+
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+
+    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(
+        context,
+        attrs,
+        defStyle
+    )
+
+    private val contextInfo = PositionMenuInfo()
+
+    override fun showContextMenuForChild(originalView: View, x: Float, y: Float): Boolean {
+        if (layoutManager != null) {
+            val position = layoutManager!!.getPosition(originalView)
+            this.contextInfo.position = position
+        }
+        return super.showContextMenuForChild(originalView, x, y)
+    }
+
+    override fun getContextMenuInfo(): ContextMenu.ContextMenuInfo {
+        return this.contextInfo
+    }
+
+}

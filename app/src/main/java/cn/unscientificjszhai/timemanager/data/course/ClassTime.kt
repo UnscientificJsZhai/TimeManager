@@ -1,0 +1,193 @@
+package cn.unscientificjszhai.timemanager.data.course
+
+import androidx.room.*
+import java.io.Serializable
+
+/**
+ * 课程时间。
+ *
+ * @param id 主键。
+ * @param courseId 外键。
+ * @param week 上课周数，位图存储，需要调用[getWeekData]和[setWeekData]方法来查改。
+ * @param whichDay 周几。0代表周日，6代表周六。
+ * @param start 从第几节课开始上。
+ * @param end 上到第几节课。
+ * @param teacherName 教师姓名。
+ * @param location 上课地点。
+ */
+@Entity(
+    tableName = ClassTime.TABLE_NAME,
+    foreignKeys = [ForeignKey(
+        entity = Course::class,
+        parentColumns = ["id"],
+        childColumns = ["course_id"],
+        onDelete = ForeignKey.CASCADE
+    )],
+    indices = [Index(value = ["course_id"])]
+)
+data class ClassTime(
+    @PrimaryKey(autoGenerate = true) var id: Long?,
+    @ColumnInfo(name = "course_id") var courseId: Long?,
+    var week: Int,
+    @ColumnInfo(name = "which_day") var whichDay: Int,
+    var start: Int,
+    var end: Int,
+    @ColumnInfo(name = "teacher_name") var teacherName: String,
+    var location: String
+) : Serializable {
+
+    companion object {
+        /**
+         * 表的名字。
+         */
+        const val TABLE_NAME = "time"
+
+        /**
+         * 周数的最大存储位数。
+         */
+        const val MAX_STORAGE_SIZE = 30
+    }
+
+    /**
+     * 创建一个新的对象的方法。
+     */
+    constructor() : this(
+        null,
+        null,
+        0,
+        0,
+        1,
+        2,
+        "",
+        ""
+    )
+
+    /**
+     * 从上一个对象处拷贝数据到新对象。不包括主键和外键。
+     *
+     * @param template 上一个对象。
+     */
+    constructor(template: ClassTime) : this(
+        null,
+        null,
+        template.week,
+        template.whichDay,
+        template.start,
+        template.end,
+        template.teacherName,
+        template.location
+    )
+
+    /**
+     * 指定Course的ID时创建新对象的方法
+     *
+     * @param courseId 目标Course对象的Id。
+     */
+    constructor(courseId: Long) : this(
+        null,
+        courseId,
+        0,
+        0,
+        1,
+        2,
+        "",
+        ""
+    )
+
+    /**
+     * 检查数据的合法性。新创建出来的对象的数据一定不合法，所以经过修改后的数据需要检查
+     * 以确定合法性。
+     *
+     * @return 是否合法。是则返回true，否则false
+     */
+    fun isLegitimacy(): Boolean {
+        if (this.whichDay > 6) return false
+        if (this.whichDay < 0) return false
+        if (this.start < 1) return false
+        return if (end < start) false else this.week != 0
+    }
+
+    /**
+     * 给周数设置数据的方法。
+     *
+     * @param weekNumber 第几周。
+     * @param set        是否选中。
+     * @throws IndexOutOfBoundsException 如果超过最大范围就会抛出此错误。
+     */
+    fun setWeekData(weekNumber: Int, set: Boolean) {
+        if (weekNumber < 1 || weekNumber > MAX_STORAGE_SIZE) {
+            throw IndexOutOfBoundsException()
+        }
+
+        val weekNumberToBit = 1 shl (weekNumber - 1)
+        if (set) {
+            this.week = this.week or weekNumberToBit
+        } else {
+            this.week = this.week and (weekNumberToBit.inv())
+        }
+    }
+
+    /**
+     * 获取数据的方法。
+     *
+     * @param weekNumber 第几周。
+     * @return 是否选中。
+     */
+    fun getWeekData(weekNumber: Int): Boolean {
+        if (weekNumber < 1 || weekNumber > MAX_STORAGE_SIZE) {
+            throw IndexOutOfBoundsException()
+        }
+
+        val weekNumberToBit = 1 shl (weekNumber - 1)
+        return (this.week and weekNumberToBit) != 0
+    }
+
+    /**
+     * 获取周数选择的描述字符串。
+     *
+     * @param template 模板，包含"%s"用于格式化。
+     * @param returnWhenEmpty 当没有选中任何一周时，返回的文字。
+     * @param rangeTo 最大范围，等于当前课程表定义的最大周数。
+     * @return 格式化后的周数描述字符串。
+     */
+    fun getWeekDescriptionString(template: String, returnWhenEmpty: String, rangeTo: Int) =
+        if (this.week == 0) {
+            returnWhenEmpty
+        } else {
+            val stringBuilder = StringBuilder()
+
+            var index = 1
+            do {
+                if (getWeekData(index)) {
+                    //如果非空则添加逗号分割
+                    if (stringBuilder.isNotBlank()) {
+                        stringBuilder.append(",")
+                    }
+
+                    //首先添加当前指向的周数
+                    stringBuilder.append(index.toString())
+                    //二级循环查找连续的值
+                    if (index < rangeTo) {
+                        for (subIndex in index + 1..rangeTo) {
+                            if (!getWeekData(subIndex)) {
+                                if (subIndex > index + 1) {
+                                    stringBuilder.append("-${subIndex - 1}")
+                                }
+                                index = subIndex + 1
+                                break
+                            } else if (subIndex >= rangeTo) {
+                                stringBuilder.append("-${subIndex}")
+                                index = subIndex + 1
+                            }
+                        }
+                    } else if (index == rangeTo) {
+                        break
+                    }
+                } else {
+                    index += 1
+                }
+            } while (index <= rangeTo)
+
+            template.format(stringBuilder.toString())
+        }
+}

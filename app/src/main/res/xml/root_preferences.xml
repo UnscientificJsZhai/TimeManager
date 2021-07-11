@@ -1,0 +1,68 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/activity_Settings_CurrentCourseListTable">
+
+        <Preference
+            app:icon="@drawable/outline_description_24"
+            app:key="current"
+            app:title="@string/activity_Settings_CurrentCourseListTable">
+            <intent
+                android:targetClass="cn.unscientificjszhai.timemanager.ui.settings.CurrentTableSelectorActivity"
+                android:targetPackage="cn.unscientificjszhai.timemanager" />
+        </Preference>
+
+        <EditTextPreference
+            app:key="weeks"
+            app:title="@string/preferences_CurrentTable_HowManyWeeks" />
+
+        <EditTextPreference
+            app:key="classesPerDay"
+            app:title="@string/preferences_CurrentTable_ClassesPerDay" />
+
+        <Preference
+            android:icon="@drawable/outline_schedule_24"
+            app:key="time"
+            app:title="@string/preferences_CurrentTable_TimeTable">
+            <intent
+                android:targetClass="cn.unscientificjszhai.timemanager.ui.settings.TimeTableEditorActivity"
+                android:targetPackage="cn.unscientificjszhai.timemanager" />
+        </Preference>
+
+        <Preference
+            app:key="startDate"
+            app:title="@string/preferences_CurrentTable_StartDate" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/preferences_CalendarOption_CategoryTitle">
+
+        <Preference
+            android:icon="@drawable/outline_update_24"
+            android:title="@string/preferences_CalendarOption_UpdateCalendar"
+            app:key="createCalendar"
+            app:summary="@string/preferences_CalendarOption_UpdateCalendarSummary" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:isPreferenceVisible="false"
+        app:key="lab"
+        app:title="实验性">
+
+        <Preference
+            app:key="insert"
+            app:title="插入表" />
+
+        <Preference
+            app:key="insertAll"
+            app:title="全部插入" />
+
+        <Preference
+            app:key="deleteEvents"
+            app:title="删除事件" />
+
+        <Preference
+            app:key="deleteAll"
+            app:title="全部删除" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
