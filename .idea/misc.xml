@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/layout/activity_course_detail.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_current_table_selector.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/dialog_progress.xml" value="0.375" />
         <entry key="app/src/main/res/menu/context_current_table_selector_long_press.xml" value="0.2359375" />
         <entry key="app/src/main/res/menu/menu_course_edit_activity.xml" value="0.2359375" />
         <entry key="app/src/main/res/menu/menu_current_table_selector_activity.xml" value="0.2359375" />

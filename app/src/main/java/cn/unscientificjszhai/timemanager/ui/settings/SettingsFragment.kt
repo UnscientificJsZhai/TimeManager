@@ -4,6 +4,8 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -15,6 +17,7 @@ import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.providers.CalendarOperator
 import cn.unscientificjszhai.timemanager.providers.EventsOperator
+import cn.unscientificjszhai.timemanager.ui.ProgressDialog
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -185,7 +188,46 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
 
         this.updateCalendarPreference = findPreference(UPDATE_CALENDAR_KEY)
         updateCalendarPreference?.setOnPreferenceClickListener {
-            //TODO 更新日历逻辑
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.preferences_UpdateCalendar_DialogTitle)
+                .setMessage(R.string.preferences_UpdateCalendar_DialogMessage)
+                .setNegativeButton(R.string.common_cancel) { dialog, _ ->
+                    dialog.dismiss()
+                }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
+                    val progressDialog = ProgressDialog(requireActivity())
+                    progressDialog.show()
+                    thread(start = true) {
+                        //删除全部日历并重新创建。
+                        val courseTable = dataStore.nowCourseTable
+                        CalendarOperator.deleteCalendarTable(requireContext(), courseTable)
+                        CalendarOperator.createCalendarTable(requireContext(), courseTable)
+                        val application =
+                            requireContext().applicationContext as TimeManagerApplication
+                        val tableDao =
+                            application.getCourseTableDatabase().courseTableDao()
+                        tableDao.updateCourseTable(courseTable)
+                        val courseDao = application.getCourseDatabase().courseDao()
+                        courseDao.getCourses().run {
+                            for (courseWithClassTimes in this) {
+                                EventsOperator.addEvent(
+                                    requireContext(),
+                                    courseTable,
+                                    courseWithClassTimes
+                                )
+                                courseDao.updateCourse(courseWithClassTimes.course)
+                            }
+                        }
+
+                        //完成后关闭ProgressDialog。
+                        progressDialog.postDismiss()
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.preferences_UpdateCalendar_Complete,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    dialog.dismiss()
+                }.show()
             true
         }
     }

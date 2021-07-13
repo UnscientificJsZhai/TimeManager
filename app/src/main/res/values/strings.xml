@@ -6,6 +6,11 @@
     <string name="common_cancel">取消</string>
     <string name="common_settings">设置</string>
 
+    <string name="common_time_noon" translatable="false">上午</string>
+    <string name="common_time_afternoon" translatable="false">下午</string>
+
+    <string name="dialog_ProgressDialog_Message" translatable="false">处理中</string>
+
     <!-- 权限申请 -->
     <string name="activity_WelcomeActivity_AskPermissionTitle">需要权限</string>
     <string name="activity_WelcomeActivity_AskPermissionText">本App是将课程表直接导入到日历中，以系统日历事件的形式通知您上课信息的。请授予日历权限以使用本App。</string>
@@ -68,6 +73,10 @@
     <string name="preferences_CalendarOption_CategoryTitle">日历选项</string>
     <string name="preferences_CalendarOption_UpdateCalendar">更新日历</string>
     <string name="preferences_CalendarOption_UpdateCalendarSummary">将当前选中的课程表的内容更新到系统日历</string>
+    <string name="preferences_UpdateCalendar_DialogTitle" translatable="false">更新日历</string>
+    <string name="preferences_UpdateCalendar_DialogMessage" translatable="false">进行此操作将删除当前课程表的日历并重新创建，是否继续？</string>
+    <string name="preferences_UpdateCalendar_Processing" translatable="false">更新中……</string>
+    <string name="preferences_UpdateCalendar_Complete" translatable="false">更新完成</string>
 
     <string name="activity_CurrentTableSelector_TableNotFound">错误：找不到指定课程表</string>
     <string name="activity_CurrentTableSelector_AddTable">添加</string>

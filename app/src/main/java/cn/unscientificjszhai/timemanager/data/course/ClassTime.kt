@@ -1,6 +1,8 @@
 package cn.unscientificjszhai.timemanager.data.course
 
 import androidx.room.*
+import cn.unscientificjszhai.timemanager.data.tables.CourseTable
+import cn.unscientificjszhai.timemanager.data.tables.FormattedTime
 import java.io.Serializable
 
 /**
@@ -190,4 +192,15 @@ data class ClassTime(
 
             template.format(stringBuilder.toString())
         }
+
+    /**
+     * 获得表示这节课这个上课时段的FormattedTime对象。
+     *
+     * @param courseTable 课程表对象，用于参照。
+     * @return 合成的[FormattedTime]对象。
+     */
+    fun getFormattedTime(courseTable: CourseTable) = FormattedTime(
+        FormattedTime(courseTable.timeTable[this.start - 1]),
+        FormattedTime(courseTable.timeTable[this.end - 1])
+    )
 }

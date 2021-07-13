@@ -94,9 +94,10 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
             if (intent?.action == Intent.ACTION_TIME_TICK) {
                 //检测日期是否发生变化
                 val timeRightNow = Calendar.getInstance()
-                if (this.timeBeforeUpdate.get(Calendar.DAY_OF_YEAR) != timeRightNow.get(Calendar.DAY_OF_YEAR)) {
+                if (this.timeBeforeUpdate.get(Calendar.DAY_OF_YEAR) != timeRightNow.get(Calendar.DAY_OF_YEAR) ||
+                    this.timeBeforeUpdate.get(Calendar.YEAR) != timeRightNow.get(Calendar.YEAR)
+                ) {
                     if (context is MainActivity) {
-                        //TODO 日期更新时主Activity更新
                         //如果为只显示今天则更新数据集
                         bindData(viewModel.courseList.value ?: ArrayList())
                     }

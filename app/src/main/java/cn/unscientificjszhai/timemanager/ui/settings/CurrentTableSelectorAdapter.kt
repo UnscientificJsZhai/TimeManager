@@ -31,7 +31,6 @@ internal class CurrentTableSelectorAdapter(
 
         override fun areContentsTheSame(oldItem: CourseTable, newItem: CourseTable) =
             false
-        //todo 改掉全为否
     }
 
     inner class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {

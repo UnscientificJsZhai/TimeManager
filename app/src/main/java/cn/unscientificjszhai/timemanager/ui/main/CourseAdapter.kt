@@ -1,5 +1,7 @@
 package cn.unscientificjszhai.timemanager.ui.main
 
+import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,21 +10,25 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
+import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.course.Course
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
+import cn.unscientificjszhai.timemanager.data.tables.FormattedTime
 
 /**
  * 供主界面的RecyclerView使用的适配器。
  *
  * @see MainActivity
  */
-internal class CourseAdapter(activity: MainActivity) :
+internal class CourseAdapter(private val activity: MainActivity) :
     ListAdapter<CourseWithClassTimes, CourseAdapter.ViewHolder>(CourseDiffCallback) {
 
     /**
      * 当前时间的标记对象，委托给宿主Activity。
      */
     private val timeTagger by activity
+
+    private val courseTable by (activity.application as TimeManagerApplication)
 
     /**
      * 获取宿主Activity的状态，是否只显示今天。
@@ -43,7 +49,7 @@ internal class CourseAdapter(activity: MainActivity) :
         override fun areContentsTheSame(
             oldItem: CourseWithClassTimes,
             newItem: CourseWithClassTimes
-        ) = oldItem == newItem
+        ) = false
     }
 
     inner class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
@@ -75,7 +81,74 @@ internal class CourseAdapter(activity: MainActivity) :
     }
 
     private fun generateInformation(course: Course): String {
-        //TODO 格式化信息文本
-        return "${course.credit}学分"
+        val stringBuilder = StringBuilder()
+
+        if (showTodayOnly()) {
+            if (course.specificClassTime == null) {
+                //异常情况，如果设置为只显示今天的话所有的course对象中的这个成员都不是null。
+                stringBuilder.append("error")
+            } else {
+                val classTime = course.specificClassTime!!.get()
+                if (classTime != null) {
+                    //上课时间
+                    Log.e(
+                        "activityRef",
+                        "generateInformation: ${activity.getString(R.string.common_time_noon)}",
+                    )
+
+                    val formattedTime = classTime.getFormattedTime(courseTable)
+                    formattedTime.getTimeDescriptionText(stringBuilder)
+
+                    //上课地点
+                    if (classTime.location.isNotBlank()) {
+                        stringBuilder.append(" @")
+                        stringBuilder.append(classTime.location)
+                    }
+
+                    //老师姓名
+                    if (classTime.teacherName.isNotBlank()) {
+                        stringBuilder.append(" ")
+                        stringBuilder.append(classTime.teacherName)
+                    }
+                }
+
+            }
+
+        } else {
+            stringBuilder.append(course.credit)
+            stringBuilder.append(activity.getString(R.string.activity_EditCourse_Credit))
+            if (course.remarks.isNotBlank()) {
+                stringBuilder.append(" ")
+                stringBuilder.append(course.remarks)
+            }
+        }
+
+        return stringBuilder.toString()
+    }
+
+    /**
+     * 把FormattedTime对象格式化成显示在街面上的文本。
+     * 不会返回值，如需直接使用请调用[toString]方法。
+     *
+     * @param stringBuilder 传入一个StringBuilder对象用于构建文本。
+     */
+    private fun FormattedTime.getTimeDescriptionText(stringBuilder: StringBuilder) {
+        if (Settings.System.getString(
+                activity.contentResolver,
+                Settings.System.TIME_12_24
+            ) != "24"
+        ) {
+            //如果使用12小时的话
+            val newStartH = if (this.startH > 12) {
+                stringBuilder.append(activity.getString(R.string.common_time_afternoon))
+                this.startH - 12
+            } else {
+                stringBuilder.append(activity.getString(R.string.common_time_noon))
+                this.startH
+            }
+            stringBuilder.append("$newStartH:${this.startM}")
+        } else {
+            stringBuilder.append("${this.startH}:${this.startM}")
+        }
     }
 }

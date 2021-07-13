@@ -1,9 +1,11 @@
 package cn.unscientificjszhai.timemanager.data.course
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import java.io.Serializable
+import java.lang.ref.WeakReference
 
 /**
  * 课程。
@@ -12,6 +14,7 @@ import java.io.Serializable
  * @param title 课程名。
  * @param credit 学分。
  * @param remarks 备注。
+ * @param specificClassTime 不在数据库中的列。用来在仅显示今天的情况下，判断上课时间。
  */
 @Entity(tableName = Course.TABLE_NAME)
 @TypeConverters(CourseEventsConverter::class)
@@ -20,7 +23,8 @@ data class Course(
     var title: String,
     var credit: Double,
     var remarks: String,
-    var associatedEventsId: ArrayList<Long>
+    var associatedEventsId: ArrayList<Long>,
+    @Ignore @Transient var specificClassTime: WeakReference<ClassTime>? = null
 ) : Serializable {
 
     companion object {

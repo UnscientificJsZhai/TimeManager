@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import java.util.*
+import kotlin.reflect.KProperty
 
 /**
  * 数据类，用于封装课程表信息。
@@ -60,6 +61,14 @@ data class CourseTable(
         )
     }
 
+    /**
+     * 为[CourseTable]提供属性委托功能。
+     */
+    interface Getter {
+
+        operator fun getValue(thisRef: Any?, property: KProperty<*>): CourseTable
+    }
+
     constructor(name: String) : this(
         null,
         name,
@@ -108,6 +117,13 @@ data class CourseTable(
         return result
     }
 
+    /**
+     * 有时学期开始日不是一周的开始日。处理方法是无视这种情况。所有的学期开始日都会被转换为周日。
+     * 这个方法可以完成转换。
+     *
+     * @return 转换后的学期开始日。
+     */
+    @Deprecated("暂时用不到的方法")
     fun getStartDateInSunday(): Calendar {
         var startDate = this.startDate.clone() as Calendar
         while (startDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
@@ -116,6 +132,11 @@ data class CourseTable(
         return startDate
     }
 
+    /**
+     * 得到前一天的Calendar对象。
+     *
+     * @return 前一天的Calendar对象。
+     */
     private fun Calendar.yesterday(): Calendar {
         if (this.get(Calendar.DATE) == 1) {
             if (this.get(Calendar.MONTH) == Calendar.JANUARY) {

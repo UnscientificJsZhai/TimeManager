@@ -134,7 +134,6 @@ class CourseDetailActivity : Activity() {
      * @return 字符串。应该给DescriptionText的text赋值此字符串。
      */
     private fun createDescriptionText(course: Course): String {
-        //TODO 描述格式化
         return "${course.remarks}学分，备注如下：\n${course.remarks}"
     }
 

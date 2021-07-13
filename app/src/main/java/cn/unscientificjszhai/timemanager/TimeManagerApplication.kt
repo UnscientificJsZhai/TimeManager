@@ -11,8 +11,9 @@ import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.ui.main.MainActivity
 import cn.unscientificjszhai.timemanager.ui.settings.SettingsActivity
 import kotlin.concurrent.thread
+import kotlin.reflect.KProperty
 
-class TimeManagerApplication : Application() {
+class TimeManagerApplication : Application(), CourseTable.Getter {
 
     companion object {
 
@@ -149,5 +150,9 @@ class TimeManagerApplication : Application() {
             broadcastIntent.setPackage(packageName)
             sendBroadcast(broadcastIntent)
         }
+    }
+
+    override fun getValue(thisRef: Any?, property: KProperty<*>): CourseTable {
+        return this.courseTable!!
     }
 }

@@ -2,6 +2,9 @@ package cn.unscientificjszhai.timemanager.data
 
 import cn.unscientificjszhai.timemanager.data.course.ClassTime
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
+import cn.unscientificjszhai.timemanager.data.tables.CourseTable
+import cn.unscientificjszhai.timemanager.data.tables.FormattedTime
+import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.reflect.KProperty
 
@@ -53,6 +56,40 @@ class NowTimeTagger(private var startDate: Calendar) {
     }
 
     /**
+     * 返回当前在第几节课。0.5意味着在今天所有课上课之前。1.5意味着已经下了第一节课但是第二节课还没有上课。
+     *
+     * @param courseTable 获取时间表。
+     */
+    @Suppress("unused")
+    fun nowLessonNumber(courseTable: CourseTable): Double {
+        val timeTable = courseTable.timeTable
+        val now = Calendar.getInstance()
+        var answer = 0.0
+
+        for (time in timeTable) {
+            val formattedTime = FormattedTime(time)
+            when (formattedTime.isDuring(now)) {
+                FormattedTime.BEFORE -> {
+                    answer += 0.5
+                    break
+                }
+                FormattedTime.DURING -> {
+                    answer += 1
+                    break
+                }
+                FormattedTime.AFTER -> {
+                    answer += 1
+                }
+                else -> {
+                    throw RuntimeException("Return Type Error")
+                }
+            }
+        }
+
+        return answer
+    }
+
+    /**
      * 计算两天的日期差距。
      *
      * @param from 开始日期。
@@ -98,6 +135,7 @@ class NowTimeTagger(private var startDate: Calendar) {
                 if (classTime.getWeekData(weekNumber) &&
                     (classTime.whichDay + 1) == nowDate.get(Calendar.DAY_OF_WEEK)
                 ) {
+                    courseWithClassTimes.course.specificClassTime = WeakReference(classTime)
                     classTimes.add(ClassTimeCompareOperator(classTime, courseWithClassTimes))
                 }
             }
