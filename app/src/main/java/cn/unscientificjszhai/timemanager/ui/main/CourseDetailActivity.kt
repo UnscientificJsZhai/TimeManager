@@ -1,7 +1,6 @@
 package cn.unscientificjszhai.timemanager.ui.main
 
 import android.Manifest
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -9,15 +8,19 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
+import cn.unscientificjszhai.timemanager.data.course.ClassTime
 import cn.unscientificjszhai.timemanager.data.course.Course
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
+import cn.unscientificjszhai.timemanager.data.dao.CourseDao
 import cn.unscientificjszhai.timemanager.providers.EventsOperator
 import cn.unscientificjszhai.timemanager.ui.ActivityUtility.jumpToSystemPermissionSettings
 import cn.unscientificjszhai.timemanager.ui.ActivityUtility.runIfPermissionGranted
 import cn.unscientificjszhai.timemanager.ui.editor.EditCourseActivity
-import java.io.Serializable
+import java.util.*
 import kotlin.concurrent.thread
 
 /**
@@ -27,7 +30,7 @@ import kotlin.concurrent.thread
  * @see MainActivity
  * @see Course
  */
-class CourseDetailActivity : Activity() {
+class CourseDetailActivity : AppCompatActivity() {
 
     companion object {
 
@@ -35,19 +38,19 @@ class CourseDetailActivity : Activity() {
          * 启动此Activity的通用方法。如果context是[MainActivity]的话，则会启动下面的方法。
          *
          * @param context 上下文。
-         * @param courseWithClassTimes 数据对象。
+         * @param courseId 数据对象。
          */
         @JvmStatic
-        fun startThisActivity(context: Context, courseWithClassTimes: CourseWithClassTimes) {
+        fun startThisActivity(context: Context, courseId: Long) {
             val intent = Intent(context, CourseDetailActivity::class.java)
-            intent.putExtra(INTENT_EXTRA_COURSE, courseWithClassTimes)
+            intent.putExtra(INTENT_EXTRA_COURSE, courseId)
             context.startActivity(intent)
         }
 
         /**
          * 启动此Activity时随Intent传入了一个整型Extra，其Key为此值。
          */
-        const val INTENT_EXTRA_COURSE = "course"
+        const val INTENT_EXTRA_COURSE = "courseID"
 
         /**
          * 在[EditCourseActivity]中如果修改了Course对象，不仅会体现在数据库中，
@@ -59,30 +62,97 @@ class CourseDetailActivity : Activity() {
          * 此Activity在[onActivityResult]方法中接收[EditCourseActivity]返回的修改后对象时，requestCode为此值。
          */
         const val EDIT_REQUEST_CODE = 4
+
+        @Suppress("Unused")
+        const val TAG = "CourseDetailActivity"
     }
 
-    private lateinit var courseWithClassTimes: CourseWithClassTimes
+    private lateinit var timeManagerApplication: TimeManagerApplication
+
+    private lateinit var courseDao: CourseDao
+
+    private lateinit var viewModel: CourseDetailActivityViewModel
+
+
+    private lateinit var descriptionTextView: TextView
+    private lateinit var timeDescriptionTextView: TextView
+    private lateinit var remarkTextView: TextView
+
+    private var delete = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course_detail)
 
-        val serializable = intent.getSerializableExtra(INTENT_EXTRA_COURSE)
-        updateViewFromCourse(serializable)
+        this.timeManagerApplication = application as TimeManagerApplication
+        this.courseDao = this.timeManagerApplication.getCourseDatabase().courseDao()
+
+        this.descriptionTextView = findViewById(R.id.CourseDetailActivity_DescriptionText)
+        this.timeDescriptionTextView = findViewById(R.id.CourseDetailActivity_TimeDescriptionText)
+        this.remarkTextView = findViewById(R.id.CourseDetailActivity_RemarkText)
+
+        val id = intent.getLongExtra(INTENT_EXTRA_COURSE, -1)
+        val courseWithClassTimesLiveData = courseDao.getLiveCourse(id)
+        if (courseWithClassTimesLiveData == null) {
+            //数据异常退出Activity
+            Toast.makeText(this, R.string.activity_CourseDetail_DataError, Toast.LENGTH_SHORT)
+                .show()
+            finish()
+            return
+        }
+
+
+        this.viewModel = ViewModelProvider(
+            this,
+            CourseDetailActivityViewModel.Factory(courseWithClassTimesLiveData)
+        ).get(CourseDetailActivityViewModel::class.java)
+
+        //监听数据变更
+        viewModel.courseWithClassTimes.observe(this) { courseWithClassTimes ->
+            if (!Course.checkLegitimacy(courseWithClassTimes)) {
+                if (!delete) {
+                    Toast.makeText(
+                        this,
+                        getText(R.string.activity_CourseDetail_LoadingErrorToast),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                finish()
+            } else {
+
+                findViewById<TextView>(R.id.CourseDetailActivity_Title).text =
+                    courseWithClassTimes.course.title
+                descriptionTextView.text =
+                    courseWithClassTimes.descriptionText()
+                timeDescriptionTextView.text =
+                    courseWithClassTimes.timeDescriptionText()
+                remarkTextView.text =
+                    courseWithClassTimes.remarkText()
+            }
+        }
 
         //定义编辑按钮
         findViewById<Button>(R.id.CourseDetailActivity_EditButton).setOnClickListener {
-            EditCourseActivity.startThisActivity(this, courseWithClassTimes)
+            val courseWithClassTimes = viewModel.courseWithClassTimes.value
+            if (courseWithClassTimes != null) {
+                EditCourseActivity.startThisActivity(this, courseWithClassTimes)
+            } else {
+                Toast.makeText(this, R.string.activity_CourseDetail_DataError, Toast.LENGTH_SHORT)
+                    .show()
+                finish()
+            }
         }
 
         //定义删除按钮
         findViewById<Button>(R.id.CourseDetailActivity_DeleteButton).setOnClickListener {
+
             AlertDialog.Builder(this)
                 .setTitle(R.string.activity_CourseDetail_DeleteConfirm)
                 .setNegativeButton(R.string.common_cancel) { dialog, _ ->
                     dialog?.dismiss()
                 }
                 .setPositiveButton(R.string.common_confirm) { dialog, _ ->
+
                     runIfPermissionGranted(Manifest.permission.WRITE_CALENDAR, {
                         dialog.dismiss()
                         AlertDialog.Builder(this)
@@ -97,21 +167,34 @@ class CourseDetailActivity : Activity() {
                                 permissionDialog.dismiss()
                             }
                     }) {
-                        thread(start = true) {
-                            //从日历中删除。
-                            val courseTable = (application as TimeManagerApplication).courseTable!!
-                            EventsOperator.deleteEvent(
-                                this@CourseDetailActivity,
-                                courseTable,
-                                courseWithClassTimes
-                            )
-                            //从数据库中删除。
-                            val database =
-                                (application as TimeManagerApplication).getCourseDatabase()
-                            val courseDao = database.courseDao()
-                            val classTimeDao = database.classTimeDao()
-                            courseDao.deleteCourse(courseWithClassTimes.course)
-                            classTimeDao.deleteClassTimes(courseWithClassTimes.classTimes)
+
+                        val courseWithClassTimes = viewModel.courseWithClassTimes.value
+
+                        if (courseWithClassTimes != null) {
+                            delete = true
+                            thread(start = true) {
+                                //从日历中删除。
+                                val courseTable =
+                                    (application as TimeManagerApplication).courseTable!!
+                                EventsOperator.deleteEvent(
+                                    this@CourseDetailActivity,
+                                    courseTable,
+                                    courseWithClassTimes
+                                )
+                                //从数据库中删除。
+                                val database =
+                                    (application as TimeManagerApplication).getCourseDatabase()
+                                val courseDao = database.courseDao()
+                                val classTimeDao = database.classTimeDao()
+                                courseDao.deleteCourse(courseWithClassTimes.course)
+                                classTimeDao.deleteClassTimes(courseWithClassTimes.classTimes)
+                            }
+                        } else {
+                            Toast.makeText(
+                                this,
+                                R.string.activity_CourseDetail_DataError,
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                         dialog.dismiss()
                         finish()
@@ -120,44 +203,90 @@ class CourseDetailActivity : Activity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == EDIT_REQUEST_CODE && resultCode == RESULT_OK && data is Intent) {
-            val serializable = data.getSerializableExtra(EDIT_INTENT_RESULT)
-            updateViewFromCourse(serializable)
+    /**
+     * 生成第一行描述性文字。
+     */
+    private fun CourseWithClassTimes.descriptionText(): String {
+        val stringBuilder = StringBuilder()
+
+        if (course.credit % 1 == 0.0) {
+            stringBuilder.append(course.credit.toInt())
+        } else {
+            stringBuilder.append(course.credit)
         }
+        stringBuilder.append(getString(R.string.activity_EditCourse_Credit))
+
+        stringBuilder.append(" ")
+
+        val courseTable by timeManagerApplication
+        var veryStart = courseTable.maxWeeks
+        var veryEnd = 1
+        for (classTime in classTimes) {
+            for (index in 1 until veryStart) {
+                if (classTime.getWeekData(index)) {
+                    veryStart = index
+                    break
+                }
+            }
+            for (index in veryEnd until courseTable.maxWeeks) {
+                if (classTime.getWeekData(index)) {
+                    veryEnd = index
+                }
+            }
+        }
+        stringBuilder.append(
+            getString(R.string.activity_CourseDetail_WeekFormatText)
+                .format(veryStart, veryEnd)
+        )
+
+        return stringBuilder.toString()
     }
 
-    /**
-     * 用于格式化处理描述文字的方法。
-     *
-     * @param course 数据对象。
-     * @return 字符串。应该给DescriptionText的text赋值此字符串。
-     */
-    private fun createDescriptionText(course: Course): String {
-        return "${course.remarks}学分，备注如下：\n${course.remarks}"
-    }
+    private fun CourseWithClassTimes.timeDescriptionText(): String {
+        val stringBuilder = StringBuilder()
+        val courseTable by timeManagerApplication
 
-    /**
-     * 从Course对象中的数据更新界面。Course对象一般来自Intent中的可序列化Extra。
-     *
-     * @param serializable 从Intent对象中获取的可序列化对象。可空。
-     * 如果为空将会立即结束此Activity并弹出一个Toast。
-     */
-    private fun updateViewFromCourse(serializable: Serializable?) {
-        if (!Course.checkLegitimacy(serializable)) {
-            Toast.makeText(
-                this,
-                getText(R.string.activity_CourseDetail_LoadingErrorToast),
-                Toast.LENGTH_SHORT
-            ).show()
-            finish()
-            return
+        this.classTimes.forEach { classTime: ClassTime ->
+            stringBuilder.append(
+                classTime.getWeekDescriptionString(
+                    getString(R.string.view_ClassTimeEdit_WeekDescription),
+                    getString(R.string.activity_CourseDetail_LoadingErrorToast),
+                    courseTable.maxWeeks
+                )
+            )
+
+            stringBuilder.append(" ")
+
+            stringBuilder.append(
+                getString(
+                    when (classTime.whichDay) {
+                        1 -> R.string.data_Week1
+                        2 -> R.string.data_Week2
+                        3 -> R.string.data_Week3
+                        4 -> R.string.data_Week4
+                        5 -> R.string.data_Week5
+                        6 -> R.string.data_Week6
+                        else -> R.string.data_Week0
+                    }
+                )
+            )
+
+            stringBuilder.append(" ")
+
+            stringBuilder.append(
+                getString(R.string.activity_CourseDetail_LessonNumberFormatText)
+                    .format(classTime.start, classTime.end)
+            )
+
+            if (classTimes.indexOf(classTime) != classTimes.size - 1) {
+                stringBuilder.append("\n")
+            }
         }
 
-        this.courseWithClassTimes = serializable as CourseWithClassTimes
-        findViewById<TextView>(R.id.CourseDetailActivity_Title).text =
-            courseWithClassTimes.course.title
-        findViewById<TextView>(R.id.CourseDetailActivity_DescriptionText).text =
-            this.createDescriptionText(courseWithClassTimes.course)
+        return stringBuilder.toString()
+    }
+
+    private fun CourseWithClassTimes.remarkText(): String {
+        return course.remarks
     }
 }

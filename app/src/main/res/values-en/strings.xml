@@ -62,8 +62,20 @@
     <string name="activity_TimeTableEditor_HeaderEditDialogHint">min</string>
     <string name="activity_TimeTableEditor_HeaderEditDialogTitle">Length of each class</string>
     <string name="activity_TimeTableEditor_HeaderItemTitle">Length of each class is %d min(s)</string>
-    <string name="activity_WelcomeActivity_AskPermissionTitle" translatable="false">Permission Needed</string>
+    <string name="activity_WelcomeActivity_AskPermissionTitle" translatable="false">Permission Is Needed</string>
     <string name="activity_WelcomeActivity_AskPermissionText">This App imports the course schedule directly into the calendar and informs you of class information in the form of system calendar events. Please grant calendar permission to use this app.</string>
     <string name="activity_WelcomeActivity_SettingsPermissionText">Will jump to system settings to request permission</string>
     <string name="activity_WelcomeActivity_FailToJumpToSettings">Unable to start system settings</string>
+    <string name="common_time_noon">A.M.</string>
+    <string name="common_time_afternoon" translatable="false">P.M.</string>
+    <string name="dialog_ProgressDialog_Message">Processing</string>
+    <string name="activity_CourseDetail_AskPermissionText">"You need to grant access to the calendar to delete it. Do you want to grant permission? If you agree, you will be redirected to the application details page. Please grant this application calendar permission here. "</string>
+    <string name="activity_EditCourse_AskPermissionText">You need to grant access to the calendar to save edits. Do you want to grant permission?</string>
+    <string name="preferences_UpdateCalendar_DialogTitle">Update Calendar</string>
+    <string name="activity_CurrentTableSelector_ContextMenu_Delete">Delete</string>
+    <string name="activity_CurrentTableSelector_ContextMenu_Edit">Rename</string>
+    <string name="activity_CurrentTableSelector_PermissionDeniedDialogMessage">No calendar write permission is granted and cannot be changed.</string>
+    <string name="preferences_UpdateCalendar_Processing">Updateing...</string>
+    <string name="preferences_UpdateCalendar_Complete" translatable="false">Complete</string>
+    <string name="preferences_UpdateCalendar_DialogMessage" translatable="false">Doing this will delete the calendar of the current curriculum and recreate it. Do you want to continue?</string>
 </resources>

@@ -60,7 +60,6 @@ class NowTimeTagger(private var startDate: Calendar) {
      *
      * @param courseTable 获取时间表。
      */
-    @Suppress("unused")
     fun nowLessonNumber(courseTable: CourseTable): Double {
         val timeTable = courseTable.timeTable
         val now = Calendar.getInstance()

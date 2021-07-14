@@ -40,7 +40,7 @@ class SettingsActivity : CalendarOperatorActivity() {
         setContentView(R.layout.activity_settings)
 
         //设置SystemUI颜色
-        ActivityUtility.setSystemUIAppearance(window)
+        ActivityUtility.setSystemUIAppearance(this)
 
         this.timeManagerApplication = application as TimeManagerApplication
 

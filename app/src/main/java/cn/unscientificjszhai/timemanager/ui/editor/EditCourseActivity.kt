@@ -50,20 +50,6 @@ class EditCourseActivity : CalendarOperatorActivity() {
         }
 
         /**
-         * 启动此Activity的通用方法。
-         *
-         * @param context 上下文。
-         * @param courseWithClassTimes 数据对象。
-         */
-        @Deprecated("不再使用，CourseDetailActivity启动此Activity时有专用方法调用。")
-        @JvmStatic
-        fun startThisActivity(context: Context, courseWithClassTimes: CourseWithClassTimes) {
-            val intent = Intent(context, EditCourseActivity::class.java)
-            intent.putExtra(CourseDetailActivity.INTENT_EXTRA_COURSE, courseWithClassTimes)
-            context.startActivity(intent)
-        }
-
-        /**
          * 启动此Activity的专用方法，使用[startActivityForResult]方法启动，
          * 请求码为[CourseDetailActivity.EDIT_REQUEST_CODE]。
          *
@@ -78,7 +64,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
         ) {
             val intent = Intent(context, EditCourseActivity::class.java)
             intent.putExtra(CourseDetailActivity.INTENT_EXTRA_COURSE, courseWithClassTimes)
-            context.startActivityForResult(intent, CourseDetailActivity.EDIT_REQUEST_CODE)
+            context.startActivity(intent)
         }
     }
 
@@ -100,7 +86,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
         //初始化ViewModel
         this.viewModel = ViewModelProvider(this).get(EditCourseActivityViewModel::class.java)
 
-        ActivityUtility.setSystemUIAppearance(window)
+        ActivityUtility.setSystemUIAppearance(this)
 
         this.timeManagerApplication = application as TimeManagerApplication
 
@@ -202,7 +188,6 @@ class EditCourseActivity : CalendarOperatorActivity() {
             //确定按键
             .setPositiveButton(R.string.common_confirm) { dialog, _ ->
                 dialog?.dismiss()
-                setResult(RESULT_CANCELED)
                 this.finish()
             }
             //取消按键
@@ -309,7 +294,6 @@ class EditCourseActivity : CalendarOperatorActivity() {
                         EventsOperator.deleteEvent(this, courseTable, courseWithClassTimes)
                     }
 
-                    setResult(RESULT_CANCELED)
                     finish()
                     //返回的应该是MainActivity
                 }
@@ -317,11 +301,13 @@ class EditCourseActivity : CalendarOperatorActivity() {
                     //修改现有Course对象时
                     for (classTime: ClassTime in viewModel.classTimes) {
                         if (!classTime.isLegitimacy()) {
-                            Toast.makeText(
-                                this,
-                                getText(R.string.activity_EditCourse_DataError),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            runOnUiThread {
+                                Toast.makeText(
+                                    this,
+                                    getText(R.string.activity_EditCourse_DataError),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                             return@thread
                         }
                     }
@@ -358,7 +344,6 @@ class EditCourseActivity : CalendarOperatorActivity() {
                         CourseDetailActivity.EDIT_INTENT_RESULT,
                         CourseWithClassTimes(course, viewModel.classTimes)
                     )
-                    setResult(RESULT_OK, intent)
                     finish()
                     //返回的应该是CourseDetailActivity
                 }

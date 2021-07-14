@@ -21,7 +21,8 @@
         android:theme="@style/Theme.TimeManager"
         tools:ignore="AllowBackup">
 
-        <activity android:name=".ui.WelcomeActivity">
+        <activity android:name=".ui.WelcomeActivity"
+            tools:ignore="IntentFilterExportedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,7 +56,8 @@
             android:label="@string/preferences_CurrentTable_TimeTable"
             android:parentActivityName=".ui.settings.SettingsActivity" />
 
-        <service android:name=".providers.AuthenticatorService">
+        <service android:name=".providers.AuthenticatorService"
+            tools:ignore="ExportedService,IntentFilterExportedReceiver">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>

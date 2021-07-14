@@ -16,6 +16,7 @@ import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.providers.CalendarOperator
+import cn.unscientificjszhai.timemanager.providers.EmptyAuthenticator
 import cn.unscientificjszhai.timemanager.ui.ActivityUtility.jumpToSystemPermissionSettings
 import cn.unscientificjszhai.timemanager.ui.ActivityUtility.runIfPermissionGranted
 import cn.unscientificjszhai.timemanager.ui.main.MainActivity
@@ -44,6 +45,9 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //添加帐号
+        EmptyAuthenticator.addAccountToSystem(this)
+
         this.timeManagerApplication = application as TimeManagerApplication
 
         if (this.timeManagerApplication.nowTableID != TimeManagerApplication.DEFAULT_DATABASE_OBJECT_ID) {
@@ -54,7 +58,7 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
             //如果当前所在表的ID为-1，就是没有初始化
             setContentView(R.layout.activity_welcome)
 
-            ActivityUtility.setSystemUIAppearance(window)
+            ActivityUtility.setSystemUIAppearance(this)
 
             this.tableTitleEditText = findViewById(R.id.WelcomeActivity_TableNameEditText)
             this.startButton = findViewById(R.id.WelcomeActivity_Button)

@@ -37,13 +37,13 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_current_table_selector)
-        ActivityUtility.setSystemUIAppearance(window)
+        ActivityUtility.setSystemUIAppearance(this)
         this.timeManagerApplication = application as TimeManagerApplication
 
         this.viewModel =
             ViewModelProvider(
                 this,
-                CurrentTableSelectorActivityViewModelFactory(
+                CurrentTableSelectorActivityViewModel.Factory(
                     timeManagerApplication.getCourseTableDatabase().courseTableDao()
                 )
             ).get(CurrentTableSelectorActivityViewModel::class.java)

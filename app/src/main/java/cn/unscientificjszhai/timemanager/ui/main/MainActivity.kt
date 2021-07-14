@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -127,13 +128,13 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
         setContentView(R.layout.activity_main)
 
         //设置SystemUI颜色
-        ActivityUtility.setSystemUIAppearance(window)
+        ActivityUtility.setSystemUIAppearance(this)
 
         this.courseDatabase = this.timeManagerApplication.getCourseDatabase()
 
         //初始化ViewModel
         this.viewModel =
-            ViewModelProvider(this, MainActivityViewModelFactory(courseDatabase.courseDao()))
+            ViewModelProvider(this, MainActivityViewModel.Factory(courseDatabase.courseDao()))
                 .get(MainActivityViewModel::class.java)
 
         this.progressBar = findViewById(R.id.MainActivity_ProgressBar)

@@ -8,7 +8,6 @@ import android.os.Build
 import android.provider.Settings
 import android.util.Log
 import android.view.View
-import android.view.Window
 import android.view.WindowInsetsController
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,9 +23,14 @@ object ActivityUtility {
     /**
      * 为目标Activity设置浅色状态栏和导航栏。
      *
-     * @param window 通过[Activity.getWindow]方法获取Window对象传入此方法。
+     * @param context Activity的上下文。
      */
-    fun setSystemUIAppearance(window: Window) {
+    fun setSystemUIAppearance(context: Activity) {
+        val window = context.window
+        if(context.applicationContext.resources.configuration.uiMode == 0x21){
+            //深色模式不进行调整
+            return
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val controller = window.insetsController
             val flag = WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS or

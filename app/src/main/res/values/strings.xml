@@ -6,10 +6,10 @@
     <string name="common_cancel">取消</string>
     <string name="common_settings">设置</string>
 
-    <string name="common_time_noon" translatable="false">上午</string>
-    <string name="common_time_afternoon" translatable="false">下午</string>
+    <string name="common_time_noon">上午</string>
+    <string name="common_time_afternoon">下午</string>
 
-    <string name="dialog_ProgressDialog_Message" translatable="false">处理中</string>
+    <string name="dialog_ProgressDialog_Message">处理中</string>
 
     <!-- 权限申请 -->
     <string name="activity_WelcomeActivity_AskPermissionTitle">需要权限</string>
@@ -22,7 +22,10 @@
     <string name="activity_CourseDetail_Edit">编辑</string>
     <string name="activity_CourseDetail_Delete">删除</string>
     <string name="activity_CourseDetail_DeleteConfirm">确认删除？</string>
-    <string name="activity_CourseDetail_AskPermissionText" translatable="false">需要授予日历访问权限才能删除，是否授予权限？如果同意，将跳转到应用详情页，请在这里授予此应用日历权限。</string>
+    <string name="activity_CourseDetail_AskPermissionText">需要授予日历访问权限才能删除，是否授予权限？如果同意，将跳转到应用详情页，请在那里授予此应用读写日历权限。</string>
+    <string name="activity_CourseDetail_DataError" translatable="false">数据异常，请重新尝试</string>
+    <string name="activity_CourseDetail_WeekFormatText" translatable="false">%d-%d周</string>
+    <string name="activity_CourseDetail_LessonNumberFormatText" translatable="false">第%d-%d节课</string>
     <string name="activity_Welcome">欢迎使用</string>
     <string name="activity_Welcome_StartButton">开始</string>
     <string name="activity_Welcome_PromptText">输入课程表的名称</string>
@@ -30,6 +33,10 @@
     <string name="activity_Main_NoTableFound">找不到课程表</string>
     <string name="activity_Main_ShowTodayOnly">仅显示今天</string>
     <string name="activity_Main_JumpToCalendar">跳转到日历</string>
+    <string name="activity_Main_TodayOnlyMode_DataError" translatable="false">数据错误，无法显示详情</string>
+    <string name="activity_Main_TodayOnlyMode_Next" translatable="false">即将上课</string>
+    <string name="activity_Main_TodayOnlyMode_During" translatable="false">正在上课</string>
+    <string name="activity_Main_TodayOnlyMode_Finished" translatable="false">已结束</string>
 
     <!-- 包ui.editor使用 -->
     <string name="activity_EditCourse_Label">编辑</string>
@@ -40,7 +47,7 @@
     <string name="activity_EditCourse_Done">完成</string>
     <string name="activity_EditCourse_DataError">数据错误</string>
     <string name="activity_EditCourse_UnsavedAlertTitle">数据可能尚未保存，是否退出？</string>
-    <string name="activity_EditCourse_AskPermissionText" translatable="false">需要授予日历访问权限才能保存编辑，是否授予权限？</string>
+    <string name="activity_EditCourse_AskPermissionText">需要授予日历访问权限才能保存编辑，是否授予权限？</string>
     <string name="view_ClassTimeEdit_Title">时间段</string>
     <string name="view_ClassTimeEdit_TeacherName">教师姓名</string>
     <string name="view_ClassTimeEdit_Location">地点</string>
@@ -73,19 +80,19 @@
     <string name="preferences_CalendarOption_CategoryTitle">日历选项</string>
     <string name="preferences_CalendarOption_UpdateCalendar">更新日历</string>
     <string name="preferences_CalendarOption_UpdateCalendarSummary">将当前选中的课程表的内容更新到系统日历</string>
-    <string name="preferences_UpdateCalendar_DialogTitle" translatable="false">更新日历</string>
-    <string name="preferences_UpdateCalendar_DialogMessage" translatable="false">进行此操作将删除当前课程表的日历并重新创建，是否继续？</string>
-    <string name="preferences_UpdateCalendar_Processing" translatable="false">更新中……</string>
-    <string name="preferences_UpdateCalendar_Complete" translatable="false">更新完成</string>
+    <string name="preferences_UpdateCalendar_DialogTitle">更新日历</string>
+    <string name="preferences_UpdateCalendar_DialogMessage">进行此操作将删除当前课程表的日历并重新创建，是否继续？</string>
+    <string name="preferences_UpdateCalendar_Processing">更新中……</string>
+    <string name="preferences_UpdateCalendar_Complete">更新完成</string>
 
     <string name="activity_CurrentTableSelector_TableNotFound">错误：找不到指定课程表</string>
     <string name="activity_CurrentTableSelector_AddTable">添加</string>
     <string name="activity_CurrentTableSelector_AddTableDialogTitle">添加课程表</string>
     <string name="activity_CurrentTableSelector_DeletingCurrentTableToast">请先选中其它课程表再删除当前课程表</string>
     <string name="activity_CurrentTableSelector_DeletingTableDialogTitle">确认删除？</string>
-    <string name="activity_CurrentTableSelector_ContextMenu_Edit" translatable="false">重命名</string>
-    <string name="activity_CurrentTableSelector_ContextMenu_Delete" translatable="false">删除</string>
-    <string name="activity_CurrentTableSelector_PermissionDeniedDialogMessage" translatable="false">没有授予日历写入权限，无法进行更改。</string>
+    <string name="activity_CurrentTableSelector_ContextMenu_Edit">重命名</string>
+    <string name="activity_CurrentTableSelector_ContextMenu_Delete">删除</string>
+    <string name="activity_CurrentTableSelector_PermissionDeniedDialogMessage">没有授予日历写入权限，无法进行更改。</string>
     <string name="activity_TimeTableEditor_RecyclerItemTitle">第%d节课</string>
     <string name="activity_TimeTableEditor_HeaderItemTitle">每节课时长%d分钟</string>
     <string name="activity_TimeTableEditor_HeaderEditDialogTitle">每节课长度</string>

@@ -105,8 +105,8 @@ object EventsOperator {
     ): CourseWithClassTimes {
         val calendarID = courseTable.calendarID
         if (calendarID != null) {
+            event.course.associatedEventsId = ArrayList() //清空之前的关联
             for (classTime in event.classTimes) {
-                event.course.associatedEventsId = ArrayList() //清空之前的关联
                 for (splitClassTime in classTime.split(courseTable.maxWeeks)) {
                     val values = ContentValues().apply {
                         put(CalendarContract.Events.TITLE, event.course.title)

@@ -28,7 +28,18 @@ interface CourseDao {
      */
     @Query("SELECT * FROM ${Course.TABLE_NAME} WHERE id = :id")
     @Transaction
-    fun getCourse(id: Int): CourseWithClassTimes?
+    fun getCourse(id: Long): CourseWithClassTimes?
+
+    /**
+     * 获取特定的Course对象以及关联的ClassTime对象。
+     * 以LiveData的形式返回查询结果。
+     *
+     * @param id 想要查找的对象的id。
+     * @return 查找到的目标对象。
+     */
+    @Query("SELECT * FROM ${Course.TABLE_NAME} WHERE id = :id")
+    @Transaction
+    fun getCourseLiveData(id: Long): LiveData<CourseWithClassTimes>?
 
     /**
      * 向数据库中插入Course对象，但是不包括关联的ClassTime对象。
@@ -70,5 +81,5 @@ interface CourseDao {
      */
     @Query("SELECT * FROM ${Course.TABLE_NAME} WHERE id = :courseId")
     @Transaction
-    fun getLiveCourse(courseId: Int): LiveData<CourseWithClassTimes>
+    fun getLiveCourse(courseId: Long): LiveData<CourseWithClassTimes>?
 }

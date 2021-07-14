@@ -36,7 +36,7 @@ class TimeTableEditorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_time_table_editor)
 
-        ActivityUtility.setSystemUIAppearance(window)
+        ActivityUtility.setSystemUIAppearance(this)
 
         this.viewModel = ViewModelProvider(this).get(TimeTableEditorActivityViewModel::class.java)
 

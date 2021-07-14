@@ -1,7 +1,6 @@
 package cn.unscientificjszhai.timemanager.ui.main
 
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,7 +64,7 @@ internal class CourseAdapter(private val activity: MainActivity) :
         view.setOnClickListener {
             val course = getItem(holder.bindingAdapterPosition)
 
-            CourseDetailActivity.startThisActivity(view.context, course)
+            CourseDetailActivity.startThisActivity(view.context, course.course.id ?: -1)
         }
         return holder
     }
@@ -86,15 +85,22 @@ internal class CourseAdapter(private val activity: MainActivity) :
         if (showTodayOnly()) {
             if (course.specificClassTime == null) {
                 //异常情况，如果设置为只显示今天的话所有的course对象中的这个成员都不是null。
-                stringBuilder.append("error")
+                stringBuilder.append(activity.getString(R.string.activity_Main_TodayOnlyMode_DataError))
             } else {
                 val classTime = course.specificClassTime!!.get()
                 if (classTime != null) {
                     //上课时间
-                    Log.e(
-                        "activityRef",
-                        "generateInformation: ${activity.getString(R.string.common_time_noon)}",
-                    )
+                    when {
+                        timeTagger.nowLessonNumber(courseTable) - classTime.start == 0.0 -> {
+                            stringBuilder.append(activity.getString(R.string.activity_Main_TodayOnlyMode_During))
+                        }
+                        timeTagger.nowLessonNumber(courseTable) - classTime.start == 0.5 -> {
+                            stringBuilder.append(activity.getString(R.string.activity_Main_TodayOnlyMode_Next))
+                        }
+                        timeTagger.nowLessonNumber(courseTable) - classTime.start > 0 -> {
+                            stringBuilder.append(activity.getString(R.string.activity_Main_TodayOnlyMode_Finished))
+                        }
+                    }
 
                     val formattedTime = classTime.getFormattedTime(courseTable)
                     formattedTime.getTimeDescriptionText(stringBuilder)
@@ -127,8 +133,8 @@ internal class CourseAdapter(private val activity: MainActivity) :
     }
 
     /**
-     * 把FormattedTime对象格式化成显示在街面上的文本。
-     * 不会返回值，如需直接使用请调用[toString]方法。
+     * 把FormattedTime对象格式化成显示在界面上的文本。
+     * 不会返回值，需要调用入参的[toString]方法。
      *
      * @param stringBuilder 传入一个StringBuilder对象用于构建文本。
      */
@@ -147,8 +153,17 @@ internal class CourseAdapter(private val activity: MainActivity) :
                 this.startH
             }
             stringBuilder.append("$newStartH:${this.startM}")
+            val newEndH = if (this.endH > 12) {
+                stringBuilder.append(activity.getString(R.string.common_time_afternoon))
+                this.endH - 12
+            } else {
+                stringBuilder.append(activity.getString(R.string.common_time_noon))
+                this.endH
+            }
+            stringBuilder.append("-$newEndH:${this.endM}")
         } else {
             stringBuilder.append("${this.startH}:${this.startM}")
+            stringBuilder.append("-${this.endH}:${this.endM}")
         }
     }
 }

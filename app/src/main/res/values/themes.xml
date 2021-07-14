@@ -24,4 +24,19 @@
         <item name="colorOnSecondary">@color/white</item>
     </style>
 
+    <style name="Theme.FloatingActivity" parent="Theme.AppCompat.Dialog">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="Theme.Widget.TextView.HeadLine" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Theme.Widget.TextView.SubText" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
 </resources>

@@ -220,12 +220,12 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
 
                         //完成后关闭ProgressDialog。
                         progressDialog.postDismiss()
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.preferences_UpdateCalendar_Complete,
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.preferences_UpdateCalendar_Complete,
+                        Toast.LENGTH_SHORT
+                    ).show()
                     dialog.dismiss()
                 }.show()
             true
