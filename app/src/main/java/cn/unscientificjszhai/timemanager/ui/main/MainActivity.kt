@@ -1,19 +1,20 @@
 package cn.unscientificjszhai.timemanager.ui.main
 
-import android.annotation.SuppressLint
+import android.Manifest
+import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,12 +23,17 @@ import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.NowTimeTagger
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.database.CourseDatabase
+import cn.unscientificjszhai.timemanager.providers.EventsOperator
 import cn.unscientificjszhai.timemanager.ui.ActivityUtility
+import cn.unscientificjszhai.timemanager.ui.ActivityUtility.jumpToSystemPermissionSettings
+import cn.unscientificjszhai.timemanager.ui.ActivityUtility.runIfPermissionGranted
+import cn.unscientificjszhai.timemanager.ui.RecyclerViewWithContextMenu
 import cn.unscientificjszhai.timemanager.ui.WelcomeActivity
 import cn.unscientificjszhai.timemanager.ui.editor.EditCourseActivity
 import cn.unscientificjszhai.timemanager.ui.settings.SettingsActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
+import kotlin.concurrent.thread
 import kotlin.reflect.KProperty
 
 
@@ -145,6 +151,7 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
 
         this.rootViewAdapter = CourseAdapter(this)
         rootView.adapter = this.rootViewAdapter
+        registerForContextMenu(rootView)
 
         //监听LiveData变更
         viewModel.courseList.observe(this) { courseList ->
@@ -190,7 +197,102 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
         return super.onMenuOpened(featureId, menu)
     }
 
-    @SuppressLint("WrongConstant")
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menuInflater.inflate(R.menu.context_main, menu)
+        if (v is RecyclerView && menuInfo is RecyclerViewWithContextMenu.PositionMenuInfo) {
+            try {
+                val courseWithClassTimes =
+                    (rootView.adapter as CourseAdapter).currentList[menuInfo.position]
+                menu?.setHeaderTitle(courseWithClassTimes.course.title)
+            } catch (e: NullPointerException) {
+                menu?.close()
+            }
+        } else {
+            menu?.close()
+        }
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        val info = item.menuInfo
+        if (info is RecyclerViewWithContextMenu.PositionMenuInfo) {
+            val courseWithClassTimes =
+                (rootView.adapter as CourseAdapter).currentList[info.position]
+
+            when (item.itemId) {
+                R.id.MainActivity_Edit -> {
+                    if (courseWithClassTimes != null) {
+                        EditCourseActivity.startThisActivity(this, courseWithClassTimes)
+                    } else {
+                        Toast.makeText(
+                            this,
+                            R.string.activity_CourseDetail_DataError,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                R.id.MainActivity_Delete -> {
+
+                    AlertDialog.Builder(this)
+                        .setTitle(R.string.activity_CourseDetail_DeleteConfirm)
+                        .setNegativeButton(R.string.common_cancel) { dialog, _ ->
+                            dialog?.dismiss()
+                        }
+                        .setPositiveButton(R.string.common_confirm) { dialog, _ ->
+
+                            runIfPermissionGranted(Manifest.permission.WRITE_CALENDAR, {
+                                dialog.dismiss()
+                                AlertDialog.Builder(this)
+                                    .setTitle(R.string.activity_WelcomeActivity_AskPermissionTitle)
+                                    .setMessage(R.string.activity_CourseDetail_AskPermissionText)
+                                    .setNegativeButton(R.string.common_cancel) { permissionDialog, _ ->
+                                        //拒绝授予日历权限。
+                                        permissionDialog.dismiss()
+                                    }
+                                    .setPositiveButton(R.string.common_confirm) { permissionDialog, _ ->
+                                        //同意授予日历权限，跳转到系统设置进行授权。
+                                        this@MainActivity.jumpToSystemPermissionSettings()
+                                        permissionDialog.dismiss()
+                                    }
+                            }) {
+                                if (courseWithClassTimes != null) {
+                                    thread(start = true) {
+                                        //从日历中删除。
+                                        val courseTable =
+                                            (application as TimeManagerApplication).courseTable!!
+                                        EventsOperator.deleteEvent(
+                                            this@MainActivity,
+                                            courseTable,
+                                            courseWithClassTimes
+                                        )
+                                        //从数据库中删除。
+                                        val database =
+                                            (application as TimeManagerApplication).getCourseDatabase()
+                                        val courseDao = database.courseDao()
+                                        val classTimeDao = database.classTimeDao()
+                                        courseDao.deleteCourse(courseWithClassTimes.course)
+                                        classTimeDao.deleteClassTimes(courseWithClassTimes.classTimes)
+                                    }
+                                } else {
+                                    Toast.makeText(
+                                        this,
+                                        R.string.activity_CourseDetail_DataError,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                dialog.dismiss()
+                            }
+                        }.create().show()
+                }
+            }
+        }
+        return super.onContextItemSelected(item)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.MainActivity_Settings -> {

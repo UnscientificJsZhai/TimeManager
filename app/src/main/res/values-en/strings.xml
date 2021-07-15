@@ -75,7 +75,7 @@
     <string name="activity_CurrentTableSelector_ContextMenu_Delete">Delete</string>
     <string name="activity_CurrentTableSelector_ContextMenu_Edit">Rename</string>
     <string name="activity_CurrentTableSelector_PermissionDeniedDialogMessage">No calendar write permission is granted and cannot be changed.</string>
-    <string name="preferences_UpdateCalendar_Processing">Updateing...</string>
+    <string name="preferences_UpdateCalendar_Processing">Updating…</string>
     <string name="preferences_UpdateCalendar_Complete" translatable="false">Complete</string>
     <string name="preferences_UpdateCalendar_DialogMessage" translatable="false">Doing this will delete the calendar of the current curriculum and recreate it. Do you want to continue?</string>
     <string name="activity_Main_TodayOnlyMode_DataError" translatable="false">Data error, unable to show details</string>

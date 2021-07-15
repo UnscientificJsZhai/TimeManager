@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,15 +7,17 @@
     android:layout_marginTop="6dp"
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="4dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:longClickable="true"
+    app:cardBackgroundColor="@color/CardView_BackgroundColor"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    app:cardMaxElevation="12dp"
-    app:cardBackgroundColor="@color/CardView_BackgroundColor">
+    app:cardMaxElevation="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="12dp">
+        android:paddingBottom="10dp">
 
         <TextView
             android:id="@+id/CourseWidget_TitleText"
@@ -25,7 +25,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="TextView"
             android:textSize="24sp"
             android:theme="@style/Theme.TimeManager.Widget.TextView.HeadLine"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,10 +36,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_marginTop="4dp"
-            android:text="TextView"
             android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/CourseWidget_TitleText"
             app:layout_constraintTop_toBottomOf="@+id/CourseWidget_TitleText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</com.google.android.material.card.MaterialCardView>
+</androidx.cardview.widget.CardView>

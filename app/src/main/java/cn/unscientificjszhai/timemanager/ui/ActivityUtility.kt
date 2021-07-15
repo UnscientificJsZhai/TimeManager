@@ -1,6 +1,7 @@
 package cn.unscientificjszhai.timemanager.ui
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -27,7 +28,7 @@ object ActivityUtility {
      */
     fun setSystemUIAppearance(context: Activity) {
         val window = context.window
-        if(context.applicationContext.resources.configuration.uiMode == 0x21){
+        if (context.applicationContext.resources.configuration.uiMode == 0x21) {
             //深色模式不进行调整
             return
         }
@@ -112,5 +113,10 @@ object ActivityUtility {
                 scrollToPosition(recyclerView, position)
             }
         }
+    }
+
+    fun Int.dp(context: Context):Int {
+        val scale = context.resources.displayMetrics.density
+        return (this*scale+0.5f).toInt()
     }
 }

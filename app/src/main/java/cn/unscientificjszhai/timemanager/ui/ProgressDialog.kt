@@ -33,6 +33,7 @@ class ProgressDialog(private val context: Activity) {
      * @param resID 文本资源ID。
      */
     @UiThread
+    @Suppress("Unused")
     fun setMessage(@StringRes resID: Int): ProgressDialog {
         messageView.setText(resID)
         return this
@@ -44,6 +45,7 @@ class ProgressDialog(private val context: Activity) {
      * @param message 文本内容。
      */
     @UiThread
+    @Suppress("Unused")
     fun setMessage(message: CharSequence?): ProgressDialog {
         messageView.text = message
         return this
