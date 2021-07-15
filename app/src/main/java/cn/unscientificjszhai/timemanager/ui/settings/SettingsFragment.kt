@@ -3,17 +3,14 @@ package cn.unscientificjszhai.timemanager.ui.settings
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.EditTextPreference
+import androidx.preference.ListPreference
 import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
-import cn.unscientificjszhai.timemanager.BuildConfig
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
-import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.providers.CalendarOperator
 import cn.unscientificjszhai.timemanager.providers.EventsOperator
@@ -53,6 +50,8 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
         const val START_DATE_KEY = "startDate"
 
         const val UPDATE_CALENDAR_KEY = "createCalendar"
+
+        const val CALENDAR_COLOR_KEY = "calendarColor"
     }
 
     private var currentTablePreference: Preference? = null
@@ -60,85 +59,11 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
     private var classesPerDayPreference: EditTextPreference? = null
     private var startDatePreference: Preference? = null
 
-    private var labPreference: PreferenceCategory? = null
-
     private var updateCalendarPreference: Preference? = null
+    private var calendarColorPreference: ListPreference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
-
-        //Debug用
-        if (BuildConfig.BUILD_TYPE == "debug") {
-            this.labPreference = findPreference("lab")
-            labPreference?.isVisible = true
-
-            val timeManagerApplication = requireActivity().application as TimeManagerApplication
-
-            val addPreference: Preference? = findPreference("insert")
-            addPreference?.setOnPreferenceClickListener {
-                try {
-                    CalendarOperator.createCalendar(requireContext())
-                } catch (e: Exception) {
-                    Log.e("SettingsFragment", "onPreferenceClick: $e")
-                }
-                true
-            }
-
-            val insertAll: Preference? = findPreference("insertAll")
-            insertAll?.setOnPreferenceClickListener {
-                thread(start = true) {
-                    CalendarOperator.createCalendarTable(requireContext(), dataStore.nowCourseTable)
-                    timeManagerApplication.getCourseTableDatabase().courseTableDao()
-                        .updateCourseTable(dataStore.nowCourseTable)
-                    val list = timeManagerApplication.getCourseDatabase().courseDao().getCourses()
-                    for (course: CourseWithClassTimes in list) {
-                        EventsOperator.addEvent(requireContext(), dataStore.nowCourseTable, course)
-                        timeManagerApplication.getCourseDatabase().courseDao()
-                            .updateCourse(course.course)
-                    }
-                }
-                true
-            }
-
-            val deleteEvents: Preference? = findPreference("deleteEvents")
-            deleteEvents?.setOnPreferenceClickListener {
-                thread(start = true) {
-                    val list = timeManagerApplication.getCourseDatabase().courseDao().getCourses()
-                    for (course: CourseWithClassTimes in list) {
-                        EventsOperator.deleteEvent(
-                            requireContext(),
-                            dataStore.nowCourseTable,
-                            course
-                        )
-                        timeManagerApplication.getCourseDatabase().courseDao()
-                            .updateCourse(course.course)
-                    }
-                }
-                true
-            }
-
-            val deleteAll: Preference? = findPreference("deleteAll")
-            deleteAll?.setOnPreferenceClickListener {
-                thread(start = true) {
-                    val list = timeManagerApplication.getCourseDatabase().courseDao().getCourses()
-                    for (course: CourseWithClassTimes in list) {
-                        EventsOperator.deleteEvent(
-                            requireContext(),
-                            dataStore.nowCourseTable,
-                            course
-                        )
-                        timeManagerApplication.getCourseDatabase().courseDao()
-                            .updateCourse(course.course)
-                    }
-
-                    CalendarOperator.deleteCalendarTable(requireContext(), dataStore.nowCourseTable)
-                    timeManagerApplication.getCourseTableDatabase().courseTableDao()
-                        .updateCourseTable(dataStore.nowCourseTable)
-                }
-                true
-            }
-        }
-        //以上是Debug用
 
         //当前课程表的设置项
         this.currentTablePreference = findPreference(CURRENT_TABLE_KEY)
@@ -228,6 +153,17 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
                     ).show()
                     dialog.dismiss()
                 }.show()
+            true
+        }
+
+        this.calendarColorPreference = findPreference(CALENDAR_COLOR_KEY)
+        calendarColorPreference?.setOnPreferenceChangeListener { _, newValue ->
+            if (newValue is String) {
+                val color = newValue.toInt()
+                thread(start = true) {
+                    CalendarOperator.updateCalendarColor(requireContext(), color)
+                }
+            }
             true
         }
     }

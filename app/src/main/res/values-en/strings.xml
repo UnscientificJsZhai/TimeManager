@@ -78,4 +78,17 @@
     <string name="preferences_UpdateCalendar_Processing">Updateing...</string>
     <string name="preferences_UpdateCalendar_Complete" translatable="false">Complete</string>
     <string name="preferences_UpdateCalendar_DialogMessage" translatable="false">Doing this will delete the calendar of the current curriculum and recreate it. Do you want to continue?</string>
+    <string name="activity_Main_TodayOnlyMode_DataError" translatable="false">Data error, unable to show details</string>
+    <string name="activity_CourseDetail_DataError" translatable="false">Data error,please try again</string>
+    <string name="activity_CourseDetail_WeekFormatText" translatable="false">from %d to %d</string>
+    <string name="activity_CourseDetail_LessonNumberFormatText">lesson %d-%d</string>
+    <string name="activity_Main_TodayOnlyMode_Finished" translatable="false">Ended</string>
+    <string name="activity_Main_TodayOnlyMode_During" translatable="false">Now</string>
+    <string name="activity_Main_TodayOnlyMode_Next">About to start</string>
+    <string name="activity_EditCourse_CopyFromPrevious_True">New item will copy from previous item to make editing easier</string>
+    <string name="activity_EditCourse_CopyFromPrevious_False">New item will no longer copy from previous item,long click add button to cancel</string>
+    <string name="preferences_CalendarColor_Title">Calendar Color</string>
+    <string name="preferences_CalendarColor_Summary">Color displayed in System Calendar App</string>
+    <string name="color_Blue">Blue</string>
+    <string name="color_Yellow">Yellow</string>
 </resources>

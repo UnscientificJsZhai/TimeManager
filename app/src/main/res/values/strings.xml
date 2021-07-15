@@ -11,6 +11,10 @@
 
     <string name="dialog_ProgressDialog_Message">处理中</string>
 
+    <!-- 颜色 -->
+    <string name="color_Blue">蓝色</string>
+    <string name="color_Yellow">黄色</string>
+
     <!-- 权限申请 -->
     <string name="activity_WelcomeActivity_AskPermissionTitle">需要权限</string>
     <string name="activity_WelcomeActivity_AskPermissionText">本App是将课程表直接导入到日历中，以系统日历事件的形式通知您上课信息的。请授予日历权限以使用本App。</string>
@@ -23,9 +27,9 @@
     <string name="activity_CourseDetail_Delete">删除</string>
     <string name="activity_CourseDetail_DeleteConfirm">确认删除？</string>
     <string name="activity_CourseDetail_AskPermissionText">需要授予日历访问权限才能删除，是否授予权限？如果同意，将跳转到应用详情页，请在那里授予此应用读写日历权限。</string>
-    <string name="activity_CourseDetail_DataError" translatable="false">数据异常，请重新尝试</string>
-    <string name="activity_CourseDetail_WeekFormatText" translatable="false">%d-%d周</string>
-    <string name="activity_CourseDetail_LessonNumberFormatText" translatable="false">第%d-%d节课</string>
+    <string name="activity_CourseDetail_DataError">数据异常，请重新尝试</string>
+    <string name="activity_CourseDetail_WeekFormatText">%d-%d周</string>
+    <string name="activity_CourseDetail_LessonNumberFormatText">第%d-%d节课</string>
     <string name="activity_Welcome">欢迎使用</string>
     <string name="activity_Welcome_StartButton">开始</string>
     <string name="activity_Welcome_PromptText">输入课程表的名称</string>
@@ -33,10 +37,10 @@
     <string name="activity_Main_NoTableFound">找不到课程表</string>
     <string name="activity_Main_ShowTodayOnly">仅显示今天</string>
     <string name="activity_Main_JumpToCalendar">跳转到日历</string>
-    <string name="activity_Main_TodayOnlyMode_DataError" translatable="false">数据错误，无法显示详情</string>
-    <string name="activity_Main_TodayOnlyMode_Next" translatable="false">即将上课</string>
-    <string name="activity_Main_TodayOnlyMode_During" translatable="false">正在上课</string>
-    <string name="activity_Main_TodayOnlyMode_Finished" translatable="false">已结束</string>
+    <string name="activity_Main_TodayOnlyMode_DataError">数据错误，无法显示详情</string>
+    <string name="activity_Main_TodayOnlyMode_Next">即将上课</string>
+    <string name="activity_Main_TodayOnlyMode_During">正在上课</string>
+    <string name="activity_Main_TodayOnlyMode_Finished">已结束</string>
 
     <!-- 包ui.editor使用 -->
     <string name="activity_EditCourse_Label">编辑</string>
@@ -48,6 +52,8 @@
     <string name="activity_EditCourse_DataError">数据错误</string>
     <string name="activity_EditCourse_UnsavedAlertTitle">数据可能尚未保存，是否退出？</string>
     <string name="activity_EditCourse_AskPermissionText">需要授予日历访问权限才能保存编辑，是否授予权限？</string>
+    <string name="activity_EditCourse_CopyFromPrevious_True">新添加的上课时间将从列表的最后一项复制内容以便编辑</string>
+    <string name="activity_EditCourse_CopyFromPrevious_False">新添加的上课时间将不再从最后一项复制\n长按添加按钮以取消</string>
     <string name="view_ClassTimeEdit_Title">时间段</string>
     <string name="view_ClassTimeEdit_TeacherName">教师姓名</string>
     <string name="view_ClassTimeEdit_Location">地点</string>
@@ -84,6 +90,8 @@
     <string name="preferences_UpdateCalendar_DialogMessage">进行此操作将删除当前课程表的日历并重新创建，是否继续？</string>
     <string name="preferences_UpdateCalendar_Processing">更新中……</string>
     <string name="preferences_UpdateCalendar_Complete">更新完成</string>
+    <string name="preferences_CalendarColor_Title">日历颜色</string>
+    <string name="preferences_CalendarColor_Summary">日历表在系统日历中的颜色</string>
 
     <string name="activity_CurrentTableSelector_TableNotFound">错误：找不到指定课程表</string>
     <string name="activity_CurrentTableSelector_AddTable">添加</string>

@@ -6,10 +6,12 @@ import android.content.Context
 import android.graphics.Color
 import android.net.Uri
 import android.provider.CalendarContract
+import androidx.annotation.ColorInt
 import androidx.annotation.WorkerThread
+import androidx.preference.PreferenceManager
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
+import cn.unscientificjszhai.timemanager.ui.settings.SettingsFragment
 import java.util.*
-import kotlin.random.Random
 
 /**
  * 日历操作工具对象。所有对日历的操作（表的层面上）都在这里完成。日历将被写入系统日历提供程序中，并和此应用的账户关联。
@@ -19,38 +21,6 @@ import kotlin.random.Random
  * @see EventsOperator
  */
 object CalendarOperator {
-
-    //测试用方法
-    fun createCalendar(context: Context): Long {
-        val timeZone = TimeZone.getDefault()
-        val value = ContentValues()
-        value.put(CalendarContract.Calendars.NAME, "Test")
-        value.put(CalendarContract.Calendars.ACCOUNT_NAME, EmptyAuthenticator.ACCOUNT_NAME)
-        value.put(
-            CalendarContract.Calendars.ACCOUNT_TYPE,
-            EmptyAuthenticator.ACCOUNT_TYPE
-        )
-        value.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, "myDisplayName")
-        value.put(CalendarContract.Calendars.VISIBLE, 1)
-        value.put(CalendarContract.Calendars.CALENDAR_COLOR, Color.BLUE)
-        value.put(CalendarContract.Calendars.SYNC_EVENTS, 1)
-        value.put(CalendarContract.Calendars.CALENDAR_TIME_ZONE, timeZone.id)
-        value.put(CalendarContract.Calendars.OWNER_ACCOUNT, EmptyAuthenticator.ACCOUNT_NAME)
-        value.put(CalendarContract.Calendars.CAN_ORGANIZER_RESPOND, 0)
-
-        val uri = context.contentResolver.insert(
-            CalendarContract.Calendars.CONTENT_URI.asSyncAdapter(
-                "TimeManager",
-                "cn.unscientificjszhai.timemanager.calendar"
-            ), value
-        )
-
-        return if (uri == null) {
-            -1
-        } else {
-            ContentUris.parseId(uri)
-        }
-    }
 
     /**
      * 为目标课程表创建一个日历表。同时会给CourseTable的成员变量赋值，但不会保存到数据库。
@@ -64,24 +34,28 @@ object CalendarOperator {
     @WorkerThread
     fun createCalendarTable(context: Context, courseTable: CourseTable): Long? {
         val timeZone = TimeZone.getDefault()
-        val value = ContentValues()
-        value.put(CalendarContract.Calendars.NAME, courseTable.getCalendarTableName())
-        value.put(CalendarContract.Calendars.ACCOUNT_NAME, EmptyAuthenticator.ACCOUNT_NAME)
-        value.put(
-            CalendarContract.Calendars.ACCOUNT_TYPE,
-            EmptyAuthenticator.ACCOUNT_TYPE
-        )
-        value.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, courseTable.name)
-        value.put(CalendarContract.Calendars.VISIBLE, 1)
-        value.put(CalendarContract.Calendars.CALENDAR_COLOR, getRandomColor())
-        value.put(CalendarContract.Calendars.SYNC_EVENTS, 1)
-        value.put(CalendarContract.Calendars.CALENDAR_TIME_ZONE, timeZone.id)
-        value.put(CalendarContract.Calendars.OWNER_ACCOUNT, EmptyAuthenticator.ACCOUNT_NAME)
-        value.put(CalendarContract.Calendars.CAN_ORGANIZER_RESPOND, 0)
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val color = sharedPreferences.getInt(SettingsFragment.CALENDAR_COLOR_KEY, Color.BLUE)
+
+        val values = ContentValues().apply {
+            put(CalendarContract.Calendars.NAME, courseTable.getCalendarTableName())
+            put(CalendarContract.Calendars.ACCOUNT_NAME, EmptyAuthenticator.ACCOUNT_NAME)
+            put(
+                CalendarContract.Calendars.ACCOUNT_TYPE,
+                EmptyAuthenticator.ACCOUNT_TYPE
+            )
+            put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, courseTable.name)
+            put(CalendarContract.Calendars.VISIBLE, 1)
+            put(CalendarContract.Calendars.CALENDAR_COLOR, color)
+            put(CalendarContract.Calendars.SYNC_EVENTS, 1)
+            put(CalendarContract.Calendars.CALENDAR_TIME_ZONE, timeZone.id)
+            put(CalendarContract.Calendars.OWNER_ACCOUNT, EmptyAuthenticator.ACCOUNT_NAME)
+            put(CalendarContract.Calendars.CAN_ORGANIZER_RESPOND, 0)
+        }
 
         val uri = context.contentResolver.insert(
             CalendarContract.Calendars.CONTENT_URI.asSyncAdapter(),
-            value
+            values
         )
 
         val id = if (uri == null) {
@@ -182,6 +156,44 @@ object CalendarOperator {
     }
 
     /**
+     * 用于更新日历表颜色的方法。
+     *
+     * @param context 更新操作的上下文。
+     * @param color 要更新的颜色。
+     */
+    @WorkerThread
+    fun updateCalendarColor(context: Context, @ColorInt color: Int) {
+        val eventProjection = arrayOf(CalendarContract.Calendars._ID)
+
+        val uri = CalendarContract.Calendars.CONTENT_URI
+        val selection = "((${CalendarContract.Calendars.ACCOUNT_NAME} = ?) AND (" +
+                "${CalendarContract.Calendars.ACCOUNT_TYPE} = ?) AND (" +
+                "${CalendarContract.Calendars.OWNER_ACCOUNT} = ?))"
+        val selectionArgs = arrayOf(
+            EmptyAuthenticator.ACCOUNT_NAME,
+            EmptyAuthenticator.ACCOUNT_TYPE,
+            EmptyAuthenticator.ACCOUNT_NAME
+        )
+        val cursor =
+            context.contentResolver.query(uri, eventProjection, selection, selectionArgs, null)
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                val calendarID = cursor.getLong(0)
+
+                //更改颜色
+                val values = ContentValues().apply {
+                    put(CalendarContract.Calendars.CALENDAR_COLOR, color)
+                }
+                val updateUri =
+                    ContentUris.withAppendedId(CalendarContract.Calendars.CONTENT_URI, calendarID)
+                context.contentResolver
+                    .update(updateUri.asSyncAdapter(), values, null, null)
+            }
+        }
+        cursor?.close()
+    }
+
+    /**
      * CourseTable的固定获取CalendarID的方法。
      *
      * @return 用于在创建日历表的过程的名称，对应字段为[CalendarContract.Calendars.NAME]。
@@ -208,16 +220,4 @@ object CalendarOperator {
      */
     private fun Uri.asSyncAdapter() =
         this.asSyncAdapter(EmptyAuthenticator.ACCOUNT_NAME, EmptyAuthenticator.ACCOUNT_TYPE)
-
-    /**
-     * 为日历对象随机选取一个颜色。
-     * 会从[Color.RED]，[Color.BLUE]，[Color.YELLOW]中选择一个。
-     *
-     * @return 随机选取的颜色
-     */
-    private fun getRandomColor() = when (Random.nextInt(2)) {
-        0 -> Color.RED
-        1 -> Color.BLUE
-        else -> Color.YELLOW
-    }
 }

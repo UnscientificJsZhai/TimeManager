@@ -20,22 +20,22 @@
         <item name="background">@color/white</item>
     </style>
 
-    <style name="Theme.TimeManager.FloatingButton" parent="Theme.TimeManager">
+    <style name="Theme.TimeManager.Widget.FloatingButton" parent="Theme.TimeManager">
         <item name="colorOnSecondary">@color/white</item>
     </style>
 
-    <style name="Theme.FloatingActivity" parent="Theme.AppCompat.Dialog">
+    <style name="Theme.TimeManager.FloatingActivity" parent="Theme.AppCompat.Dialog">
         <item name="windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
         <item name="android:background">@color/white</item>
     </style>
 
-    <style name="Theme.Widget.TextView.HeadLine" parent="Widget.AppCompat.TextView">
+    <style name="Theme.TimeManager.Widget.TextView.HeadLine" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="Theme.Widget.TextView.SubText" parent="Widget.AppCompat.TextView">
+    <style name="Theme.TimeManager.Widget.TextView.SubText" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray</item>
     </style>
 

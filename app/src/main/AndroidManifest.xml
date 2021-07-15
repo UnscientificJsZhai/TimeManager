@@ -34,7 +34,7 @@
         <activity android:name=".ui.main.MainActivity" />
         <activity
             android:name=".ui.main.CourseDetailActivity"
-            android:theme="@style/Theme.FloatingActivity" />
+            android:theme="@style/Theme.TimeManager.FloatingActivity" />
 
         <!--editor包-->
         <activity

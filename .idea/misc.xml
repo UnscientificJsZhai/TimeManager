@@ -12,9 +12,13 @@
         <entry key="app/src/main/res/layout/dialog_progress.xml" value="0.375" />
         <entry key="app/src/main/res/layout/recycler_class_time_editor.xml" value="0.25" />
         <entry key="app/src/main/res/layout/recycler_course.xml" value="0.15760869565217392" />
+        <entry key="app/src/main/res/layout/recycler_time_table_editor.xml" value="0.1693840579710145" />
+        <entry key="app/src/main/res/layout/widget_course_editor.xml" value="0.1693840579710145" />
+        <entry key="app/src/main/res/layout/widget_time_table_editor_header.xml" value="0.1693840579710145" />
         <entry key="app/src/main/res/menu/context_current_table_selector_long_press.xml" value="0.2359375" />
         <entry key="app/src/main/res/menu/menu_course_edit_activity.xml" value="0.2359375" />
         <entry key="app/src/main/res/menu/menu_current_table_selector_activity.xml" value="0.2359375" />
+        <entry key="app/src/main/res/xml/root_preferences.xml" value="0.1693840579710145" />
       </map>
     </option>
   </component>

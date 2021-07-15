@@ -13,7 +13,7 @@
         android:layout_marginBottom="16dp"
         android:layout_weight="1"
         android:clickable="true"
-        android:theme="@style/Theme.TimeManager.FloatingButton"
+        android:theme="@style/Theme.TimeManager.Widget.FloatingButton"
         app:backgroundTint="@color/skyBlue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

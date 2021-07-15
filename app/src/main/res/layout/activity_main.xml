@@ -37,7 +37,7 @@
         android:layout_marginBottom="24dp"
         android:clickable="true"
         android:src="@drawable/outline_add_24"
-        android:theme="@style/Theme.TimeManager.FloatingButton"
+        android:theme="@style/Theme.TimeManager.Widget.FloatingButton"
         android:tint="@color/white"
         app:backgroundTint="@color/skyBlue"
         app:layout_constraintBottom_toBottomOf="parent"
