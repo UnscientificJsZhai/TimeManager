@@ -2,10 +2,8 @@ package cn.unscientificjszhai.timemanager.ui.settings
 
 import android.Manifest
 import android.os.Bundle
-import android.view.ContextMenu
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
@@ -109,12 +107,14 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.CurrentTableSelector_Add -> {
-                val editText = TextInputEditText(this)
+                val root: FrameLayout =
+                    View.inflate(this, R.layout.dialog_input, null) as FrameLayout
+                val editText = root.findViewById<TextInputEditText>(R.id.InputDialog_EditText)
                 editText.setHint(R.string.activity_Welcome_PromptText)
 
                 AlertDialog.Builder(this)
                     .setTitle(R.string.activity_CurrentTableSelector_AddTableDialogTitle)
-                    .setView(editText)
+                    .setView(root)
                     .setNegativeButton(R.string.common_cancel) { dialog, _ ->
                         dialog?.dismiss()
                     }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
@@ -174,7 +174,9 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
             val courseTable = viewModel.tableList.value!![info.position]
             when (item.itemId) {
                 R.id.CurrentTableSelector_RenameTable -> {
-                    val editText = TextInputEditText(this)
+                    val root: FrameLayout =
+                        View.inflate(this, R.layout.dialog_input, null) as FrameLayout
+                    val editText = root.findViewById<TextInputEditText>(R.id.InputDialog_EditText)
                     editText.setHint(R.string.activity_Welcome_PromptText)
                     editText.setText(courseTable.name)
 

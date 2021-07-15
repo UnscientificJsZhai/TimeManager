@@ -58,7 +58,6 @@
             android:layout_marginEnd="16dp"
             android:background="?attr/selectableItemBackground"
             android:gravity="center_vertical|start"
-            android:text="text"
             android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/WeekImage"
@@ -110,7 +109,8 @@
             android:layout_marginTop="24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/CalenderImage"
-            app:srcCompat="@drawable/baseline_calendar_view_day_24" />
+            app:srcCompat="@drawable/baseline_calendar_view_day_24"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/Text_From"
@@ -132,7 +132,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/DayImage"
             app:layout_constraintStart_toEndOf="@+id/Text_From"
             app:layout_constraintTop_toTopOf="@+id/DayImage"
-            android:imeOptions="actionNext"/>
+            android:imeOptions="actionNext"
+            tools:ignore="Autofill,LabelFor" />
 
         <TextView
             android:id="@+id/Text_To"
@@ -152,7 +153,8 @@
             android:inputType="number"
             app:layout_constraintBottom_toBottomOf="@+id/DayImage"
             app:layout_constraintStart_toEndOf="@+id/Text_To"
-            app:layout_constraintTop_toTopOf="@+id/DayImage" />
+            app:layout_constraintTop_toTopOf="@+id/DayImage"
+            tools:ignore="Autofill,LabelFor" />
 
         <TextView
             android:id="@+id/Text_End"
@@ -209,7 +211,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/TeacherImage"
-            app:srcCompat="@drawable/baseline_location_on_24" />
+            app:srcCompat="@drawable/baseline_location_on_24"
+            tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ClassTimeEditView_LocationTextInputLayout"

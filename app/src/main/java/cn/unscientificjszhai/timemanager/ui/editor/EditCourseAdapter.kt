@@ -24,7 +24,7 @@ import cn.unscientificjszhai.timemanager.data.course.ClassTime
  * @param maxWeeks 最大周数。
  * @see EditCourseActivity
  */
-class EditCourseAdapter(private val classTimes: ArrayList<ClassTime>, private val maxWeeks: Int) :
+internal class EditCourseAdapter(private val classTimes: ArrayList<ClassTime>, private val maxWeeks: Int) :
     RecyclerView.Adapter<EditCourseAdapter.ViewHolder>() {
 
     companion object {

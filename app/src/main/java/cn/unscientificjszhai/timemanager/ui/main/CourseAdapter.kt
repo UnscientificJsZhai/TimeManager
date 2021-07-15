@@ -73,8 +73,9 @@ internal class CourseAdapter(private val activity: MainActivity) :
         try {
             val course = this.getItem(position).course
             holder.titleText.text = course.title
+            holder.informationText.visibility = View.VISIBLE
             holder.informationText.text = generateInformation(course){
-
+                holder.informationText.visibility = View.GONE
             }
         } catch (e: NullPointerException) {
             return

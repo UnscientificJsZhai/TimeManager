@@ -62,9 +62,6 @@ class CourseDetailActivity : AppCompatActivity() {
          * 此Activity在[onActivityResult]方法中接收[EditCourseActivity]返回的修改后对象时，requestCode为此值。
          */
         const val EDIT_REQUEST_CODE = 4
-
-        @Suppress("Unused")
-        const val TAG = "CourseDetailActivity"
     }
 
     private lateinit var timeManagerApplication: TimeManagerApplication
@@ -205,6 +202,8 @@ class CourseDetailActivity : AppCompatActivity() {
 
     /**
      * 生成第一行描述性文字。
+     *
+     * @return 描述学分和上课周数的文字。
      */
     private fun CourseWithClassTimes.descriptionText(): String {
         val stringBuilder = StringBuilder()
@@ -244,6 +243,11 @@ class CourseDetailActivity : AppCompatActivity() {
         return stringBuilder.toString()
     }
 
+    /**
+     * 生成第二行的描述性文字。
+     *
+     * @return 每个上课时间段的描述。每个[ClassTime]对象各占用一行。
+     */
     private fun CourseWithClassTimes.timeDescriptionText(): String {
         val stringBuilder = StringBuilder()
         val courseTable by timeManagerApplication
@@ -288,6 +292,11 @@ class CourseDetailActivity : AppCompatActivity() {
         return stringBuilder.toString()
     }
 
+    /**
+     * 生成第三行的描述性文字。
+     *
+     * @return 显示备注信息。
+     */
     private fun CourseWithClassTimes.remarkText(): String {
         return course.remarks
     }

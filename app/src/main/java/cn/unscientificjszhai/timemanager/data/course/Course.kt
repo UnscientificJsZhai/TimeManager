@@ -28,6 +28,7 @@ data class Course(
 ) : Serializable {
 
     companion object {
+
         /**
          * 表的名字。
          */

@@ -6,8 +6,14 @@ import android.view.ContextMenu
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * 支持ContextMenu的RecyclerView。
+ */
 class RecyclerViewWithContextMenu : RecyclerView {
 
+    /**
+     * 用于传递位置数据的MenuInfo
+     */
     class PositionMenuInfo : ContextMenu.ContextMenuInfo {
 
         var position = -1

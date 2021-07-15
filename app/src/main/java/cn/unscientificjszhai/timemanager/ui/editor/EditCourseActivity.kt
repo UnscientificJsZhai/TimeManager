@@ -59,7 +59,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
          */
         @JvmStatic
         fun startThisActivity(
-            context: CourseDetailActivity,
+            context: Context,
             courseWithClassTimes: CourseWithClassTimes
         ) {
             val intent = Intent(context, EditCourseActivity::class.java)
