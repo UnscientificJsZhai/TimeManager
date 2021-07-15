@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="@string/activity_TimeTableEditor_HeaderItemTitle"
-        android:textColor="@color/black"
         android:textSize="28sp"
+        android:theme="@style/Theme.TimeManager.Widget.TextView.HeadLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

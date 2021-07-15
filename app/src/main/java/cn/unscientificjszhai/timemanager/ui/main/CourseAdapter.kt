@@ -73,13 +73,15 @@ internal class CourseAdapter(private val activity: MainActivity) :
         try {
             val course = this.getItem(position).course
             holder.titleText.text = course.title
-            holder.informationText.text = generateInformation(course)
+            holder.informationText.text = generateInformation(course){
+
+            }
         } catch (e: NullPointerException) {
             return
         }
     }
 
-    private fun generateInformation(course: Course): String {
+    private fun generateInformation(course: Course, emptyOption: () -> Unit): String {
         val stringBuilder = StringBuilder()
 
         if (showTodayOnly()) {
@@ -121,11 +123,19 @@ internal class CourseAdapter(private val activity: MainActivity) :
             }
 
         } else {
-            stringBuilder.append(course.credit)
-            stringBuilder.append(activity.getString(R.string.activity_EditCourse_Credit))
+            var showEmptyMessage = true
+            if (course.credit != 0.0) {
+                stringBuilder.append(course.credit)
+                stringBuilder.append(activity.getString(R.string.activity_EditCourse_Credit))
+                showEmptyMessage = false
+            }
             if (course.remarks.isNotBlank()) {
                 stringBuilder.append(" ")
                 stringBuilder.append(course.remarks)
+                showEmptyMessage = false
+            }
+            if (showEmptyMessage) {
+                emptyOption()
             }
         }
 

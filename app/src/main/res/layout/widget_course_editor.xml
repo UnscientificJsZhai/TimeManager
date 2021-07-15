@@ -10,7 +10,8 @@
     android:layout_marginBottom="6dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    app:cardMaxElevation="12dp">
+    app:cardMaxElevation="12dp"
+    android:background="@color/CardView_BackgroundColor">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/widget_ClassTImeEditor_RootLayout"
@@ -44,7 +45,7 @@
                 android:id="@+id/EditCourseActivity_TitleEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@color/TextInputEditText_BackgroundColor"
                 android:imeOptions="actionNext"
                 android:inputType="text"
                 android:textSize="16sp" />
@@ -77,7 +78,7 @@
                 android:id="@+id/EditCourseActivity_CreditEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@color/TextInputEditText_BackgroundColor"
                 android:inputType="numberDecimal"
                 android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -99,9 +100,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="24dp"
-            android:hint="@string/activity_EditCourse_Description"
             android:enabled="true"
             android:gravity="top"
+            android:hint="@string/activity_EditCourse_Description"
             android:inputType="textMultiLine"
             android:maxLines="10"
             android:minLines="8"

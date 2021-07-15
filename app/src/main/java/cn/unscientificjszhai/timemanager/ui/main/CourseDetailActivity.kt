@@ -209,12 +209,14 @@ class CourseDetailActivity : AppCompatActivity() {
     private fun CourseWithClassTimes.descriptionText(): String {
         val stringBuilder = StringBuilder()
 
-        if (course.credit % 1 == 0.0) {
-            stringBuilder.append(course.credit.toInt())
-        } else {
-            stringBuilder.append(course.credit)
+        if (course.credit != 0.0) {
+            if (course.credit % 1 == 0.0) {
+                stringBuilder.append(course.credit.toInt())
+            } else {
+                stringBuilder.append(course.credit)
+            }
+            stringBuilder.append(getString(R.string.activity_EditCourse_Credit))
         }
-        stringBuilder.append(getString(R.string.activity_EditCourse_Credit))
 
         stringBuilder.append(" ")
 

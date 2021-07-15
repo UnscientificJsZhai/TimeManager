@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/activity_Welcome"
-        android:theme="@style/Theme.Widget.TextView.HeadLine"
+        android:theme="@style/Theme.TimeManager.Widget.TextView.HeadLine"
         android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@+id/WelcomeActivity_Button"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="@string/activity_Welcome_PromptText"
-        android:theme="@style/Theme.Widget.TextView.SubText"
+        android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
         app:layout_constraintBottom_toTopOf="@+id/WelcomeActivity_TableNameEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

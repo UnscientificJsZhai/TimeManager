@@ -126,12 +126,34 @@ class EditCourseActivity : CalendarOperatorActivity() {
         this.courseDatabase = (application as TimeManagerApplication).getCourseDatabase()
 
         //浮动按钮的监听器
-        findViewById<FloatingActionButton>(R.id.EditCourseActivity_PlusButton).setOnClickListener {
-            viewModel.classTimes.add(ClassTime())
+        val floatingActionButton =
+            findViewById<FloatingActionButton>(R.id.EditCourseActivity_PlusButton)
+        floatingActionButton.setOnClickListener {
+            val lastClassTime = viewModel.classTimes.lastOrNull()
+            if (lastClassTime == null || !viewModel.copyFromPrevious) {
+                viewModel.classTimes.add(ClassTime())
+            } else {
+                viewModel.classTimes.add(ClassTime(lastClassTime))
+            }
             this.adapter.notifyItemInserted(adapter.itemCount - 1)
 
             //滚动到底部
             ActivityUtility.RecyclerScrollHelper.scrollToBottom(this.rootRecyclerView)
+        }
+        floatingActionButton.setOnLongClickListener {
+            viewModel.copyFromPrevious = !viewModel.copyFromPrevious
+
+            Toast.makeText(
+                this,
+                if (viewModel.copyFromPrevious) {
+                    R.string.activity_EditCourse_CopyFromPrevious_True
+                } else {
+                    R.string.activity_EditCourse_CopyFromPrevious_False
+                },
+                Toast.LENGTH_SHORT
+            ).show()
+
+            true
         }
     }
 
@@ -254,14 +276,22 @@ class EditCourseActivity : CalendarOperatorActivity() {
 
             val course = this.viewModel.course
 
+            if(course?.title?.isEmpty() == true){
+                Toast.makeText(
+                    this,
+                    R.string.activity_EditCourse_DataError,
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@thread
+            }
+
             when {
                 course == null -> {
                     Toast.makeText(
                         this,
                         R.string.activity_EditCourse_DataError,
                         Toast.LENGTH_SHORT
-                    )
-                        .show()
+                    ).show()
                 }
                 course.id == null -> {
                     //新建Course对象时
@@ -295,7 +325,6 @@ class EditCourseActivity : CalendarOperatorActivity() {
                     }
 
                     finish()
-                    //返回的应该是MainActivity
                 }
                 else -> {
                     //修改现有Course对象时
@@ -345,7 +374,6 @@ class EditCourseActivity : CalendarOperatorActivity() {
                         CourseWithClassTimes(course, viewModel.classTimes)
                     )
                     finish()
-                    //返回的应该是CourseDetailActivity
                 }
             }
         }

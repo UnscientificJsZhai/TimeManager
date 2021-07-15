@@ -15,9 +15,8 @@
         android:layout_marginEnd="16dp"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:text="Title"
         android:textSize="36sp"
-        android:theme="@style/Theme.Widget.TextView.HeadLine"
+        android:theme="@style/Theme.TimeManager.Widget.TextView.HeadLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,9 +26,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="TextView"
         android:textSize="16sp"
-        android:theme="@style/Theme.Widget.TextView.SubText"
+        android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
         app:layout_constraintEnd_toEndOf="@+id/CourseDetailActivity_Title"
         app:layout_constraintStart_toStartOf="@+id/CourseDetailActivity_Title"
         app:layout_constraintTop_toBottomOf="@+id/CourseDetailActivity_Title" />
@@ -39,9 +37,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="TextView"
         android:textSize="16sp"
-        android:theme="@style/Theme.Widget.TextView.SubText"
+        android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
         app:layout_constraintEnd_toEndOf="@+id/CourseDetailActivity_DescriptionText"
         app:layout_constraintStart_toStartOf="@+id/CourseDetailActivity_DescriptionText"
         app:layout_constraintTop_toBottomOf="@+id/CourseDetailActivity_DescriptionText" />
@@ -51,9 +48,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="TextView"
         android:textSize="16sp"
-        android:theme="@style/Theme.Widget.TextView.SubText"
+        android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
         app:layout_constraintEnd_toEndOf="@+id/CourseDetailActivity_TimeDescriptionText"
         app:layout_constraintStart_toStartOf="@+id/CourseDetailActivity_TimeDescriptionText"
         app:layout_constraintTop_toBottomOf="@+id/CourseDetailActivity_TimeDescriptionText" />

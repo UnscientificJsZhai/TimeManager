@@ -41,28 +41,16 @@
             android:title="@string/preferences_CalendarOption_UpdateCalendar"
             app:key="createCalendar"
             app:summary="@string/preferences_CalendarOption_UpdateCalendarSummary" />
-    </PreferenceCategory>
 
-    <PreferenceCategory
-        app:isPreferenceVisible="false"
-        app:key="lab"
-        app:title="实验性">
+        <ListPreference
+            android:entries="@array/preferences_CalendarColor_Entries"
+            android:entryValues="@array/preferences_CalendarColor_EntryValues"
+            android:icon="@drawable/outline_palette_24"
+            android:title="@string/preferences_CalendarColor_Title"
+            app:key="calendarColor"
+            app:summary="@string/preferences_CalendarColor_Summary"
+            android:defaultValue="-16776961"/>
 
-        <Preference
-            app:key="insert"
-            app:title="插入表" />
-
-        <Preference
-            app:key="insertAll"
-            app:title="全部插入" />
-
-        <Preference
-            app:key="deleteEvents"
-            app:title="删除事件" />
-
-        <Preference
-            app:key="deleteAll"
-            app:title="全部删除" />
     </PreferenceCategory>
 
 </PreferenceScreen>
