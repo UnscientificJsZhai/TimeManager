@@ -6,6 +6,7 @@ import android.content.Context
 import android.provider.CalendarContract
 import android.util.Log
 import androidx.annotation.WorkerThread
+import androidx.preference.PreferenceManager
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.course.ClassTime
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
@@ -124,7 +125,25 @@ object EventsOperator {
                     )?.lastPathSegment
 
                     if (lastPathSegment != null) {
-                        event.course.associatedEventsId.add(lastPathSegment.toLong())
+                        val eventID = lastPathSegment.toLong()
+                        event.course.associatedEventsId.add(eventID)
+
+                        //添加提醒时间
+                        val sharedPreferences =
+                            PreferenceManager.getDefaultSharedPreferences(context)
+                        val time = sharedPreferences.getString("remindTime", "15")
+                        val remindValues = ContentValues().apply {
+                            put(CalendarContract.Reminders.MINUTES, time)
+                            put(CalendarContract.Reminders.EVENT_ID, eventID)
+                            put(
+                                CalendarContract.Reminders.METHOD,
+                                CalendarContract.Reminders.METHOD_ALERT
+                            )
+                        }
+                        context.contentResolver.insert(
+                            CalendarContract.Reminders.CONTENT_URI,
+                            remindValues
+                        )
                     } else {
                         Log.e(TAG, "addEvent: Event ID is null!")
                     }
@@ -235,5 +254,12 @@ object EventsOperator {
      *
      * @return 教师姓名 @上课地点
      */
-    private fun ClassTime.getCalendarDescription() = "${this.teacherName} @${this.location}"
+    private fun ClassTime.getCalendarDescription(): String {
+        val stringBuilder = StringBuilder()
+        stringBuilder.append(this.teacherName)
+        if (this.location.isNotBlank()) {
+            stringBuilder.append(" @").append(this.location)
+        }
+        return stringBuilder.toString()
+    }
 }

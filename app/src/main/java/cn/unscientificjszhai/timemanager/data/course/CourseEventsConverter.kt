@@ -2,6 +2,11 @@ package cn.unscientificjszhai.timemanager.data.course
 
 import androidx.room.TypeConverter
 
+/**
+ * 将[Course]类中存储关联的日历事件的数组转化为可存储在Room数据库中的格式的TypeConverter类。
+ *
+ * @see Course
+ */
 class CourseEventsConverter {
 
     @TypeConverter

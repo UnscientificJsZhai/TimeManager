@@ -43,13 +43,34 @@
             app:summary="@string/preferences_CalendarOption_UpdateCalendarSummary" />
 
         <ListPreference
+            android:defaultValue="-16776961"
             android:entries="@array/preferences_CalendarColor_Entries"
             android:entryValues="@array/preferences_CalendarColor_EntryValues"
             android:icon="@drawable/outline_palette_24"
             android:title="@string/preferences_CalendarColor_Title"
             app:key="calendarColor"
-            app:summary="@string/preferences_CalendarColor_Summary"
-            android:defaultValue="-16776961"/>
+            app:summary="@string/preferences_CalendarColor_Summary" />
+
+        <ListPreference
+            android:defaultValue="15"
+            android:entries="@array/preferences_RemindTime_Entries"
+            android:entryValues="@array/preferences_RemindTime_EntryValues"
+            app:key="remindTime"
+            app:title="@string/preferences_RemindTime_Title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/preferences_DisplayOption_CategoryTitle">
+
+        <ListPreference
+            android:defaultValue="title"
+            android:entries="@array/preferences_ShowOnMainActivity_Entries"
+            android:entryValues="@array/preferences_ShowOnMainActivity_EntryValues"
+            android:title="@string/preferences_ShowOnMainActivity_Title"
+            app:defaultValue="table"
+            app:key="showOnMainActivity"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 

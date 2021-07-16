@@ -63,7 +63,7 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
     private var calendarColorPreference: ListPreference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.root_preferences, rootKey)
+        setPreferencesFromResource(R.xml.settings_preferences, rootKey)
 
         //当前课程表的设置项
         this.currentTablePreference = findPreference(CURRENT_TABLE_KEY)

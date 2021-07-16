@@ -9,4 +9,28 @@
         <item>-16776961</item>
         <item>-256</item>
     </string-array>
+
+    <string-array name="preferences_RemindTime_Entries">
+        <item>@string/preferences_RemindTime_10Min</item>
+        <item>@string/preferences_RemindTime_15Min</item>
+        <item>@string/preferences_RemindTime_20Min</item>
+        <item>@string/preferences_RemindTime_30Min</item>
+    </string-array>
+
+    <string-array name="preferences_RemindTime_EntryValues">
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>30</item>
+    </string-array>
+
+    <string-array name="preferences_ShowOnMainActivity_Entries">
+        <item>@string/preferences_ShowOnMainActivity_TableNameOnly</item>
+        <item>@string/preferences_ShowOnMainActivity_Today</item>
+    </string-array>
+
+    <string-array name="preferences_ShowOnMainActivity_EntryValues">
+        <item>table</item>
+        <item>today</item>
+    </string-array>
 </resources>

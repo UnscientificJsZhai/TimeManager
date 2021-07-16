@@ -41,15 +41,15 @@
     <string name="data_Week5">Friday</string>
     <string name="data_Week6">Saturday</string>
     <string name="activity_Settings_CurrentCourseListTable">Current Table</string>
-    <string name="preferences_CurrentTable_HowManyWeeks">Weeks in Term</string>
+    <string name="preferences_CurrentTable_HowManyWeeks">Weeks in term</string>
     <string name="preferences_CurrentTable_MaxWeeksSummary">Week</string>
-    <string name="preferences_CurrentTable_ClassesPerDay">Classes per Day</string>
+    <string name="preferences_CurrentTable_ClassesPerDay">Classes per day</string>
     <string name="preferences_CurrentTable_ClassesPerDaySummary">Classes</string>
-    <string name="preferences_CurrentTable_TimeTable">Class Timetable</string>
-    <string name="preferences_CurrentTable_StartDate">Start Day of Term</string>
+    <string name="preferences_CurrentTable_TimeTable">Class timetable</string>
+    <string name="preferences_CurrentTable_StartDate">Start day of term</string>
     <string name="preferences_CurrentTable_StartDateSummary">%d.%d.%d</string>
     <string name="preferences_CalendarOption_CategoryTitle">Calendar Options</string>
-    <string name="preferences_CalendarOption_UpdateCalendar">Update Calendar</string>
+    <string name="preferences_CalendarOption_UpdateCalendar">Update calendar</string>
     <string name="preferences_CalendarOption_UpdateCalendarSummary">Update the content of the currently selected curriculum to the system calendar</string>
     <string name="activity_CurrentTableSelector_TableNotFound">Error:Table Not Found!</string>
     <string name="activity_CurrentTableSelector_AddTable">Add</string>
@@ -91,4 +91,13 @@
     <string name="preferences_CalendarColor_Summary">Color displayed in System Calendar App</string>
     <string name="color_Blue">Blue</string>
     <string name="color_Yellow">Yellow</string>
+    <string name="preferences_DisplayOption_CategoryTitle">Display Options</string>
+    <string name="preferences_ShowOnMainActivity_Title">Show on main page</string>
+    <string name="preferences_ShowOnMainActivity_TableNameOnly">Show table title only</string>
+    <string name="preferences_ShowOnMainActivity_Today">Show today information</string>
+    <string name="preferences_RemindTime_Title">Default remind time</string>
+    <string name="preferences_RemindTime_10Min">10 Minutes</string>
+    <string name="preferences_RemindTime_15Min">15 Minutes</string>
+    <string name="preferences_RemindTime_20Min">20 Minutes</string>
+    <string name="preferences_RemindTime_30Min">30 Minutes</string>
 </resources>

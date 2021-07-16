@@ -1,5 +1,7 @@
 package cn.unscientificjszhai.timemanager.data
 
+import android.content.Context
+import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.data.course.ClassTime
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable

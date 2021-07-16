@@ -16,6 +16,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
@@ -178,12 +179,43 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
 
     override fun onStart() {
         super.onStart()
-
         //更新ActionBar的内容
-        supportActionBar?.let { actionBar ->
-            timeManagerApplication.courseTable?.let { courseTable ->
-                actionBar.title = courseTable.name
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val option = sharedPreferences.getString("showOnMainActivity", "table")
+        val stringBuilder = StringBuilder()
+        val courseTable by timeManagerApplication
+        when (option) {
+            "table" -> stringBuilder.append(courseTable.name)
+            "today" -> {
+
+                /**
+                 * 用来获取当前是星期几的局部函数。
+                 *
+                 * @return 表示星期几的字符串，可以直接用于显示。
+                 */
+                fun dayOfWeek(): String = getString(
+                    when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
+                        Calendar.MONDAY -> R.string.data_Week1
+                        Calendar.TUESDAY -> R.string.data_Week2
+                        Calendar.WEDNESDAY -> R.string.data_Week3
+                        Calendar.THURSDAY -> R.string.data_Week4
+                        Calendar.FRIDAY -> R.string.data_Week5
+                        Calendar.SATURDAY -> R.string.data_Week6
+                        else -> R.string.data_Week0
+                    }
+                )
+
+                stringBuilder.append(
+                    getString(R.string.view_ClassTimeEdit_WeekItem_ForKotlin)
+                        .format(nowTimeTagger.getWeekNumber())
+                )
+                    .append(" ")
+                    .append(dayOfWeek())
             }
+        }
+        supportActionBar?.let { actionBar ->
+            actionBar.title = stringBuilder.toString()
+
         }
     }
 

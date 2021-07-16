@@ -92,6 +92,15 @@
     <string name="preferences_UpdateCalendar_Complete">更新完成</string>
     <string name="preferences_CalendarColor_Title">日历颜色</string>
     <string name="preferences_CalendarColor_Summary">日历表在系统日历中的颜色</string>
+    <string name="preferences_RemindTime_Title">上课前提醒时间</string>
+    <string name="preferences_RemindTime_10Min">10分钟</string>
+    <string name="preferences_RemindTime_15Min">15分钟</string>
+    <string name="preferences_RemindTime_20Min">20分钟</string>
+    <string name="preferences_RemindTime_30Min">30分钟</string>
+    <string name="preferences_DisplayOption_CategoryTitle">界面显示设置</string>
+    <string name="preferences_ShowOnMainActivity_Title">首页标题显示内容</string>
+    <string name="preferences_ShowOnMainActivity_TableNameOnly">显示课程表标题</string>
+    <string name="preferences_ShowOnMainActivity_Today">显示今天的情况</string>
 
     <string name="activity_CurrentTableSelector_TableNotFound">错误：找不到指定课程表</string>
     <string name="activity_CurrentTableSelector_AddTable">添加</string>
