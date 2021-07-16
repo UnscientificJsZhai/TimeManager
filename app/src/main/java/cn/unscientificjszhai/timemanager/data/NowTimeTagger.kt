@@ -1,7 +1,5 @@
 package cn.unscientificjszhai.timemanager.data
 
-import android.content.Context
-import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.data.course.ClassTime
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
@@ -136,7 +134,6 @@ class NowTimeTagger(private var startDate: Calendar) {
                 if (classTime.getWeekData(weekNumber) &&
                     (classTime.whichDay + 1) == nowDate.get(Calendar.DAY_OF_WEEK)
                 ) {
-                    courseWithClassTimes.course.specificClassTime = WeakReference(classTime)
                     classTimes.add(ClassTimeCompareOperator(classTime, courseWithClassTimes))
                 }
             }
@@ -144,9 +141,9 @@ class NowTimeTagger(private var startDate: Calendar) {
 
         classTimes.sort()
         classTimes.forEach {
-            if (!newList.contains(it.courseWithClassTimes)) {
-                newList.add(it.courseWithClassTimes)
-            }
+            val courseWithClassTimes = CourseWithClassTimes(it.courseWithClassTimes)
+            courseWithClassTimes.course.specificClassTime = WeakReference(it.classTime)
+            newList.add(courseWithClassTimes)
         }
 
         return newList

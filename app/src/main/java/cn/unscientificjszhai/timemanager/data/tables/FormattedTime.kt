@@ -137,7 +137,7 @@ class FormattedTime {
      * @see AFTER
      */
     fun isDuring(time: Calendar): Int {
-        val timeFormat = (time.get(Calendar.HOUR) + 1 * 60) + time.get(Calendar.MINUTE)
+        val timeFormat = ((time.get(Calendar.HOUR_OF_DAY)) * 60) + time.get(Calendar.MINUTE)
         val startFormat = startH * 60 + startM
         val endFormat = endH * 60 + endM
 

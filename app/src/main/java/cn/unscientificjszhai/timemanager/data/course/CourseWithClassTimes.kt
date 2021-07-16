@@ -14,4 +14,7 @@ data class CourseWithClassTimes(
     @Embedded val course: Course,
     @Relation(parentColumn = "id", entityColumn = "course_id")
     var classTimes: List<ClassTime>
-) : Serializable
+) : Serializable {
+
+    constructor(template: CourseWithClassTimes) : this(template.course.copy(), template.classTimes)
+}

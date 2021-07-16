@@ -74,7 +74,7 @@ internal class CourseAdapter(private val activity: MainActivity) :
             val course = this.getItem(position).course
             holder.titleText.text = course.title
             holder.informationText.visibility = View.VISIBLE
-            holder.informationText.text = generateInformation(course){
+            holder.informationText.text = generateInformation(course) {
                 holder.informationText.visibility = View.GONE
             }
         } catch (e: NullPointerException) {
@@ -93,15 +93,19 @@ internal class CourseAdapter(private val activity: MainActivity) :
                 val classTime = course.specificClassTime!!.get()
                 if (classTime != null) {
                     //上课时间
+                    val nowLessonNumber = timeTagger.nowLessonNumber(courseTable)
                     when {
-                        timeTagger.nowLessonNumber(courseTable) - classTime.start == 0.0 -> {
+                        nowLessonNumber - classTime.start == 0.0 -> {
                             stringBuilder.append(activity.getString(R.string.activity_Main_TodayOnlyMode_During))
+                                .append(" ")
                         }
-                        timeTagger.nowLessonNumber(courseTable) - classTime.start == 0.5 -> {
+                        nowLessonNumber - classTime.start == -0.5 -> {
                             stringBuilder.append(activity.getString(R.string.activity_Main_TodayOnlyMode_Next))
+                                .append(" ")
                         }
-                        timeTagger.nowLessonNumber(courseTable) - classTime.start > 0 -> {
+                        nowLessonNumber - classTime.start > 0 -> {
                             stringBuilder.append(activity.getString(R.string.activity_Main_TodayOnlyMode_Finished))
+                                .append(" ")
                         }
                     }
 
@@ -150,6 +154,13 @@ internal class CourseAdapter(private val activity: MainActivity) :
      * @param stringBuilder 传入一个StringBuilder对象用于构建文本。
      */
     private fun FormattedTime.getTimeDescriptionText(stringBuilder: StringBuilder) {
+        fun Int.with0() =
+            when {
+                this < 0 -> ""
+                this < 9 -> "0$this"
+                else -> this.toString()
+            }
+
         if (Settings.System.getString(
                 activity.contentResolver,
                 Settings.System.TIME_12_24
@@ -163,7 +174,7 @@ internal class CourseAdapter(private val activity: MainActivity) :
                 stringBuilder.append(activity.getString(R.string.common_time_noon))
                 this.startH
             }
-            stringBuilder.append("$newStartH:${this.startM}")
+            stringBuilder.append("$newStartH:${this.startM.with0()}")
             val newEndH = if (this.endH > 12) {
                 stringBuilder.append(activity.getString(R.string.common_time_afternoon))
                 this.endH - 12
@@ -171,10 +182,10 @@ internal class CourseAdapter(private val activity: MainActivity) :
                 stringBuilder.append(activity.getString(R.string.common_time_noon))
                 this.endH
             }
-            stringBuilder.append("-$newEndH:${this.endM}")
+            stringBuilder.append("-$newEndH:${this.endM.with0()}")
         } else {
-            stringBuilder.append("${this.startH}:${this.startM}")
-            stringBuilder.append("-${this.endH}:${this.endM}")
+            stringBuilder.append("${this.startH}:${this.startM.with0()}")
+            stringBuilder.append("-${this.endH}:${this.endM.with0()}")
         }
     }
 }

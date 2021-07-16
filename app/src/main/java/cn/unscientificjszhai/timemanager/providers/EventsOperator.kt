@@ -61,7 +61,7 @@ object EventsOperator {
             startTime.set(Calendar.WEEK_OF_YEAR, startTime.get(Calendar.WEEK_OF_YEAR) + (start - 1))
             startTime.set(Calendar.DAY_OF_WEEK, classTime.whichDay + 1)
             val formattedStartTime = FormattedTime(courseTable.timeTable[classTime.start - 1])
-            startTime.set(Calendar.HOUR, formattedStartTime.startH)
+            startTime.set(Calendar.HOUR_OF_DAY, formattedStartTime.startH)
             startTime.set(Calendar.MINUTE, formattedStartTime.startM)
 
             this.put(CalendarContract.Events.DTSTART, startTime.timeInMillis)
