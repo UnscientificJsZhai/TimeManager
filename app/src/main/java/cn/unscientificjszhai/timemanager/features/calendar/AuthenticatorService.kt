@@ -1,4 +1,4 @@
-package cn.unscientificjszhai.timemanager.providers
+package cn.unscientificjszhai.timemanager.features.calendar
 
 import android.app.Service
 import android.content.Intent

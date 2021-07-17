@@ -62,12 +62,12 @@
     <string name="activity_TimeTableEditor_HeaderEditDialogHint">min</string>
     <string name="activity_TimeTableEditor_HeaderEditDialogTitle">Length of each class</string>
     <string name="activity_TimeTableEditor_HeaderItemTitle">Length of each class is %d min(s)</string>
-    <string name="activity_WelcomeActivity_AskPermissionTitle" translatable="false">Permission Is Needed</string>
+    <string name="activity_WelcomeActivity_AskPermissionTitle" >Permission Is Needed</string>
     <string name="activity_WelcomeActivity_AskPermissionText">This App imports the course schedule directly into the calendar and informs you of class information in the form of system calendar events. Please grant calendar permission to use this app.</string>
     <string name="activity_WelcomeActivity_SettingsPermissionText">Will jump to system settings to request permission</string>
     <string name="activity_WelcomeActivity_FailToJumpToSettings">Unable to start system settings</string>
     <string name="common_time_noon">A.M.</string>
-    <string name="common_time_afternoon" translatable="false">P.M.</string>
+    <string name="common_time_afternoon">P.M.</string>
     <string name="dialog_ProgressDialog_Message">Processing</string>
     <string name="activity_CourseDetail_AskPermissionText">"You need to grant access to the calendar to delete it. Do you want to grant permission? If you agree, you will be redirected to the application details page. Please grant this application calendar permission here. "</string>
     <string name="activity_EditCourse_AskPermissionText">You need to grant access to the calendar to save edits. Do you want to grant permission?</string>
@@ -76,14 +76,14 @@
     <string name="activity_CurrentTableSelector_ContextMenu_Edit">Rename</string>
     <string name="activity_CurrentTableSelector_PermissionDeniedDialogMessage">No calendar write permission is granted and cannot be changed.</string>
     <string name="preferences_UpdateCalendar_Processing">Updating…</string>
-    <string name="preferences_UpdateCalendar_Complete" translatable="false">Complete</string>
-    <string name="preferences_UpdateCalendar_DialogMessage" translatable="false">Doing this will delete the calendar of the current curriculum and recreate it. Do you want to continue?</string>
-    <string name="activity_Main_TodayOnlyMode_DataError" translatable="false">Data error, unable to show details</string>
-    <string name="activity_CourseDetail_DataError" translatable="false">Data error,please try again</string>
-    <string name="activity_CourseDetail_WeekFormatText" translatable="false">from %d to %d</string>
+    <string name="preferences_UpdateCalendar_Complete" >Complete</string>
+    <string name="preferences_UpdateCalendar_DialogMessage" >Doing this will delete the calendar of the current curriculum and recreate it. Do you want to continue?</string>
+    <string name="activity_Main_TodayOnlyMode_DataError" >Data error, unable to show details</string>
+    <string name="activity_CourseDetail_DataError" >Data error,please try again</string>
+    <string name="activity_CourseDetail_WeekFormatText" >from %d to %d</string>
     <string name="activity_CourseDetail_LessonNumberFormatText">lesson %d-%d</string>
-    <string name="activity_Main_TodayOnlyMode_Finished" translatable="false">Ended</string>
-    <string name="activity_Main_TodayOnlyMode_During" translatable="false">Now</string>
+    <string name="activity_Main_TodayOnlyMode_Finished" >Ended</string>
+    <string name="activity_Main_TodayOnlyMode_During">Now</string>
     <string name="activity_Main_TodayOnlyMode_Next">About to start</string>
     <string name="activity_EditCourse_CopyFromPrevious_True">New item will copy from previous item to make editing easier</string>
     <string name="activity_EditCourse_CopyFromPrevious_False">New item will no longer copy from previous item,long click add button to cancel</string>
@@ -100,4 +100,13 @@
     <string name="preferences_RemindTime_15Min">15 Minutes</string>
     <string name="preferences_RemindTime_20Min">20 Minutes</string>
     <string name="preferences_RemindTime_30Min">30 Minutes</string>
+    <string name="preferences_Backup_CategoryTitle">Backup,Import and Export</string>
+    <string name="preferences_Backup_Title">Export backup</string>
+    <string name="preferences_Import_Title">Import backup</string>
+    <string name="preferences_ExportICS_Title">Export as ICS file</string>
+    <string name="preferences_Import_Summary">Data imported will become a new table.</string>
+    <string name="preferences_ExportsICS_Summary">ICS file is use to import events into calendar apps.</string>
+    <string name="activity_RestoreBackup_ButtonText">Choose file</string>
+    <string name="activity_Settings_FailToBackup">Fail to export backup</string>
+    <string name="activity_Settings_ImportError">Fail to import</string>
 </resources>

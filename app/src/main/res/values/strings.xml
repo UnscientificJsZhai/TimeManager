@@ -76,6 +76,8 @@
 
     <!-- 包ui.settings使用 -->
     <string name="activity_Settings_CurrentCourseListTable">当前课程表</string>
+    <string name="activity_Settings_FailToBackup">导出失败</string>
+    <string name="activity_Settings_ImportError">导入失败，文件可能损坏</string>
     <string name="preferences_CurrentTable_HowManyWeeks">学期上课周数</string>
     <string name="preferences_CurrentTable_MaxWeeksSummary">周</string>
     <string name="preferences_CurrentTable_ClassesPerDay">每日上课节数</string>
@@ -101,6 +103,12 @@
     <string name="preferences_ShowOnMainActivity_Title">首页标题显示内容</string>
     <string name="preferences_ShowOnMainActivity_TableNameOnly">显示课程表标题</string>
     <string name="preferences_ShowOnMainActivity_Today">显示今天的情况</string>
+    <string name="preferences_Backup_CategoryTitle">备份和导入导出</string>
+    <string name="preferences_Backup_Title">导出备份</string>
+    <string name="preferences_Import_Title">导入备份</string>
+    <string name="preferences_Import_Summary">导入的数据将创建一个新的课程表，无法与现有课程表合并。</string>
+    <string name="preferences_ExportICS_Title">导出为ICS文件</string>
+    <string name="preferences_ExportsICS_Summary">ICS文件可以导入到日历中。</string>
 
     <string name="activity_CurrentTableSelector_TableNotFound">错误：找不到指定课程表</string>
     <string name="activity_CurrentTableSelector_AddTable">添加</string>
@@ -116,5 +124,7 @@
     <string name="activity_TimeTableEditor_HeaderEditDialogHint">分钟</string>
     <string name="activity_TimeTableEditor_StartTime">开始时间</string>
     <string name="activity_TimeTableEditor_EndTime">结束时间</string>
+
+    <string name="activity_RestoreBackup_ButtonText">选择文件</string>
 
 </resources>

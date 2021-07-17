@@ -12,8 +12,8 @@ import androidx.preference.PreferenceFragmentCompat
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
-import cn.unscientificjszhai.timemanager.providers.CalendarOperator
-import cn.unscientificjszhai.timemanager.providers.EventsOperator
+import cn.unscientificjszhai.timemanager.features.calendar.CalendarOperator
+import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
 import cn.unscientificjszhai.timemanager.ui.ProgressDialog
 import java.util.*
 import kotlin.concurrent.thread
@@ -61,6 +61,9 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
 
     private var updateCalendarPreference: Preference? = null
     private var calendarColorPreference: ListPreference? = null
+
+    private var saveBackupPreference: Preference? = null
+    private var importBackupPreference: Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_preferences, rootKey)
@@ -164,6 +167,18 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
                     CalendarOperator.updateCalendarColor(requireContext(), color)
                 }
             }
+            true
+        }
+
+        this.saveBackupPreference = findPreference("backup")
+        saveBackupPreference?.setOnPreferenceClickListener {
+            (requireActivity() as SettingsActivity).saveBackup()
+            true
+        }
+
+        this.importBackupPreference = findPreference("import")
+        importBackupPreference?.setOnPreferenceClickListener {
+            (requireActivity() as SettingsActivity).importBackup()
             true
         }
     }

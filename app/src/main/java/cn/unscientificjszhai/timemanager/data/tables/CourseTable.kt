@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import java.io.Serializable
 import java.util.*
 import kotlin.reflect.KProperty
 
@@ -20,14 +21,14 @@ import kotlin.reflect.KProperty
 @Entity(tableName = CourseTable.TABLE_NAME)
 @TypeConverters(TimeTableTypeConverter::class)
 data class CourseTable(
-    @PrimaryKey(autoGenerate = true) val id: Long?,
+    @PrimaryKey(autoGenerate = true) var id: Long?,
     var name: String,
     @ColumnInfo(name = "class_per_day") var classesPerDay: Int,
     @ColumnInfo(name = "max_weeks") var maxWeeks: Int,
     @ColumnInfo(name = "time_table") var timeTable: Array<String>,
     @ColumnInfo(name = "start_date") var startDate: Calendar,
     @ColumnInfo(name = "calendar_id") var calendarID: Long?
-) {
+) : Serializable {
 
     companion object {
 

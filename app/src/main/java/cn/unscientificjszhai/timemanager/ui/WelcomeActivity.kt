@@ -15,8 +15,8 @@ import androidx.core.content.ContextCompat
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
-import cn.unscientificjszhai.timemanager.providers.CalendarOperator
-import cn.unscientificjszhai.timemanager.providers.EmptyAuthenticator
+import cn.unscientificjszhai.timemanager.features.calendar.CalendarOperator
+import cn.unscientificjszhai.timemanager.features.calendar.EmptyAuthenticator
 import cn.unscientificjszhai.timemanager.ui.ActivityUtility.jumpToSystemPermissionSettings
 import cn.unscientificjszhai.timemanager.ui.ActivityUtility.runIfPermissionGranted
 import cn.unscientificjszhai.timemanager.ui.main.MainActivity

@@ -74,4 +74,23 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/preferences_Backup_CategoryTitle">
+
+        <Preference
+            android:icon="@drawable/outline_backup_table_24"
+            app:key="backup"
+            app:title="@string/preferences_Backup_Title" />
+
+        <Preference
+            android:icon="@drawable/outline_settings_backup_restore_24"
+            android:key="import"
+            app:summary="@string/preferences_Import_Summary"
+            app:title="@string/preferences_Import_Title" />
+
+        <Preference
+            app:key="ics"
+            app:summary="@string/preferences_ExportsICS_Summary"
+            app:title="@string/preferences_ExportICS_Title" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

@@ -5,7 +5,7 @@ import androidx.preference.PreferenceDataStore
 import cn.unscientificjszhai.timemanager.data.course.ClassTime
 import cn.unscientificjszhai.timemanager.data.dao.CourseTableDao
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
-import cn.unscientificjszhai.timemanager.providers.EventsOperator
+import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
 import kotlin.concurrent.thread
 
 /**

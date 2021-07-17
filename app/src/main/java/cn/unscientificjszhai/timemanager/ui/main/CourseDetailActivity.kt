@@ -16,7 +16,7 @@ import cn.unscientificjszhai.timemanager.data.course.ClassTime
 import cn.unscientificjszhai.timemanager.data.course.Course
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.dao.CourseDao
-import cn.unscientificjszhai.timemanager.providers.EventsOperator
+import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
 import cn.unscientificjszhai.timemanager.ui.ActivityUtility.jumpToSystemPermissionSettings
 import cn.unscientificjszhai.timemanager.ui.ActivityUtility.runIfPermissionGranted
 import cn.unscientificjszhai.timemanager.ui.editor.EditCourseActivity

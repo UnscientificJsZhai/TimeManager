@@ -14,7 +14,7 @@ import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.data.tables.FormattedTime
-import cn.unscientificjszhai.timemanager.providers.EventsOperator
+import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
 import cn.unscientificjszhai.timemanager.ui.ActivityUtility
 import kotlin.concurrent.thread
 

@@ -1,4 +1,4 @@
-package cn.unscientificjszhai.timemanager.providers
+package cn.unscientificjszhai.timemanager.features.calendar
 
 import android.content.ContentUris
 import android.content.ContentValues
@@ -6,7 +6,6 @@ import android.content.Context
 import android.graphics.Color
 import android.net.Uri
 import android.provider.CalendarContract
-import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.annotation.WorkerThread
 import androidx.preference.PreferenceManager

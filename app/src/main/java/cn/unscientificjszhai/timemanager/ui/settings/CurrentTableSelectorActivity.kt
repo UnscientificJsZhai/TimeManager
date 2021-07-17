@@ -2,6 +2,7 @@ package cn.unscientificjszhai.timemanager.ui.settings
 
 import android.Manifest
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.Toast
@@ -12,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
-import cn.unscientificjszhai.timemanager.providers.CalendarOperator
+import cn.unscientificjszhai.timemanager.features.calendar.CalendarOperator
 import cn.unscientificjszhai.timemanager.ui.ActivityUtility
 import cn.unscientificjszhai.timemanager.ui.ActivityUtility.runIfPermissionGranted
 import cn.unscientificjszhai.timemanager.ui.CalendarOperatorActivity
@@ -180,9 +181,13 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
                     editText.setHint(R.string.activity_Welcome_PromptText)
                     editText.setText(courseTable.name)
 
+                    if (root.parent != null) {
+                        Log.e("Root", "onContextItemSelected: ")
+                    }
+
                     AlertDialog.Builder(this)
-                        .setTitle(R.string.activity_CurrentTableSelector_AddTableDialogTitle)
-                        .setView(editText)
+                        .setTitle(R.string.activity_CurrentTableSelector_ContextMenu_Edit)
+                        .setView(root)
                         .setNegativeButton(R.string.common_cancel) { dialog, _ ->
                             dialog?.dismiss()
                         }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
