@@ -28,15 +28,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- main包 -->
+        </activity>
+        <!-- main包 -->
         <activity android:name=".ui.main.MainActivity" />
         <activity
             android:name=".ui.main.CourseDetailActivity"
-            android:theme="@style/Theme.TimeManager.FloatingActivity" /> <!-- editor包 -->
+            android:theme="@style/Theme.TimeManager.FloatingActivity" />
+        <!-- editor包 -->
         <activity
             android:name=".ui.editor.EditCourseActivity"
             android:label="@string/activity_EditCourse_Label"
-            android:parentActivityName=".ui.main.MainActivity" /> <!-- settings包 -->
+            android:parentActivityName=".ui.main.MainActivity" />
+        <!-- settings包 -->
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:label="@string/common_settings"

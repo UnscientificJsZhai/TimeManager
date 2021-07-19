@@ -6,22 +6,14 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.room.Room
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
-import cn.unscientificjszhai.timemanager.data.database.CourseDatabase
-import cn.unscientificjszhai.timemanager.features.backup.TableWithCourses
+import cn.unscientificjszhai.timemanager.features.backup.BackupOperator
 import cn.unscientificjszhai.timemanager.ui.ActivityUtility
 import cn.unscientificjszhai.timemanager.ui.CalendarOperatorActivity
-import cn.unscientificjszhai.timemanager.ui.ProgressDialog
 import cn.unscientificjszhai.timemanager.ui.main.MainActivity
-import java.io.IOException
-import java.io.ObjectInputStream
-import java.nio.charset.StandardCharsets
-import kotlin.concurrent.thread
 
 /**
  * 设置Activity，设置项的初始化在SettingsFragment中。使用了JetPack库的Preference库。
@@ -86,32 +78,10 @@ class SettingsActivity : CalendarOperatorActivity() {
         //定义保存备份的逻辑
         this.backupLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == RESULT_OK) {
+                if(it.resultCode == RESULT_OK){
                     val uri = it.data?.data
-                    if (uri != null) {
-                        val progressDialog = ProgressDialog(this)
-                        progressDialog.show()
-                        thread(start = true) {
-                            val objectString: String
-                            val courseList =
-                                timeManagerApplication.getCourseDatabase().courseDao().getCourses()
-                            val serializableObject = TableWithCourses(courseTable, courseList)
-                            try {
-                                objectString = serializableObject.serializeObject()
-                                val outputStream = contentResolver.openOutputStream(uri)
-                                outputStream!!.write(objectString.toByteArray(StandardCharsets.ISO_8859_1))
-                                outputStream.close()
-                            } catch (e: IOException) {
-                                runOnUiThread {
-                                    Toast.makeText(
-                                        this,
-                                        R.string.activity_Settings_FailToBackup,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-                            progressDialog.postDismiss()
-                        }
+                    if(uri!=null){
+                        BackupOperator.exportBackup(this,uri)
                     }
                 }
             }
@@ -119,71 +89,10 @@ class SettingsActivity : CalendarOperatorActivity() {
         //定义导入备份的逻辑
         this.importLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == RESULT_OK) {
+                if(it.resultCode == RESULT_OK){
                     val uri = it.data?.data
-                    if (uri != null) {
-                        val progressDialog = ProgressDialog(this)
-                        progressDialog.show()
-                        thread(start = true) {
-                            val inputStream = contentResolver.openInputStream(uri)
-                            val objectInputStream = ObjectInputStream(inputStream)
-                            val tableWithCourses: TableWithCourses?
-                            try {
-                                tableWithCourses =
-                                    objectInputStream.readObject() as TableWithCourses?
-                            } catch (e: Exception) {
-                                progressDialog.postDismiss()
-                                runOnUiThread {
-                                    Toast.makeText(
-                                        this,
-                                        R.string.activity_Settings_ImportError,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                return@thread
-                            } finally {
-                                objectInputStream.close()
-                                inputStream?.close()
-                            }
-
-                            if (tableWithCourses == null) {
-                                progressDialog.postDismiss()
-                                runOnUiThread {
-                                    Toast.makeText(
-                                        this,
-                                        R.string.activity_Settings_ImportError,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                return@thread
-                            } else {
-                                val newCourseTable = tableWithCourses.courseTable.apply {
-                                    id = null
-                                }
-                                val courseTableDao =
-                                    timeManagerApplication.getCourseTableDatabase()
-                                        .courseTableDao()
-                                val tableID = courseTableDao.insertCourseTable(newCourseTable)
-                                val courseDatabase =
-                                    Room.databaseBuilder(
-                                        this,
-                                        CourseDatabase::class.java,
-                                        "table$tableID.db"
-                                    ).build()
-                                //添加课程
-                                val courseDao = courseDatabase.courseDao()
-                                val classTimeDao = courseDatabase.classTimeDao()
-                                for (courseWithClassTimes in tableWithCourses.courses) {
-                                    courseDao.insertCourse(courseWithClassTimes.course.apply {
-                                        associatedEventsId.clear()
-                                    })
-                                    for (classTime in courseWithClassTimes.classTimes) {
-                                        classTimeDao.insertClassTime(classTime)
-                                    }
-                                }
-                            }
-                            progressDialog.postDismiss()
-                        }
+                    if(uri!=null){
+                        BackupOperator.importBackup(this,uri)
                     }
                 }
             }
@@ -207,18 +116,10 @@ class SettingsActivity : CalendarOperatorActivity() {
      */
     internal fun saveBackup() {
         val courseTable by timeManagerApplication
-
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.type = "application/octet-stream"
-        intent.putExtra(Intent.EXTRA_TITLE, "${courseTable.name}.tmb")
-        backupLauncher.launch(intent)
+        backupLauncher.launch(BackupOperator.getExportBackupIntent(courseTable))
     }
 
     internal fun importBackup() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.type = "application/octet-stream"
-        importLauncher.launch(intent)
+        importLauncher.launch(BackupOperator.getImportBackupIntent())
     }
 }
