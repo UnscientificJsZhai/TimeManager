@@ -28,7 +28,7 @@ object ActivityUtility {
      */
     fun setSystemUIAppearance(context: Activity) {
         val window = context.window
-        if (context.applicationContext.resources.configuration.uiMode == 0x21) {
+        if (context.isDarkMode()) {
             //深色模式不进行调整
             return
         }
@@ -43,6 +43,12 @@ object ActivityUtility {
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
     }
+
+    /**
+     * 判断当前是否处于深色模式中。
+     */
+    private fun Context.isDarkMode(): Boolean =
+        this.applicationContext.resources.configuration.uiMode == 0x21
 
     /**
      * 当获得权限时运行。
@@ -92,7 +98,7 @@ object ActivityUtility {
          * @param recyclerView 要滚动的RecyclerView。
          * @param position 目标位置。
          */
-        fun scrollToPosition(recyclerView: RecyclerView, position: Int) {
+        private fun scrollToPosition(recyclerView: RecyclerView, position: Int) {
             val manager = recyclerView.layoutManager
             if (manager is LinearLayoutManager) {
                 val scroller = LinearSmoothScroller(recyclerView.context)
@@ -113,10 +119,5 @@ object ActivityUtility {
                 scrollToPosition(recyclerView, position)
             }
         }
-    }
-
-    fun Int.dp(context: Context):Int {
-        val scale = context.resources.displayMetrics.density
-        return (this*scale+0.5f).toInt()
     }
 }

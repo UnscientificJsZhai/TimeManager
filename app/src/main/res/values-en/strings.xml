@@ -109,4 +109,5 @@
     <string name="activity_RestoreBackup_ButtonText">Choose file</string>
     <string name="activity_Settings_FailToBackup">Fail to export backup</string>
     <string name="activity_Settings_ImportError">Fail to import</string>
+    <string name="preferences_Backup_Summary">Export current table.Old backup may not funtional.</string>
 </resources>

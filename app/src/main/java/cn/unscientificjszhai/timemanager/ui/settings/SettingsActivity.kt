@@ -11,9 +11,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.features.backup.BackupOperator
+import cn.unscientificjszhai.timemanager.features.backup.CourseICS
 import cn.unscientificjszhai.timemanager.ui.ActivityUtility
 import cn.unscientificjszhai.timemanager.ui.CalendarOperatorActivity
 import cn.unscientificjszhai.timemanager.ui.main.MainActivity
+import kotlin.concurrent.thread
 
 /**
  * 设置Activity，设置项的初始化在SettingsFragment中。使用了JetPack库的Preference库。
@@ -26,6 +28,7 @@ class SettingsActivity : CalendarOperatorActivity() {
 
     private lateinit var backupLauncher: ActivityResultLauncher<Intent>
     private lateinit var importLauncher: ActivityResultLauncher<Intent>
+    private lateinit var exportIcsLauncher: ActivityResultLauncher<Intent>
 
     inner class DatabaseChangeReceiver : BroadcastReceiver() {
 
@@ -78,10 +81,10 @@ class SettingsActivity : CalendarOperatorActivity() {
         //定义保存备份的逻辑
         this.backupLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if(it.resultCode == RESULT_OK){
+                if (it.resultCode == RESULT_OK) {
                     val uri = it.data?.data
-                    if(uri!=null){
-                        BackupOperator.exportBackup(this,uri)
+                    if (uri != null) {
+                        BackupOperator.exportBackup(this, uri)
                     }
                 }
             }
@@ -89,10 +92,28 @@ class SettingsActivity : CalendarOperatorActivity() {
         //定义导入备份的逻辑
         this.importLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if(it.resultCode == RESULT_OK){
+                if (it.resultCode == RESULT_OK) {
                     val uri = it.data?.data
-                    if(uri!=null){
-                        BackupOperator.importBackup(this,uri)
+                    if (uri != null) {
+                        BackupOperator.importBackup(this, uri)
+                    }
+                }
+            }
+
+        //定义导出ICS的逻辑
+        this.exportIcsLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == RESULT_OK) {
+                    val uri = it.data?.data
+                    if (uri != null) {
+                        thread(start = true) {
+                            val courseList =
+                                timeManagerApplication.getCourseDatabase().courseDao().getCourses()
+                            val courseICS = CourseICS(courseList, courseTable)
+                            runOnUiThread {
+                                courseICS.writeToFile(this, uri)
+                            }
+                        }
                     }
                 }
             }
@@ -113,13 +134,33 @@ class SettingsActivity : CalendarOperatorActivity() {
 
     /**
      * Fragment调用的，保存备份时调用的方法。
+     *
+     * @return 给onPreferenceClick做返回值的true。
      */
-    internal fun saveBackup() {
+    internal fun saveBackup(): Boolean {
         val courseTable by timeManagerApplication
         backupLauncher.launch(BackupOperator.getExportBackupIntent(courseTable))
+        return true
     }
 
-    internal fun importBackup() {
+    /**
+     * Fragment调用的，导入备份时调用的方法。
+     *
+     * @return 给onPreferenceClick做返回值的true。
+     */
+    internal fun importBackup(): Boolean {
         importLauncher.launch(BackupOperator.getImportBackupIntent())
+        return true
+    }
+
+    /**
+     * Fragment调用的，导出ics时调用的方法。
+     *
+     * @return 给onPreferenceClick做返回值的true。
+     */
+    internal fun exportIcs(): Boolean {
+        val courseTable by timeManagerApplication
+        exportIcsLauncher.launch(CourseICS.getExportIcsIntent(courseTable))
+        return true
     }
 }

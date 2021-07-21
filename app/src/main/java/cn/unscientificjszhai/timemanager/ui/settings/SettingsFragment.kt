@@ -64,6 +64,7 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
 
     private var saveBackupPreference: Preference? = null
     private var importBackupPreference: Preference? = null
+    private var exportIcsPreference:Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_preferences, rootKey)
@@ -173,13 +174,16 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
         this.saveBackupPreference = findPreference("backup")
         saveBackupPreference?.setOnPreferenceClickListener {
             (requireActivity() as SettingsActivity).saveBackup()
-            true
         }
 
         this.importBackupPreference = findPreference("import")
         importBackupPreference?.setOnPreferenceClickListener {
             (requireActivity() as SettingsActivity).importBackup()
-            true
+        }
+
+        this.exportIcsPreference = findPreference("ics")
+        exportIcsPreference?.setOnPreferenceClickListener {
+            (requireActivity() as SettingsActivity).exportIcs()
         }
     }
 

@@ -4,17 +4,19 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
+import cn.unscientificjszhai.timemanager.features.backup.BackupOperator
 import cn.unscientificjszhai.timemanager.features.calendar.CalendarOperator
 import cn.unscientificjszhai.timemanager.features.calendar.EmptyAuthenticator
 import cn.unscientificjszhai.timemanager.ui.ActivityUtility.jumpToSystemPermissionSettings
@@ -41,6 +43,8 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
     private lateinit var startButton: Button
     private lateinit var progressBar: ProgressBar
     private lateinit var textView: TextView
+
+    private lateinit var importBackupLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +79,23 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
 
             this.startButton.setOnClickListener(this)
         }
+
+        //注册导入功能
+        this.importBackupLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                val uri = it.data?.data
+                if (uri != null) {
+                    BackupOperator.importBackup(this, uri) { tableID, calendarID ->
+                        timeManagerApplication.updateTableID(tableID)
+                        CalendarOperator.deleteAllTables(this, calendarID)
+                        runOnUiThread {
+                            val mainActivityIntent = Intent(this, MainActivity::class.java)
+                            startActivity(mainActivityIntent)
+                            finish()
+                        }
+                    }
+                }
+            }
     }
 
     override fun onClick(v: View?) {
@@ -155,6 +176,26 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_welcome_activity, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.WelcomeActivity_ImportBackup) {
+            runIfPermissionGranted(Manifest.permission.WRITE_CALENDAR, {
+                Toast.makeText(
+                    this,
+                    R.string.activity_WelcomeActivity_AskPermissionText,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }) {
+                importBackupLauncher.launch(BackupOperator.getImportBackupIntent())
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     /**
      * 创建本应用的第一个课程表对象，同时也会将其写入日历。
      * 此方法不会检查日历权限，需要在调用钱检查。
@@ -177,7 +218,7 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
             runOnUiThread {
                 val mainActivityIntent = Intent(this, MainActivity::class.java)
                 startActivity(mainActivityIntent)
-                this.finish()
+                finish()
             }
         }
     }

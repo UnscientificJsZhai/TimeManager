@@ -35,7 +35,8 @@ object CalendarOperator {
     fun createCalendarTable(context: Context, courseTable: CourseTable): Long? {
         val timeZone = TimeZone.getDefault()
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val color = sharedPreferences.getString(SettingsFragment.CALENDAR_COLOR_KEY, Color.BLUE.toString())
+        val color =
+            sharedPreferences.getString(SettingsFragment.CALENDAR_COLOR_KEY, Color.BLUE.toString())
 
         val values = ContentValues().apply {
             put(CalendarContract.Calendars.NAME, courseTable.getCalendarTableName())
@@ -125,9 +126,10 @@ object CalendarOperator {
      * 一般用于清除全部数据后首次启动。
      *
      * @param context 操作的上下文。
+     * @param exception 除外的日历表的日历ID。通过[CourseTable.calendarID]获得。不需要保留的情况下填入null。
      */
     @WorkerThread
-    fun deleteAllTables(context: Context) {
+    fun deleteAllTables(context: Context, exception: Long? = null) {
         val eventProjection = arrayOf(CalendarContract.Calendars._ID)
 
         val uri = CalendarContract.Calendars.CONTENT_URI
@@ -145,11 +147,16 @@ object CalendarOperator {
             while (cursor.moveToNext()) {
                 val calendarID = cursor.getLong(0)
 
-                //删除日历表
-                val deleteUri =
-                    ContentUris.withAppendedId(CalendarContract.Calendars.CONTENT_URI, calendarID)
-                context.contentResolver
-                    .delete(deleteUri.asSyncAdapter(), null, null) != -1
+                if (calendarID != exception) {
+                    //删除日历表
+                    val deleteUri =
+                        ContentUris.withAppendedId(
+                            CalendarContract.Calendars.CONTENT_URI,
+                            calendarID
+                        )
+                    context.contentResolver
+                        .delete(deleteUri.asSyncAdapter(), null, null) != -1
+                }
             }
         }
         cursor?.close()

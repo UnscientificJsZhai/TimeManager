@@ -5,12 +5,15 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.annotation.UiThread
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.database.CourseDatabase
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
+import cn.unscientificjszhai.timemanager.features.calendar.CalendarOperator
+import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
 import cn.unscientificjszhai.timemanager.ui.ProgressDialog
 import java.io.IOException
 import java.io.ObjectInputStream
@@ -31,6 +34,7 @@ object BackupOperator {
      * @param context 进行备份操作的上下文，因为要显示Dialog，仅接受Activity。
      * @param uri 备份文件的uri，需要可以被写入。
      */
+    @UiThread
     fun exportBackup(context: Activity, uri: Uri) {
         val timeManagerApplication = (context.applicationContext) as TimeManagerApplication
         val courseTable by timeManagerApplication
@@ -65,11 +69,17 @@ object BackupOperator {
      * 导入备份的具体实现。在处理过程中，会在窗口上显示一个Dialog。
      * 这个方法应该在[Activity.onActivityResult]中被调用，
      * 或者在[AppCompatActivity.registerForActivityResult]中注册。
+     * 调用前需确保已经获得日历授权。
      *
      * @param context 进行备份操作的上下文，因为要显示Dialog，仅接受Activity。
      * @param uri 备份文件的uri，需要可以被读取。
      */
-    fun importBackup(context: Activity, uri: Uri) {
+    @UiThread
+    fun importBackup(
+        context: Activity,
+        uri: Uri,
+        doOnImportThread: (tableID: Long, calendarID: Long?) -> Unit = { _, _ -> }
+    ) {
         val timeManagerApplication = (context.applicationContext) as TimeManagerApplication
         val contentResolver = context.contentResolver
 
@@ -108,12 +118,14 @@ object BackupOperator {
                 }
                 return@thread
             } else {
+                //数据判定合法，开始导入过程
                 val newCourseTable = tableWithCourses.courseTable.apply {
                     id = null
                 }
                 val courseTableDao =
                     timeManagerApplication.getCourseTableDatabase()
                         .courseTableDao()
+                CalendarOperator.createCalendarTable(context, newCourseTable)
                 val tableID = courseTableDao.insertCourseTable(newCourseTable)
                 val courseDatabase =
                     Room.databaseBuilder(
@@ -125,6 +137,7 @@ object BackupOperator {
                 val courseDao = courseDatabase.courseDao()
                 val classTimeDao = courseDatabase.classTimeDao()
                 for (courseWithClassTimes in tableWithCourses.courses) {
+                    EventsOperator.addEvent(context, newCourseTable, courseWithClassTimes)
                     courseDao.insertCourse(courseWithClassTimes.course.apply {
                         associatedEventsId.clear()
                     })
@@ -132,6 +145,8 @@ object BackupOperator {
                         classTimeDao.insertClassTime(classTime)
                     }
                 }
+                progressDialog.postDismiss()
+                doOnImportThread(tableID, newCourseTable.calendarID)
             }
             progressDialog.postDismiss()
         }
