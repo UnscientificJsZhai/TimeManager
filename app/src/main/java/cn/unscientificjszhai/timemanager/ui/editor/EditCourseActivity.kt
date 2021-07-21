@@ -133,6 +133,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
             if (lastClassTime == null || !viewModel.copyFromPrevious) {
                 viewModel.classTimes.add(ClassTime())
             } else {
+                requestFocus()
                 viewModel.classTimes.add(ClassTime(lastClassTime))
             }
             this.adapter.notifyItemInserted(adapter.itemCount - 1)
@@ -188,14 +189,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
                         dialog.dismiss()
                     }
             }) {
-                rootRecyclerView.apply {
-                    if (!requestFocus()) {
-                        //通过夺取焦点使编辑控件被动保存数据更改
-                        isFocusable = true
-                        requestFocus()
-                    }
-                }
-
+                requestFocus()
                 saveData()
             }
         } else if (item.itemId == android.R.id.home) {
@@ -276,12 +270,14 @@ class EditCourseActivity : CalendarOperatorActivity() {
 
             val course = this.viewModel.course
 
-            if(course?.title?.isEmpty() == true){
-                Toast.makeText(
-                    this,
-                    R.string.activity_EditCourse_DataError,
-                    Toast.LENGTH_SHORT
-                ).show()
+            if (course?.title?.isEmpty() == true) {
+                runOnUiThread {
+                    Toast.makeText(
+                        this,
+                        R.string.activity_EditCourse_DataError,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
                 return@thread
             }
 
@@ -376,6 +372,17 @@ class EditCourseActivity : CalendarOperatorActivity() {
                     finish()
                 }
             }
+        }
+    }
+
+    private fun requestFocus(){
+        rootRecyclerView.apply {
+            if (!requestFocus()) {
+                //通过夺取焦点使编辑控件被动保存数据更改
+                isFocusable = true
+            }
+            requestFocus()
+            isFocusable = false
         }
     }
 }

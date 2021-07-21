@@ -21,38 +21,57 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/CourseDetailActivity_DescriptionText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:textSize="16sp"
-        android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
-        app:layout_constraintEnd_toEndOf="@+id/CourseDetailActivity_Title"
-        app:layout_constraintStart_toStartOf="@+id/CourseDetailActivity_Title"
-        app:layout_constraintTop_toBottomOf="@+id/CourseDetailActivity_Title" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/CourseDetailActivity_EditButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CourseDetailActivity_Title">
 
-    <TextView
-        android:id="@+id/CourseDetailActivity_TimeDescriptionText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:textSize="16sp"
-        android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
-        app:layout_constraintEnd_toEndOf="@+id/CourseDetailActivity_DescriptionText"
-        app:layout_constraintStart_toStartOf="@+id/CourseDetailActivity_DescriptionText"
-        app:layout_constraintTop_toBottomOf="@+id/CourseDetailActivity_DescriptionText" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/CourseDetailActivity_RemarkText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:textSize="16sp"
-        android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
-        app:layout_constraintEnd_toEndOf="@+id/CourseDetailActivity_TimeDescriptionText"
-        app:layout_constraintStart_toStartOf="@+id/CourseDetailActivity_TimeDescriptionText"
-        app:layout_constraintTop_toBottomOf="@+id/CourseDetailActivity_TimeDescriptionText" />
+            <TextView
+                android:id="@+id/CourseDetailActivity_DescriptionText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textSize="24sp"
+                android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/CourseDetailActivity_TimeDescriptionText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:textSize="16sp"
+                android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
+                app:layout_constraintEnd_toEndOf="@+id/CourseDetailActivity_DescriptionText"
+                app:layout_constraintStart_toStartOf="@+id/CourseDetailActivity_DescriptionText"
+                app:layout_constraintTop_toBottomOf="@+id/CourseDetailActivity_DescriptionText" />
+
+            <TextView
+                android:id="@+id/CourseDetailActivity_RemarkText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textSize="16sp"
+                android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
+                app:layout_constraintEnd_toEndOf="@+id/CourseDetailActivity_TimeDescriptionText"
+                app:layout_constraintStart_toStartOf="@+id/CourseDetailActivity_TimeDescriptionText"
+                app:layout_constraintTop_toBottomOf="@+id/CourseDetailActivity_TimeDescriptionText" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
 
     <Button
         android:id="@+id/CourseDetailActivity_EditButton"
@@ -60,6 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/Button_CourseDetailButtonColor"
         android:text="@string/activity_CourseDetail_Edit"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -71,6 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/Button_CourseDetailButtonColor"
         android:text="@string/activity_CourseDetail_Delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

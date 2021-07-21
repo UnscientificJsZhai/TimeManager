@@ -6,7 +6,7 @@
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.253125" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.253125" />
         <entry key="app/src/main/res/drawable/outline_backup_table_24.xml" value="0.23177083333333334" />
-        <entry key="app/src/main/res/layout/activity_course_detail.xml" value="0.2784090909090909" />
+        <entry key="app/src/main/res/layout/activity_course_detail.xml" value="0.55" />
         <entry key="app/src/main/res/layout/activity_current_table_selector.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_edit_course.xml" value="0.15670289855072464" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15670289855072464" />

@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.TimeManager" parent="Theme.MaterialComponents.DayNight">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/gray</item>
+        <item name="colorPrimary">@color/skyBlue</item>
         <item name="colorPrimaryVariant">@color/primary_deep</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->

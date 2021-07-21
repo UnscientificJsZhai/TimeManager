@@ -41,6 +41,8 @@
     <string name="activity_Main_TodayOnlyMode_Next">即将上课</string>
     <string name="activity_Main_TodayOnlyMode_During">正在上课</string>
     <string name="activity_Main_TodayOnlyMode_Finished">已结束</string>
+    <string name="activity_Main_ActionBarLabel_TodayOnly">今天的课程</string>
+    <string name="activity_Main_ActionBarLabel_All">所有课程</string>
 
     <!-- 包ui.editor使用 -->
     <string name="activity_EditCourse_Label">编辑</string>

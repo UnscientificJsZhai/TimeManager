@@ -179,43 +179,7 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
     override fun onStart() {
         super.onStart()
         //更新ActionBar的内容
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val option = sharedPreferences.getString("showOnMainActivity", "table")
-        val stringBuilder = StringBuilder()
-        val courseTable by timeManagerApplication
-        when (option) {
-            "table" -> stringBuilder.append(courseTable.name)
-            "today" -> {
-
-                /**
-                 * 用来获取当前是星期几的局部函数。
-                 *
-                 * @return 表示星期几的字符串，可以直接用于显示。
-                 */
-                fun dayOfWeek(): String = getString(
-                    when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-                        Calendar.MONDAY -> R.string.data_Week1
-                        Calendar.TUESDAY -> R.string.data_Week2
-                        Calendar.WEDNESDAY -> R.string.data_Week3
-                        Calendar.THURSDAY -> R.string.data_Week4
-                        Calendar.FRIDAY -> R.string.data_Week5
-                        Calendar.SATURDAY -> R.string.data_Week6
-                        else -> R.string.data_Week0
-                    }
-                )
-
-                stringBuilder.append(
-                    getString(R.string.view_ClassTimeEdit_WeekItem_ForKotlin)
-                        .format(nowTimeTagger.getWeekNumber())
-                )
-                    .append(" ")
-                    .append(dayOfWeek())
-            }
-        }
-        supportActionBar?.let { actionBar ->
-            actionBar.title = stringBuilder.toString()
-
-        }
+        updateActionBarLabel()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -333,6 +297,7 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
             R.id.MainActivity_ShowTodayOnly -> {
                 viewModel.showTodayOnly = !item.isChecked
                 bindData(viewModel.courseList.value ?: ArrayList())
+                updateActionBarLabel()
             }
             R.id.MainActivity_JumpToCalendar -> {
                 Calendar.getInstance().timeInMillis
@@ -352,6 +317,10 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
         super.onDestroy()
     }
 
+    override fun getValue(thisRef: Any?, property: KProperty<*>): NowTimeTagger {
+        return this.nowTimeTagger
+    }
+
     /**
      * 更新列表数据的方法。会判断是否仅显示今天的课程，然后传入正确的列表给[CourseAdapter]。
      *
@@ -366,10 +335,6 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
         }
     }
 
-    override fun getValue(thisRef: Any?, property: KProperty<*>): NowTimeTagger {
-        return this.nowTimeTagger
-    }
-
     /**
      * 用在给CourseAdapter提供方法注入的方法。
      *
@@ -377,5 +342,57 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
      */
     internal fun getToadyOnlyGetterMethod(): () -> Boolean = {
         this.viewModel.showTodayOnly
+    }
+
+    /**
+     * 更新ActionBar的标题。
+     */
+    private fun updateActionBarLabel() {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val option = sharedPreferences.getString("showOnMainActivity", "table")
+        val stringBuilder = StringBuilder()
+        val courseTable by timeManagerApplication
+        when (option) {
+            "table" -> stringBuilder.append(courseTable.name)
+            "today" -> {
+
+                /**
+                 * 用来获取当前是星期几的局部函数。
+                 *
+                 * @return 表示星期几的字符串，可以直接用于显示。
+                 */
+                fun dayOfWeek(): String = getString(
+                    when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
+                        Calendar.MONDAY -> R.string.data_Week1
+                        Calendar.TUESDAY -> R.string.data_Week2
+                        Calendar.WEDNESDAY -> R.string.data_Week3
+                        Calendar.THURSDAY -> R.string.data_Week4
+                        Calendar.FRIDAY -> R.string.data_Week5
+                        Calendar.SATURDAY -> R.string.data_Week6
+                        else -> R.string.data_Week0
+                    }
+                )
+
+                stringBuilder.append(
+                    getString(R.string.view_ClassTimeEdit_WeekItem_ForKotlin)
+                        .format(nowTimeTagger.getWeekNumber())
+                )
+                    .append(" ")
+                    .append(dayOfWeek())
+                    .append(" ")
+                    .append(
+                        getString(
+                            if (viewModel.showTodayOnly) {
+                                R.string.activity_Main_ActionBarLabel_TodayOnly
+                            } else {
+                                R.string.activity_Main_ActionBarLabel_All
+                            }
+                        )
+                    )
+            }
+        }
+        supportActionBar?.let { actionBar ->
+            actionBar.title = stringBuilder.toString()
+        }
     }
 }

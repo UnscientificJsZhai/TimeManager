@@ -26,4 +26,5 @@
     <!-- 应用于特定组件的颜色 -->
     <color name="CardView_BackgroundColor">@color/white</color>
     <color name="TextInputEditText_BackgroundColor">@color/white</color>
+    <color name="Button_CourseDetailButtonColor">@color/skyBlue</color>
 </resources>
