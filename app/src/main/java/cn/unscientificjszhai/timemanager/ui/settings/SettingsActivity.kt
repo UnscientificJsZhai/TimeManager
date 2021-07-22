@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -119,13 +120,26 @@ class SettingsActivity : CalendarOperatorActivity() {
             }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) =
-        if (item.itemId == android.R.id.home) {
-            finish()
-            true
-        } else {
-            super.onOptionsItemSelected(item)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_settings_activity, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+            }
+            R.id.SettingsActivity_Info -> {
+                val intent = Intent(this, InfoActivity::class.java)
+                startActivity(intent)
+            }
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
         }
+        return true
+    }
 
     override fun onDestroy() {
         unregisterReceiver(this.databaseChangeReceiver)

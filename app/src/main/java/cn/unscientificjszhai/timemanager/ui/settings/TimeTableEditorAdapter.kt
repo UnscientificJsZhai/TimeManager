@@ -101,6 +101,11 @@ internal class TimeTableEditorAdapter(
 
     override fun getItemCount() = this.courseTable.classesPerDay
 
+    /**
+     * 格式化整型数为2位字符串。
+     *
+     * @param number 要格式化的整型数。
+     */
     private fun timeNumberFormat(number: Int) =
         if (number < 10) {
             "0$number"

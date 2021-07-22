@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +28,9 @@ internal class TimeTableHeaderAdapter(private val viewModel: TimeTableEditorActi
         val viewHolder = HeaderViewHolder(view)
 
         view.setOnClickListener {
-            val editText = TextInputEditText(parent.context)
+            val root: FrameLayout =
+                View.inflate(parent.context, R.layout.dialog_input, null) as FrameLayout
+            val editText = root.findViewById<TextInputEditText>(R.id.InputDialog_EditText)
             editText.inputType = EditorInfo.TYPE_CLASS_NUMBER
             editText.imeOptions = EditorInfo.IME_ACTION_DONE
             editText.setHint(R.string.activity_TimeTableEditor_HeaderEditDialogHint)
@@ -35,7 +38,7 @@ internal class TimeTableHeaderAdapter(private val viewModel: TimeTableEditorActi
 
             AlertDialog.Builder(parent.context)
                 .setTitle(R.string.activity_TimeTableEditor_HeaderEditDialogTitle)
-                .setView(editText)
+                .setView(root)
                 .setNegativeButton(R.string.common_cancel) { dialog, _ ->
                     dialog?.dismiss()
                 }.setPositiveButton(R.string.common_confirm) { dialog, _ ->

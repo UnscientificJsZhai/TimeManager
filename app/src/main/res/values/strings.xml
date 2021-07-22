@@ -80,6 +80,7 @@
     <string name="activity_Settings_CurrentCourseListTable">当前课程表</string>
     <string name="activity_Settings_FailToBackup">导出失败</string>
     <string name="activity_Settings_ImportError">导入失败，文件可能损坏</string>
+    <string name="activity_Settings_Info">关于</string>
     <string name="preferences_CurrentTable_HowManyWeeks">学期上课周数</string>
     <string name="preferences_CurrentTable_MaxWeeksSummary">周</string>
     <string name="preferences_CurrentTable_ClassesPerDay">每日上课节数</string>
@@ -127,7 +128,5 @@
     <string name="activity_TimeTableEditor_HeaderEditDialogHint">分钟</string>
     <string name="activity_TimeTableEditor_StartTime">开始时间</string>
     <string name="activity_TimeTableEditor_EndTime">结束时间</string>
-
-    <string name="activity_RestoreBackup_ButtonText">选择文件</string>
 
 </resources>

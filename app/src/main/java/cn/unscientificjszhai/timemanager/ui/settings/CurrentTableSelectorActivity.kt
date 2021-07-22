@@ -2,7 +2,6 @@ package cn.unscientificjszhai.timemanager.ui.settings
 
 import android.Manifest
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.Toast
@@ -180,10 +179,6 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
                     val editText = root.findViewById<TextInputEditText>(R.id.InputDialog_EditText)
                     editText.setHint(R.string.activity_Welcome_PromptText)
                     editText.setText(courseTable.name)
-
-                    if (root.parent != null) {
-                        Log.e("Root", "onContextItemSelected: ")
-                    }
 
                     AlertDialog.Builder(this)
                         .setTitle(R.string.activity_CurrentTableSelector_ContextMenu_Edit)

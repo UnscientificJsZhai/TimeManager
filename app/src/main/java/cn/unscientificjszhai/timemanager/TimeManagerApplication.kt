@@ -94,7 +94,6 @@ class TimeManagerApplication : Application(), CourseTable.Getter {
                 CourseDatabase::class.java,
                 "table$nowTableID.db"
             ).build()
-
         }
         return this.courseDatabase!!
     }
@@ -105,17 +104,14 @@ class TimeManagerApplication : Application(), CourseTable.Getter {
      * @return CourseTable的RoomDatabase对象，可以调用它的Dao方法来进行数据操作。
      */
     fun getCourseTableDatabase(): CourseTableDatabase {
+        //初始化CourseTableDatabase
         if (this.courseTableDatabase == null) {
-            //初始化CourseTableDatabase
-            if (this.courseTableDatabase == null) {
-                this.courseTableDatabase =
-                    Room.databaseBuilder(
-                        this,
-                        CourseTableDatabase::class.java,
-                        "database.db"
-                    ).build()
-            }
-
+            this.courseTableDatabase =
+                Room.databaseBuilder(
+                    this,
+                    CourseTableDatabase::class.java,
+                    "database.db"
+                ).build()
         }
         return this.courseTableDatabase!!
     }

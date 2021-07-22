@@ -57,16 +57,17 @@ object ActivityUtility {
      * @param permissionDenied 当没有获得权限时运行的代码块。
      * @param block 当获得权限时运行的代码块。
      */
-    inline fun Activity.runIfPermissionGranted(
+    inline fun <T> Activity.runIfPermissionGranted(
         permission: String,
         permissionDenied: Activity.() -> Unit,
-        block: Activity.() -> Unit
-    ) {
+        block: Activity.() -> T
+    ): T? {
         if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
-            block()
+            return block()
         } else {
             permissionDenied()
         }
+        return null
     }
 
     /**
