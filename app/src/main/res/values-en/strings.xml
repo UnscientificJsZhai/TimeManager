@@ -62,7 +62,7 @@
     <string name="activity_TimeTableEditor_HeaderEditDialogHint">min</string>
     <string name="activity_TimeTableEditor_HeaderEditDialogTitle">Length of each class</string>
     <string name="activity_TimeTableEditor_HeaderItemTitle">Length of each class is %d min(s)</string>
-    <string name="activity_WelcomeActivity_AskPermissionTitle" >Permission Is Needed</string>
+    <string name="activity_WelcomeActivity_AskPermissionTitle">Permission Is Needed</string>
     <string name="activity_WelcomeActivity_AskPermissionText">This App imports the course schedule directly into the calendar and informs you of class information in the form of system calendar events. Please grant calendar permission to use this app.</string>
     <string name="activity_WelcomeActivity_SettingsPermissionText">Will jump to system settings to request permission</string>
     <string name="activity_WelcomeActivity_FailToJumpToSettings">Unable to start system settings</string>
@@ -76,13 +76,13 @@
     <string name="activity_CurrentTableSelector_ContextMenu_Edit">Rename</string>
     <string name="activity_CurrentTableSelector_PermissionDeniedDialogMessage">No calendar write permission is granted and cannot be changed.</string>
     <string name="preferences_UpdateCalendar_Processing">Updating…</string>
-    <string name="preferences_UpdateCalendar_Complete" >Complete</string>
-    <string name="preferences_UpdateCalendar_DialogMessage" >Doing this will delete the calendar of the current curriculum and recreate it. Do you want to continue?</string>
-    <string name="activity_Main_TodayOnlyMode_DataError" >Data error, unable to show details</string>
-    <string name="activity_CourseDetail_DataError" >Data error,please try again</string>
-    <string name="activity_CourseDetail_WeekFormatText" >from %d to %d</string>
+    <string name="preferences_UpdateCalendar_Complete">Complete</string>
+    <string name="preferences_UpdateCalendar_DialogMessage">Doing this will delete the calendar of the current curriculum and recreate it. Do you want to continue?</string>
+    <string name="activity_Main_TodayOnlyMode_DataError">Data error, unable to show details</string>
+    <string name="activity_CourseDetail_DataError">Data error,please try again</string>
+    <string name="activity_CourseDetail_WeekFormatText">from %d to %d</string>
     <string name="activity_CourseDetail_LessonNumberFormatText">lesson %d-%d</string>
-    <string name="activity_Main_TodayOnlyMode_Finished" >Ended</string>
+    <string name="activity_Main_TodayOnlyMode_Finished">Ended</string>
     <string name="activity_Main_TodayOnlyMode_During">Now</string>
     <string name="activity_Main_TodayOnlyMode_Next">About to start</string>
     <string name="activity_EditCourse_CopyFromPrevious_True">New item will copy from previous item to make editing easier</string>
@@ -112,4 +112,13 @@
     <string name="activity_Main_ActionBarLabel_TodayOnly">Today</string>
     <string name="activity_Main_ActionBarLabel_All">All</string>
     <string name="activity_Settings_Info">Info</string>
+    <string name="view_ClassTimeEdit_WeekChooseDialogHeader">Long press to select continuously</string>
+    <string name="activity_TimeTableEditor_HeaderSubtitle">Long press to set end time manually</string>
+    <string name="info_Author">Developed By UnscientificJsZhai</string>
+    <string name="info_Button_Bilibili">bilibili</string>
+    <string name="info_Button_Mail">Mail</string>
+    <string name="info_Button_CoolApk">CoolApk</string>
+    <string name="info_LogoDesigner">Logo Designed by 李宇轩(Yuxuan Li)</string>
+    <string name="info_UnableToSendEmail">Please install a E-mail app to send mail\nOr long press to show the mail address</string>
+    <string name="info_Description">This app is a class schedule app which depends on system calendar.</string>
 </resources>

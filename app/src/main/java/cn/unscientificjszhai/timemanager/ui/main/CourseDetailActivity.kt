@@ -281,8 +281,18 @@ class CourseDetailActivity : AppCompatActivity() {
 
             stringBuilder.append(
                 getString(R.string.activity_CourseDetail_LessonNumberFormatText)
-                    .format(classTime.start, classTime.end)
+                    .format(
+                        if (classTime.start == classTime.end) {
+                            classTime.start.toString()
+                        } else {
+                            "${classTime.start}-${classTime.end}"
+                        }
+                    )
             )
+
+            if (classTime.location.isNotBlank()) {
+                stringBuilder.append(" ${classTime.location}")
+            }
 
             if (classTimes.indexOf(classTime) != classTimes.size - 1) {
                 stringBuilder.append("\n")

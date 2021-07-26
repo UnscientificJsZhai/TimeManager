@@ -113,8 +113,8 @@ class FormattedTime {
      * @param duration 间隔，单位分钟。
      */
     fun autoSetEndTime(duration: Int) {
-        var hour = this.endH
-        var min = this.endM
+        var hour = this.startH
+        var min = this.startM
         min += duration
         while (min >= 60) {
             min -= 60

@@ -12,10 +12,12 @@ import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.data.course.ClassTime
+import cn.unscientificjszhai.timemanager.ui.StaticViewHeaderAdapter
 
 /**
  * ClassTime编辑器的适配器。
@@ -24,7 +26,10 @@ import cn.unscientificjszhai.timemanager.data.course.ClassTime
  * @param maxWeeks 最大周数。
  * @see EditCourseActivity
  */
-internal class EditCourseAdapter(private val classTimes: ArrayList<ClassTime>, private val maxWeeks: Int) :
+internal class EditCourseAdapter(
+    private val classTimes: ArrayList<ClassTime>,
+    private val maxWeeks: Int
+) :
     RecyclerView.Adapter<EditCourseAdapter.ViewHolder>() {
 
     companion object {
@@ -118,7 +123,10 @@ internal class EditCourseAdapter(private val classTimes: ArrayList<ClassTime>, p
             //初始化Dialog中的RecyclerView
             val recyclerView = RecyclerView(builder.context)
             recyclerView.layoutManager = LinearLayoutManager(builder.context)
-            recyclerView.adapter = WeekChooseDialogAdapter(weekData, items)
+            recyclerView.adapter = ConcatAdapter(
+                StaticViewHeaderAdapter(R.layout.widget_week_choose_dialig_header),
+                WeekChooseDialogAdapter(weekData, items)
+            )
 
             builder.setView(recyclerView)
 

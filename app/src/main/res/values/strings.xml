@@ -29,7 +29,7 @@
     <string name="activity_CourseDetail_AskPermissionText">需要授予日历访问权限才能删除，是否授予权限？如果同意，将跳转到应用详情页，请在那里授予此应用读写日历权限。</string>
     <string name="activity_CourseDetail_DataError">数据异常，请重新尝试</string>
     <string name="activity_CourseDetail_WeekFormatText">%d-%d周</string>
-    <string name="activity_CourseDetail_LessonNumberFormatText">第%d-%d节课</string>
+    <string name="activity_CourseDetail_LessonNumberFormatText">%s节课</string>
     <string name="activity_Welcome">欢迎使用</string>
     <string name="activity_Welcome_StartButton">开始</string>
     <string name="activity_Welcome_PromptText">输入课程表的名称</string>
@@ -67,6 +67,7 @@
     <string name="view_ClassTimeEdit_WeekItem_ForKotlin">第%d周</string>
     <string name="view_ClassTimeEdit_WeekDescription">第%s周</string>
     <string name='view_ClassTimeEdit_WeekDescriptionWhenEmpty'>选择上课周数</string>
+    <string name="view_ClassTimeEdit_WeekChooseDialogHeader">长按可以向前连续选中直到最近一个已选中项</string>
 
     <string name="data_Week0">周日</string>
     <string name="data_Week1">周一</string>
@@ -124,9 +125,21 @@
     <string name="activity_CurrentTableSelector_PermissionDeniedDialogMessage">没有授予日历写入权限，无法进行更改。</string>
     <string name="activity_TimeTableEditor_RecyclerItemTitle">第%d节课</string>
     <string name="activity_TimeTableEditor_HeaderItemTitle">每节课时长%d分钟</string>
+    <string name="activity_TimeTableEditor_HeaderSubtitle">长按可以手动设置下课时间</string>
     <string name="activity_TimeTableEditor_HeaderEditDialogTitle">每节课长度</string>
     <string name="activity_TimeTableEditor_HeaderEditDialogHint">分钟</string>
     <string name="activity_TimeTableEditor_StartTime">开始时间</string>
     <string name="activity_TimeTableEditor_EndTime">结束时间</string>
+
+    <!-- Info -->
+    <string name="info_Author">不科学的Js宅 作品</string>
+    <string name="info_Button_Github" translatable="false">GitHub</string>
+    <string name="info_Button_Bilibili">哔哩哔哩</string>
+    <string name="info_Button_Mail">电子邮件</string>
+    <string name="info_Button_CoolApk">酷安</string>
+    <string name="info_LogoDesigner">图标设计 李宇轩</string>
+    <string name="info_UnableToSendEmail">请安装邮箱客户端来发送邮件\n长按可以显示邮箱</string>
+
+    <string name="info_Description">本应用是一个以系统日历功能为核心的课程表App。\n在本应用中添加的所有课程，会自动保存为日历事件，插入到系统日历中。这样就可以用系统级的通知提醒您上课。因此本应用不需要发送通知和后台运行，但是相对的，使用本App的时候必须授予日历访问权限。\n如果您对本应用有什么建议，欢迎给我发邮件。\n\n当您卸载本应用的时候，已经添加的课程的日历事件也会被自动清除。虽然您可以使用备份功能和导出ICS功能保存您的课程表，但是我还是建议您不要卸载本应用。当您清除本应用的数据时，日历事件不会被删除。要想清理这些日历事件，只需重新打开本应用即可。</string>
 
 </resources>

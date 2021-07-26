@@ -95,7 +95,7 @@ internal class CourseAdapter(private val activity: MainActivity) :
                     //上课时间
                     val nowLessonNumber = timeTagger.nowLessonNumber(courseTable)
                     when {
-                        nowLessonNumber - classTime.start == 0.0 -> {
+                        nowLessonNumber >= classTime.start && nowLessonNumber <= classTime.end -> {
                             stringBuilder.append(activity.getString(R.string.activity_Main_TodayOnlyMode_During))
                                 .append(" ")
                         }
@@ -103,7 +103,7 @@ internal class CourseAdapter(private val activity: MainActivity) :
                             stringBuilder.append(activity.getString(R.string.activity_Main_TodayOnlyMode_Next))
                                 .append(" ")
                         }
-                        nowLessonNumber - classTime.start > 0 -> {
+                        nowLessonNumber - classTime.end > 0 -> {
                             stringBuilder.append(activity.getString(R.string.activity_Main_TodayOnlyMode_Finished))
                                 .append(" ")
                         }

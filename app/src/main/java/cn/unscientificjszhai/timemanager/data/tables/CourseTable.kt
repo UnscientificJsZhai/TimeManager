@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import cn.unscientificjszhai.timemanager.data.course.ClassTime
 import java.io.Serializable
 import java.util.*
 import kotlin.reflect.KProperty
@@ -37,13 +38,27 @@ data class CourseTable(
          */
         const val TABLE_NAME = "course_table"
 
+        /**
+         * 每天的最大课程数量。
+         */
         const val MAX_CLASS_PER_DAY = 15
 
+        /**
+         * 默认每天的课程数量。
+         */
         const val DEFAULT_CLASS_PER_DAY = 13
 
+        /**
+         * 默认学期教学周数。最大值见下。
+         *
+         * @see ClassTime.MAX_STORAGE_SIZE
+         */
         const val DEFAULT_MAX_WEEKS = 18
 
-        val DEFAULT_TIME_STRING = arrayOf(
+        /**
+         * 获得默认的时间表对象。
+         */
+        fun defaultTimeTable() = arrayOf(
             "08300915",
             "09251010",
             "10301115",
@@ -75,7 +90,7 @@ data class CourseTable(
         name,
         DEFAULT_CLASS_PER_DAY,
         DEFAULT_MAX_WEEKS,
-        DEFAULT_TIME_STRING,
+        defaultTimeTable(),
         Calendar.getInstance(),
         null
     )

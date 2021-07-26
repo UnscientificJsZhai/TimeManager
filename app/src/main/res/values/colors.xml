@@ -23,6 +23,10 @@
     <color name="red">#F44336</color>
     <color name="yellow">#FFC413</color>
 
+    <color name="github_gray">#1B1F23</color>
+    <color name="bilibili_pink">#D55178</color>
+    <color name="coolapk_green">#1A9D52</color>
+
     <!-- 应用于特定组件的颜色 -->
     <color name="CardView_BackgroundColor">@color/white</color>
     <color name="TextInputEditText_BackgroundColor">@color/white</color>

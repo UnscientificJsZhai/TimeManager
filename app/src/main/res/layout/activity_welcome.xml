@@ -15,7 +15,8 @@
         app:layout_constraintBottom_toTopOf="@+id/WelcomeActivity_Button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4" />
 
     <TextView
         android:id="@+id/WelcomeActivity_Text"
@@ -37,12 +38,13 @@
         android:layout_marginBottom="24dp"
         android:hint="@string/activity_Welcome_EditTextHint"
         android:imeOptions="actionDone"
+        android:inputType="text"
+        android:minHeight="48dp"
         android:singleLine="true"
         app:layout_constraintBottom_toTopOf="@+id/WelcomeActivity_Button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="Autofill"
-        android:inputType="text" />
+        tools:ignore="Autofill" />
 
     <Button
         android:id="@+id/WelcomeActivity_Button"

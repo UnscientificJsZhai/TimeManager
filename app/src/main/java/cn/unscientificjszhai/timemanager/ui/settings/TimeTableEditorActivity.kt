@@ -81,8 +81,10 @@ class TimeTableEditorActivity : AppCompatActivity() {
                 }
 
             } else {
-                Toast.makeText(this, R.string.activity_EditCourse_DataError, Toast.LENGTH_SHORT)
-                    .show()
+                if (this.courseTable.hashCode() != this.viewModel.timeTableHashCode) {
+                    Toast.makeText(this, R.string.activity_EditCourse_DataError, Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
 
             finish()
