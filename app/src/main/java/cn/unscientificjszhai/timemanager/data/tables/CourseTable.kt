@@ -85,12 +85,12 @@ data class CourseTable(
         operator fun getValue(thisRef: Any?, property: KProperty<*>): CourseTable
     }
 
-    constructor(name: String) : this(
+    constructor(name: String, timeTable: Array<String> = defaultTimeTable()) : this(
         null,
         name,
         DEFAULT_CLASS_PER_DAY,
         DEFAULT_MAX_WEEKS,
-        defaultTimeTable(),
+        timeTable,
         Calendar.getInstance(),
         null
     )

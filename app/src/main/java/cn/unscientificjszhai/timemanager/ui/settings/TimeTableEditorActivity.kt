@@ -44,7 +44,7 @@ class TimeTableEditorActivity : AppCompatActivity() {
 
         try {
             this.courseTable = this.timeManagerApplication.courseTable!!
-            this.viewModel.timeTableHashCode = courseTable.timeTable.hashCode()
+            this.viewModel.originTimeTable = courseTable.timeTable.typeConvert()
         } catch (e: NullPointerException) {
             Toast.makeText(this, R.string.activity_EditCourse_DataError, Toast.LENGTH_SHORT).show()
             finish()
@@ -71,7 +71,7 @@ class TimeTableEditorActivity : AppCompatActivity() {
             onBackPressed()
         } else if (item.itemId == R.id.TimeTableEditorActivity_Done) {
             val id = courseTable.id
-            if (id != null && this.courseTable.timeTable.hashCode() != this.viewModel.timeTableHashCode) {
+            if (id != null && this.courseTable.timeTable.typeConvert() != this.viewModel.originTimeTable) {
                 thread(start = true) {
                     timeManagerApplication.getCourseTableDatabase().courseTableDao()
                         .updateCourseTable(adapter.courseTable)
@@ -79,12 +79,9 @@ class TimeTableEditorActivity : AppCompatActivity() {
 
                     EventsOperator.updateAllEvents(this, this.courseTable)
                 }
-
-            } else {
-                if (this.courseTable.hashCode() != this.viewModel.timeTableHashCode) {
-                    Toast.makeText(this, R.string.activity_EditCourse_DataError, Toast.LENGTH_SHORT)
-                        .show()
-                }
+            } else if (this.courseTable.timeTable.typeConvert() != this.viewModel.originTimeTable) {
+                Toast.makeText(this, R.string.activity_EditCourse_DataError, Toast.LENGTH_SHORT)
+                    .show()
             }
 
             finish()
@@ -102,4 +99,10 @@ class TimeTableEditorActivity : AppCompatActivity() {
                 dialog?.dismiss()
             }.show()
     }
+
+    private fun Array<String>.typeConvert(): String {
+        val converter by viewModel
+        return converter.setTimeTable(this)
+    }
+
 }

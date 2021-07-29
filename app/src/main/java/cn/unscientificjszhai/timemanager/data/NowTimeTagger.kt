@@ -148,4 +148,8 @@ class NowTimeTagger(private var startDate: Calendar) {
 
         return newList
     }
+
+    fun setStartDate(startDate: Calendar) {
+        this.startDate = startDate
+    }
 }

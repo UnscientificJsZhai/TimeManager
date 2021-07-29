@@ -83,6 +83,11 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
                 context.viewModel.courseList.observe(this@MainActivity) { courseList ->
                     bindData(courseList)
                 }
+
+                //更新NowTimeTagger
+                val courseTable by context.timeManagerApplication
+                context.nowTimeTagger.setStartDate(courseTable.startDate)
+                updateActionBarLabel()
             }
         }
     }
@@ -336,13 +341,11 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
     }
 
     /**
-     * 用在给CourseAdapter提供方法注入的方法。
+     * 查询是否只显示今天，提供给Adapter使用。
      *
-     * @return 用于查询是否只显示今天的方法。返回类型为Boolean。
+     * @return 是否只显示今天。
      */
-    internal fun getToadyOnlyGetterMethod(): () -> Boolean = {
-        this.viewModel.showTodayOnly
-    }
+    internal fun isShowTodayOnly(): Boolean = this.viewModel.showTodayOnly
 
     /**
      * 更新ActionBar的标题。

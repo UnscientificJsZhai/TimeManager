@@ -1,6 +1,8 @@
 package cn.unscientificjszhai.timemanager.ui.settings
 
 import androidx.lifecycle.ViewModel
+import cn.unscientificjszhai.timemanager.data.tables.TimeTableTypeConverter
+import kotlin.reflect.KProperty
 
 /**
  * 用于给[TimeTableEditorActivity]保存每节课间隔的ViewModel。
@@ -12,5 +14,9 @@ internal class TimeTableEditorActivityViewModel : ViewModel() {
     /**
      * 用于校验前后是否修改过表。
      */
-    var timeTableHashCode = 0
+    var originTimeTable = ""
+
+    private val typeConverter = TimeTableTypeConverter()
+
+    operator fun getValue(thisRef: Any?, property: KProperty<*>) = this.typeConverter
 }

@@ -34,12 +34,13 @@ internal class CourseAdapter(private val activity: MainActivity) :
      *
      * @return 是否仅显示今天
      */
-    private val showTodayOnly: () -> Boolean = activity.getToadyOnlyGetterMethod()
+    private val showTodayOnly: () -> Boolean = activity::isShowTodayOnly
 
     /**
      * ListAdapter用于对比数据变化的方法集合，用于CourseAdapter类。
      */
     private object CourseDiffCallback : DiffUtil.ItemCallback<CourseWithClassTimes>() {
+
         override fun areItemsTheSame(
             oldItem: CourseWithClassTimes,
             newItem: CourseWithClassTimes

@@ -133,7 +133,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
             if (lastClassTime == null || !viewModel.copyFromPrevious) {
                 viewModel.classTimes.add(ClassTime())
             } else {
-                requestFocus()
+                clearChildViewFocus()
                 viewModel.classTimes.add(ClassTime(lastClassTime))
             }
             this.adapter.notifyItemInserted(adapter.itemCount - 1)
@@ -189,7 +189,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
                         dialog.dismiss()
                     }
             }) {
-                requestFocus()
+                clearChildViewFocus()
                 saveData()
             }
         } else if (item.itemId == android.R.id.home) {
@@ -270,7 +270,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
 
             val course = this.viewModel.course
 
-            if (course?.title?.isEmpty() == true) {
+            if (course?.title?.isBlank() == true) {
                 runOnUiThread {
                     Toast.makeText(
                         this,
@@ -375,14 +375,10 @@ class EditCourseActivity : CalendarOperatorActivity() {
         }
     }
 
-    private fun requestFocus(){
-        rootRecyclerView.apply {
-            if (!requestFocus()) {
-                //通过夺取焦点使编辑控件被动保存数据更改
-                isFocusable = true
-            }
-            requestFocus()
-            isFocusable = false
-        }
+    /**
+     * 清除所有输入框的焦点，迫使数据保存。
+     */
+    private fun clearChildViewFocus() {
+        rootRecyclerView.clearFocus()
     }
 }

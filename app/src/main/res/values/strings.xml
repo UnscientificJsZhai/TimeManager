@@ -12,8 +12,30 @@
     <string name="dialog_ProgressDialog_Message">处理中</string>
 
     <!-- 颜色 -->
-    <string name="color_Blue">蓝色</string>
-    <string name="color_Yellow">黄色</string>
+    <string name="color_Tomato">番茄红</string>
+    <string name="color_Tangerine">橘红</string>
+    <string name="color_Pumpkin">南瓜色</string>
+    <string name="color_Mango">芒果黄</string>
+    <string name="color_Banana">香蕉黄</string>
+    <string name="color_Citron">香橼黄</string>
+    <string name="color_Avocado">牛油果色</string>
+    <string name="color_Pistachio">开心果绿</string>
+    <string name="color_Basil">罗勒绿</string>
+    <string name="color_Eucalyptus">桉树绿</string>
+    <string name="color_Sage">鼠尾草绿</string>
+    <string name="color_Peacock">孔雀蓝</string>
+    <string name="color_Cobalt">钴蓝</string>
+    <string name="color_Blueberry">蓝莓色</string>
+    <string name="color_Lavender">薰衣草色</string>
+    <string name="color_Wisteria">紫藤色</string>
+    <string name="color_Amethyst">水晶紫</string>
+    <string name="color_Grape">葡萄紫</string>
+    <string name="color_Radicchio">菊苣红</string>
+    <string name="color_CherryBlossom">樱花粉红</string>
+    <string name="color_Flamingo">红鹤色</string>
+    <string name="color_Cocoa">可可棕</string>
+    <string name="color_Graphite">石墨黑</string>
+    <string name="color_Birch">桦木灰</string>
 
     <!-- 权限申请 -->
     <string name="activity_WelcomeActivity_AskPermissionTitle">需要权限</string>
@@ -123,6 +145,7 @@
     <string name="activity_CurrentTableSelector_ContextMenu_Edit">重命名</string>
     <string name="activity_CurrentTableSelector_ContextMenu_Delete">删除</string>
     <string name="activity_CurrentTableSelector_PermissionDeniedDialogMessage">没有授予日历写入权限，无法进行更改。</string>
+    <string name="activity_CurrentTableSelector_CopyTimeTableCheckBox">从当前课程表复制上课时间</string>
     <string name="activity_TimeTableEditor_RecyclerItemTitle">第%d节课</string>
     <string name="activity_TimeTableEditor_HeaderItemTitle">每节课时长%d分钟</string>
     <string name="activity_TimeTableEditor_HeaderSubtitle">长按可以手动设置下课时间</string>

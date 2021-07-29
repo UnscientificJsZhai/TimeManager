@@ -43,7 +43,7 @@
             app:summary="@string/preferences_CalendarOption_UpdateCalendarSummary" />
 
         <ListPreference
-            android:defaultValue="-16776961"
+            android:defaultValue="-1409017"
             android:entries="@array/preferences_CalendarColor_Entries"
             android:entryValues="@array/preferences_CalendarColor_EntryValues"
             android:icon="@drawable/outline_palette_24"
@@ -79,8 +79,8 @@
         <Preference
             android:icon="@drawable/outline_backup_table_24"
             app:key="backup"
-            app:title="@string/preferences_Backup_Title"
-            app:summary="@string/preferences_Backup_Summary"/>
+            app:summary="@string/preferences_Backup_Summary"
+            app:title="@string/preferences_Backup_Title" />
 
         <Preference
             android:icon="@drawable/outline_settings_backup_restore_24"

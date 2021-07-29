@@ -3,7 +3,9 @@ package cn.unscientificjszhai.timemanager.ui.settings
 import android.Manifest
 import android.os.Bundle
 import android.view.*
+import android.widget.CheckBox
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
@@ -51,46 +53,7 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
 
         //初始化RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
-        this.adapter =
-            CurrentTableSelectorAdapter(timeManagerApplication.nowTableID) { courseTable, isDelete ->
-                if (isDelete) {
-                    //删除CourseTable的逻辑。
-                    if (courseTable.id != this.timeManagerApplication.nowTableID) {
-                        runIfPermissionGranted(Manifest.permission.WRITE_CALENDAR, {
-                            showPermissionDeniedDialog()
-                        }) {
-                            thread(start = true) {
-                                CalendarOperator.deleteCalendarTable(this, courseTable)
-
-                                val dao =
-                                    timeManagerApplication.getCourseTableDatabase()
-                                        .courseTableDao()
-                                dao.deleteCourseTable(courseTable)
-                                deleteDatabase("table${courseTable.id}.db")
-                            }
-                        }
-                    }
-                } else {
-                    //选中CourseTable的逻辑。
-                    try {
-                        val id: Long = courseTable.id!!
-                        if (id != timeManagerApplication.nowTableID) {
-                            timeManagerApplication.updateTableID(id)
-                        } else {
-                            return@CurrentTableSelectorAdapter
-                        }
-                    } catch (e: NullPointerException) {
-                        Toast.makeText(
-                            this,
-                            R.string.activity_CurrentTableSelector_TableNotFound,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return@CurrentTableSelectorAdapter
-                    } finally {
-                        finish()
-                    }
-                }
-            }
+        this.adapter = CurrentTableSelectorAdapter(timeManagerApplication.nowTableID, ::setTable)
         recyclerView.adapter = this.adapter
 
         //注册监听器
@@ -107,10 +70,12 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.CurrentTableSelector_Add -> {
-                val root: FrameLayout =
-                    View.inflate(this, R.layout.dialog_input, null) as FrameLayout
-                val editText = root.findViewById<TextInputEditText>(R.id.InputDialog_EditText)
+                val root: LinearLayout =
+                    View.inflate(this, R.layout.dialog_new_table, null) as LinearLayout
+                val editText = root.findViewById<TextInputEditText>(R.id.NewTableDialog_EditText)
+                val checkBox = root.findViewById<CheckBox>(R.id.NewTableDialog_CheckBox)
                 editText.setHint(R.string.activity_Welcome_PromptText)
+                checkBox.isChecked = true
 
                 AlertDialog.Builder(this)
                     .setTitle(R.string.activity_CurrentTableSelector_AddTableDialogTitle)
@@ -118,8 +83,19 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
                     .setNegativeButton(R.string.common_cancel) { dialog, _ ->
                         dialog?.dismiss()
                     }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
+                        //从当前选中的表中复制上课时间信息
+                        val currentTable by timeManagerApplication
 
-                        val courseTable = CourseTable(editText.text.toString())
+                        val courseTable =
+                            if (checkBox.isChecked) {
+                                CourseTable(editText.text.toString(), currentTable.timeTable)
+                            } else {
+                                CourseTable(editText.text.toString())
+                            }
+                        if (courseTable.name.isBlank()) {
+                            //为空时填入默认课程表名
+                            courseTable.name = getString(R.string.activity_Welcome_EditTextHint)
+                        }
 
                         runIfPermissionGranted(Manifest.permission.WRITE_CALENDAR, {
                             showPermissionDeniedDialog()
@@ -253,5 +229,51 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
             .setPositiveButton(R.string.common_confirm) { dialog, _ ->
                 dialog.dismiss()
             }.show()
+    }
+
+    /**
+     * 设置课程表的方法。
+     *
+     * @param courseTable 要操作的课程表。
+     * @param isDelete True则删除此表，False则将此表设置为当前选中的表。
+     */
+    private fun setTable(courseTable: CourseTable, isDelete: Boolean) {
+        if (isDelete) {
+            //删除CourseTable的逻辑。
+            if (courseTable.id != this.timeManagerApplication.nowTableID) {
+                runIfPermissionGranted(Manifest.permission.WRITE_CALENDAR, {
+                    showPermissionDeniedDialog()
+                }) {
+                    thread(start = true) {
+                        CalendarOperator.deleteCalendarTable(this, courseTable)
+
+                        val dao =
+                            timeManagerApplication.getCourseTableDatabase()
+                                .courseTableDao()
+                        dao.deleteCourseTable(courseTable)
+                        deleteDatabase("table${courseTable.id}.db")
+                    }
+                }
+            }
+        } else {
+            //选中CourseTable的逻辑。
+            try {
+                val id: Long = courseTable.id!!
+                if (id != timeManagerApplication.nowTableID) {
+                    timeManagerApplication.updateTableID(id)
+                } else {
+                    return
+                }
+            } catch (e: NullPointerException) {
+                Toast.makeText(
+                    this,
+                    R.string.activity_CurrentTableSelector_TableNotFound,
+                    Toast.LENGTH_SHORT
+                ).show()
+                return
+            } finally {
+                finish()
+            }
+        }
     }
 }

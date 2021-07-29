@@ -164,7 +164,7 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
             ) {
                 //获得了写入日历的权限,继续写入日历。
                 createFirstTable(
-                    if (tableTitleEditText.text.isEmpty()) {
+                    if (tableTitleEditText.text.isBlank()) {
                         //当输入为空时的默认课程表名
                         getString(R.string.activity_Welcome_EditTextHint)
                     } else {

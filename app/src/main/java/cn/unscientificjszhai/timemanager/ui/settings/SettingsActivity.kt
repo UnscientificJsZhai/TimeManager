@@ -62,10 +62,9 @@ class SettingsActivity : CalendarOperatorActivity() {
                 SettingsDataStore(
                     courseTable,
                     timeManagerApplication.getCourseTableDatabase().courseTableDao(),
-                    this
-                ) {
-                    timeManagerApplication.updateTableID(it)
-                }
+                    this,
+                    timeManagerApplication::updateTableID
+                )
             )
             supportFragmentManager
                 .beginTransaction()
