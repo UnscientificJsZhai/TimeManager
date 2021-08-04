@@ -13,14 +13,14 @@ import kotlin.reflect.KProperty
  *
  * @param startDate 学期开始日，Calendar对象。
  */
-class NowTimeTagger(private var startDate: Calendar) {
+class CurrentTimeMarker(private var startDate: Calendar) {
 
     /**
-     * 为[NowTimeTagger]提供属性委托功能。
+     * 为[CurrentTimeMarker]提供属性委托功能。
      */
     interface Getter {
 
-        operator fun getValue(thisRef: Any?, property: KProperty<*>): NowTimeTagger
+        operator fun getValue(thisRef: Any?, property: KProperty<*>): CurrentTimeMarker
     }
 
     /**

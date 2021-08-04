@@ -1,7 +1,7 @@
 package cn.unscientificjszhai.timemanager.ui.settings
 
 import androidx.lifecycle.ViewModel
-import cn.unscientificjszhai.timemanager.data.tables.TimeTableTypeConverter
+import cn.unscientificjszhai.timemanager.data.tables.TimetableTypeConverter
 import kotlin.reflect.KProperty
 
 /**
@@ -16,7 +16,7 @@ internal class TimeTableEditorActivityViewModel : ViewModel() {
      */
     var originTimeTable = ""
 
-    private val typeConverter = TimeTableTypeConverter()
+    private val typeConverter = TimetableTypeConverter()
 
     operator fun getValue(thisRef: Any?, property: KProperty<*>) = this.typeConverter
 }

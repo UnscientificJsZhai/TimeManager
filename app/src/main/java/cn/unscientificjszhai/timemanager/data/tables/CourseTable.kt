@@ -22,7 +22,7 @@ import kotlin.reflect.KProperty
  * @param startDate 学期开始日。
  */
 @Entity(tableName = CourseTable.TABLE_NAME)
-@TypeConverters(TimeTableTypeConverter::class)
+@TypeConverters(TimetableTypeConverter::class)
 data class CourseTable(
     @PrimaryKey(autoGenerate = true) var id: Long?,
     var name: String,
@@ -88,7 +88,7 @@ data class CourseTable(
         @Throws(JSONException::class)
         fun parseJson(jsonString: String): CourseTable {
             val jsonObject = JSONObject(jsonString)
-            val converter = TimeTableTypeConverter()
+            val converter = TimetableTypeConverter()
             val name = jsonObject.getString("name")
             val timeTable = converter.getTimeTable(jsonObject.getString("timeTable"))
             val courseTable = CourseTable(name, timeTable)
@@ -210,7 +210,7 @@ data class CourseTable(
      */
     fun toJson(): JSONObject {
         val jsonObject = JSONObject()
-        val converter = TimeTableTypeConverter()
+        val converter = TimetableTypeConverter()
         jsonObject.put("name", name)
         jsonObject.put("classPerDay", classesPerDay)
         jsonObject.put("maxWeeks", maxWeeks)

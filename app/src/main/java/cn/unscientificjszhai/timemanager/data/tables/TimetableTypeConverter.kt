@@ -8,7 +8,7 @@ import java.util.*
  *
  * @see CourseTable
  */
-class TimeTableTypeConverter {
+class TimetableTypeConverter {
 
     @TypeConverter
     fun getTimeTable(value: String): Array<String> {

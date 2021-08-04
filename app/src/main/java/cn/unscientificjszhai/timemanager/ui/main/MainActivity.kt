@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
-import cn.unscientificjszhai.timemanager.data.NowTimeTagger
+import cn.unscientificjszhai.timemanager.data.CurrentTimeMarker
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.database.CourseDatabase
 import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
@@ -43,7 +43,7 @@ import kotlin.reflect.KProperty
  * @see CourseAdapter
  * @see MainActivityViewModel
  */
-class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
+class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
     companion object {
 
@@ -55,10 +55,10 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
     }
 
     private lateinit var timeManagerApplication: TimeManagerApplication
-    private val nowTimeTagger: NowTimeTagger by lazy {
+    private val currentTimeMarker: CurrentTimeMarker by lazy {
         timeManagerApplication.courseTable?.let {
-            NowTimeTagger(it.startDate)
-        } ?: NowTimeTagger(Calendar.getInstance())
+            CurrentTimeMarker(it.startDate)
+        } ?: CurrentTimeMarker(Calendar.getInstance())
     }
 
     private lateinit var viewModel: MainActivityViewModel
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
 
                 //更新NowTimeTagger
                 val courseTable by context.timeManagerApplication
-                context.nowTimeTagger.setStartDate(courseTable.startDate)
+                context.currentTimeMarker.setStartDate(courseTable.startDate)
                 updateActionBarLabel()
             }
         }
@@ -322,8 +322,8 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
         super.onDestroy()
     }
 
-    override fun getValue(thisRef: Any?, property: KProperty<*>): NowTimeTagger {
-        return this.nowTimeTagger
+    override fun getValue(thisRef: Any?, property: KProperty<*>): CurrentTimeMarker {
+        return this.currentTimeMarker
     }
 
     /**
@@ -334,7 +334,7 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
     private fun bindData(courseList: List<CourseWithClassTimes>) {
         progressBar.visibility = View.GONE
         if (viewModel.showTodayOnly) {
-            rootViewAdapter.submitList(this.nowTimeTagger.getTodayCourseList(courseList))
+            rootViewAdapter.submitList(this.currentTimeMarker.getTodayCourseList(courseList))
         } else {
             rootViewAdapter.submitList(courseList)
         }
@@ -378,7 +378,7 @@ class MainActivity : AppCompatActivity(), NowTimeTagger.Getter {
 
                 stringBuilder.append(
                     getString(R.string.view_ClassTimeEdit_WeekItem_ForKotlin)
-                        .format(nowTimeTagger.getWeekNumber())
+                        .format(currentTimeMarker.getWeekNumber())
                 )
                     .append(" ")
                     .append(dayOfWeek())

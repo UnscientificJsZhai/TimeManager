@@ -76,7 +76,6 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
                 val editText = root.findViewById<TextInputEditText>(R.id.NewTableDialog_EditText)
                 val checkBox = root.findViewById<CheckBox>(R.id.NewTableDialog_CheckBox)
                 editText.setHint(R.string.activity_Welcome_PromptText)
-                editText.imeOptions = EditorInfo.IME_ACTION_DONE
                 checkBox.isChecked = true
 
                 AlertDialog.Builder(this)

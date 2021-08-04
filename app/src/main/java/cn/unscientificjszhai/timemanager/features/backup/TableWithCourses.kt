@@ -8,10 +8,9 @@ import org.json.JSONObject
 import java.io.Serializable
 
 /**
- * 用于备份和恢复功能的可序列化类。
+ * 用于备份和恢复功能的封装类。在导入导出备份和生成ICS中使用。
  *
  * @see CourseTable
- *
  * @see CourseWithClassTimes
  */
 class TableWithCourses(val courseTable: CourseTable, val courses: List<CourseWithClassTimes>) :
