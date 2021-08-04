@@ -91,7 +91,7 @@ class InfoActivity : AppCompatActivity() {
         }
 
         designerMailButton.setOnLongClickListener {
-            Toast.makeText(this, MAIL_ADDRESS,Toast.LENGTH_LONG).show()
+            Toast.makeText(this, LOGO_DESIGNER_MAIL_ADDRESS,Toast.LENGTH_LONG).show()
             val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             clipboardManager.setPrimaryClip(ClipData.newPlainText(null, LOGO_DESIGNER_MAIL_ADDRESS))
             true

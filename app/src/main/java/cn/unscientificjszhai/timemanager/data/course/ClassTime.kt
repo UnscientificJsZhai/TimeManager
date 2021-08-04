@@ -3,6 +3,8 @@ package cn.unscientificjszhai.timemanager.data.course
 import androidx.room.*
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.data.tables.FormattedTime
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.Serializable
 
 /**
@@ -48,6 +50,26 @@ data class ClassTime(
          * 周数的最大存储位数。
          */
         const val MAX_STORAGE_SIZE = 30
+
+        /**
+         * 从Json中解析出一个上课时间对象。
+         *
+         * @return 生成的ClassTime对象。
+         * @exception JSONException 当Json解析出错时抛出此错误。
+         */
+        @JvmStatic
+        @Throws(JSONException::class)
+        fun parseJson(jsonString: String): ClassTime {
+            val jsonObject = JSONObject(jsonString)
+            val classTime = ClassTime()
+            classTime.week = jsonObject.getInt("week")
+            classTime.whichDay = jsonObject.getInt("whichDay")
+            classTime.start = jsonObject.getInt("start")
+            classTime.end = jsonObject.getInt("end")
+            classTime.teacherName = jsonObject.getString("teacherName")
+            classTime.location = jsonObject.getString("location")
+            return classTime
+        }
     }
 
     /**
@@ -203,4 +225,20 @@ data class ClassTime(
         FormattedTime(courseTable.timeTable[this.start - 1]),
         FormattedTime(courseTable.timeTable[this.end - 1])
     )
+
+    /**
+     * 生成Json字符串。
+     *
+     * @return 生成的字符串。
+     */
+    fun toJson(): JSONObject {
+        val jsonObject = JSONObject()
+        jsonObject.put("week", week)
+        jsonObject.put("whichDay", whichDay)
+        jsonObject.put("start", start)
+        jsonObject.put("end", end)
+        jsonObject.put("teacherName", teacherName)
+        jsonObject.put("location", location)
+        return jsonObject
+    }
 }

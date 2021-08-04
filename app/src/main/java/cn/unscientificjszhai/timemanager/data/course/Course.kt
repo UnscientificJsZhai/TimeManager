@@ -4,6 +4,8 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.Serializable
 import java.lang.ref.WeakReference
 
@@ -58,10 +60,40 @@ data class Course(
                 return false
             }
         }
+
+        /**
+         * 从Json中解析出一个课程对象。
+         *
+         * @return 生成的Course对象。
+         * @exception JSONException 当Json解析出错时抛出此错误。
+         */
+        @JvmStatic
+        @Throws(JSONException::class)
+        fun parseJson(jsonString: String): Course {
+            val jsonObject = JSONObject(jsonString)
+            val course = Course()
+            course.title = jsonObject.getString("title")
+            course.credit = jsonObject.getDouble("credit")
+            course.remarks = jsonObject.getString("remarks")
+            return course
+        }
     }
 
     /**
      * 创建一个新的对象的方法。
      */
     constructor() : this(null, "", 0.0, "", ArrayList<Long>())
+
+    /**
+     * 生成Json字符串。
+     *
+     * @return 生成的字符串。
+     */
+    fun toJson(): JSONObject {
+        val jsonObject = JSONObject()
+        jsonObject.put("title", title)
+        jsonObject.put("credit", credit)
+        jsonObject.put("remarks", remarks)
+        return jsonObject
+    }
 }

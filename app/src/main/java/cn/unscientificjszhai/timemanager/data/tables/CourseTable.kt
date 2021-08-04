@@ -5,6 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import cn.unscientificjszhai.timemanager.data.course.ClassTime
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.Serializable
 import java.util.*
 import kotlin.reflect.KProperty
@@ -75,6 +77,26 @@ data class CourseTable(
             "00000000",
             "00000000"
         )
+
+        /**
+         * 从Json中解析出一个课程表对象。
+         *
+         * @return 生成的CourseTable对象。
+         * @exception JSONException 当Json解析出错时抛出此错误。
+         */
+        @JvmStatic
+        @Throws(JSONException::class)
+        fun parseJson(jsonString: String): CourseTable {
+            val jsonObject = JSONObject(jsonString)
+            val converter = TimeTableTypeConverter()
+            val name = jsonObject.getString("name")
+            val timeTable = converter.getTimeTable(jsonObject.getString("timeTable"))
+            val courseTable = CourseTable(name, timeTable)
+            courseTable.classesPerDay = jsonObject.getInt("classPerDay")
+            courseTable.maxWeeks = jsonObject.getInt("maxWeeks")
+            courseTable.startDate = converter.getStartDate(jsonObject.getString("startDate"))
+            return courseTable
+        }
     }
 
     /**
@@ -179,5 +201,21 @@ data class CourseTable(
             this.set(Calendar.DATE, this.get(Calendar.DATE) - 1)
         }
         return this
+    }
+
+    /**
+     * 生成Json字符串。
+     *
+     * @return 生成的字符串。
+     */
+    fun toJson(): JSONObject {
+        val jsonObject = JSONObject()
+        val converter = TimeTableTypeConverter()
+        jsonObject.put("name", name)
+        jsonObject.put("classPerDay", classesPerDay)
+        jsonObject.put("maxWeeks", maxWeeks)
+        jsonObject.put("timeTable", converter.setTimeTable(timeTable))
+        jsonObject.put("startDate", converter.setStartDate(startDate))
+        return jsonObject
     }
 }

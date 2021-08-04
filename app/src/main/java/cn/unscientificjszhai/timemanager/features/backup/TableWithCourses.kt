@@ -2,8 +2,10 @@ package cn.unscientificjszhai.timemanager.features.backup
 
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
-import java.io.*
-import java.nio.charset.StandardCharsets
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.Serializable
 
 /**
  * 用于备份和恢复功能的可序列化类。
@@ -15,48 +17,42 @@ import java.nio.charset.StandardCharsets
 class TableWithCourses(val courseTable: CourseTable, val courses: List<CourseWithClassTimes>) :
     Serializable {
 
-    /**
-     * 返回序列化此对象的字符串。
-     *
-     * @return 序列化字符串。
-     * @throws IOException 出现IO异常。
-     */
-    @Throws(IOException::class)
-    fun serializeObject(): String {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        val out = ObjectOutputStream(byteArrayOutputStream)
-        out.writeObject(this)
-        val objectString = byteArrayOutputStream.toString("ISO-8859-1")
-        out.close()
-        byteArrayOutputStream.close()
-        return objectString
+    companion object {
+
+        /**
+         * 从Json中解析出一个组合表对象。
+         *
+         * @return 生成的TableWithCourse对象。
+         * @exception JSONException 当Json解析出错时抛出此错误。
+         */
+        @JvmStatic
+        @Throws(JSONException::class)
+        fun parseJson(jsonString: String): TableWithCourses {
+            val jsonObject = JSONObject(jsonString)
+            val courseTable = CourseTable.parseJson(jsonObject.getString("courseTable"))
+            val courses = ArrayList<CourseWithClassTimes>()
+            val jsonArrayOfCourses = JSONArray(jsonObject.getString("courses"))
+            for (index in 0 until jsonArrayOfCourses.length()) {
+                val courseJsonString = jsonArrayOfCourses.getString(index)
+                courses.add(CourseWithClassTimes.parseJson(courseJsonString))
+            }
+            return TableWithCourses(courseTable, courses)
+        }
     }
 
-    companion object {
-        /**
-         * 用字符串反序列化生成对象。
-         *
-         * @param input 输入字符串
-         * @return 生成的对象。如果生成的对象不为[TableWithCourses]的话，就会返回null。
-         * @throws IOException 出现IO异常。
-         */
-        @Throws(IOException::class)
-        fun stringSerializeObject(input: String): TableWithCourses? {
-            val byteArrayInputStream =
-                ByteArrayInputStream(input.toByteArray(StandardCharsets.ISO_8859_1))
-            val objectInputStream = ObjectInputStream(byteArrayInputStream)
-            val serializableObject: Any = try {
-                objectInputStream.readObject()
-            } catch (e: ClassNotFoundException) {
-                return null
-            }
-            objectInputStream.close()
-            byteArrayInputStream.close()
-            return if (serializableObject !is TableWithCourses) {
-                null
-            } else {
-                serializableObject
-            }
+    /**
+     * 生成Json字符串。
+     *
+     * @return 生成的字符串。
+     */
+    fun toJson(): JSONObject {
+        val jsonObject = JSONObject()
+        jsonObject.put("courseTable", courseTable.toJson())
+        val jsonArray = JSONArray()
+        courses.forEach {
+            jsonArray.put(it.toJson())
         }
+        jsonObject.put("courses", jsonArray)
+        return jsonObject
     }
 }

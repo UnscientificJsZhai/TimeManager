@@ -41,12 +41,12 @@ internal class WeekChooseDialogAdapter(
             do {
                 if (!weekData.getWeekData(position + 1)) {
                     weekData.setWeekData(position + 1, true)
+                    notifyItemChanged(position)
                     position -= 1
                 } else {
                     break
                 }
             } while (position >= 0)
-            notifyDataSetChanged()
 
             true
         }

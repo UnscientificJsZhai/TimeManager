@@ -15,8 +15,7 @@ import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.features.calendar.CalendarOperator
 import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
 import cn.unscientificjszhai.timemanager.ui.ProgressDialog
-import java.io.IOException
-import java.io.ObjectInputStream
+import java.io.*
 import java.nio.charset.StandardCharsets
 import kotlin.concurrent.thread
 
@@ -46,11 +45,11 @@ object BackupOperator {
             val objectString: String
             val courseList =
                 timeManagerApplication.getCourseDatabase().courseDao().getCourses()
-            val serializableObject = TableWithCourses(courseTable, courseList)
+            val tableWithCourses = TableWithCourses(courseTable, courseList)
             try {
-                objectString = serializableObject.serializeObject()
+                objectString = tableWithCourses.toJson().toString()
                 val outputStream = contentResolver.openOutputStream(uri)
-                outputStream!!.write(objectString.toByteArray(StandardCharsets.ISO_8859_1))
+                outputStream!!.write(objectString.toByteArray(StandardCharsets.UTF_8))
                 outputStream.close()
             } catch (e: IOException) {
                 context.runOnUiThread {
@@ -73,6 +72,7 @@ object BackupOperator {
      *
      * @param context 进行备份操作的上下文，因为要显示Dialog，仅接受Activity。
      * @param uri 备份文件的uri，需要可以被读取。
+     * @param doOnImportThread 导入完成后在导入线程（工作线程）上继续的操作。
      */
     @UiThread
     fun importBackup(
@@ -87,11 +87,19 @@ object BackupOperator {
         progressDialog.show()
         thread(start = true) {
             val inputStream = contentResolver.openInputStream(uri)
-            val objectInputStream = ObjectInputStream(inputStream)
+            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
+
+            val jsonBuilder = StringBuilder()
+            while (true) {
+                val line = bufferedReader.readLine() ?: break
+                jsonBuilder.append(line)
+            }
+
             val tableWithCourses: TableWithCourses?
             try {
+                val jsonString = jsonBuilder.toString()
                 tableWithCourses =
-                    objectInputStream.readObject() as TableWithCourses?
+                    TableWithCourses.parseJson(jsonString)
             } catch (e: Exception) {
                 progressDialog.postDismiss()
                 context.runOnUiThread {
@@ -103,7 +111,7 @@ object BackupOperator {
                 }
                 return@thread
             } finally {
-                objectInputStream.close()
+                bufferedReader.close()
                 inputStream?.close()
             }
 
@@ -119,14 +127,13 @@ object BackupOperator {
                 return@thread
             } else {
                 //数据判定合法，开始导入过程
-                val newCourseTable = tableWithCourses.courseTable.apply {
-                    id = null
-                }
+                val newCourseTable = tableWithCourses.courseTable
                 val courseTableDao =
                     timeManagerApplication.getCourseTableDatabase()
                         .courseTableDao()
                 CalendarOperator.createCalendarTable(context, newCourseTable)
                 val tableID = courseTableDao.insertCourseTable(newCourseTable)
+                //创建Course数据库文件
                 val courseDatabase =
                     Room.databaseBuilder(
                         context,
@@ -138,11 +145,11 @@ object BackupOperator {
                 val classTimeDao = courseDatabase.classTimeDao()
                 for (courseWithClassTimes in tableWithCourses.courses) {
                     EventsOperator.addEvent(context, newCourseTable, courseWithClassTimes)
-                    courseDao.insertCourse(courseWithClassTimes.course.apply {
-                        associatedEventsId.clear()
-                    })
+                    val courseId = courseDao.insertCourse(courseWithClassTimes.course)
                     for (classTime in courseWithClassTimes.classTimes) {
-                        classTimeDao.insertClassTime(classTime)
+                        classTimeDao.insertClassTime(classTime.apply {
+                            this.courseId = courseId
+                        })
                     }
                 }
                 progressDialog.postDismiss()

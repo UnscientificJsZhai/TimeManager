@@ -2,6 +2,9 @@ package cn.unscientificjszhai.timemanager.data.course
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.Serializable
 
 /**
@@ -17,4 +20,43 @@ data class CourseWithClassTimes(
 ) : Serializable {
 
     constructor(template: CourseWithClassTimes) : this(template.course.copy(), template.classTimes)
+
+    companion object {
+
+        /**
+         * 从Json中解析出一个课程组合对象。
+         *
+         * @return 生成的CourseWithClassTimes对象。
+         * @exception JSONException 当Json解析出错时抛出此错误。
+         */
+        @JvmStatic
+        @Throws(JSONException::class)
+        fun parseJson(jsonString: String): CourseWithClassTimes {
+            val jsonObject = JSONObject(jsonString)
+            val course = Course.parseJson(jsonObject.getString("course"))
+            val classTimes = ArrayList<ClassTime>()
+            val jsonArrayOfClassTime = JSONArray(jsonObject.getString("classTimes"))
+            for (index in 0 until jsonArrayOfClassTime.length()) {
+                val classTimeJsonString = jsonArrayOfClassTime.getString(index)
+                classTimes.add(ClassTime.parseJson(classTimeJsonString))
+            }
+            return CourseWithClassTimes(course, classTimes)
+        }
+    }
+
+    /**
+     * 生成Json字符串。
+     *
+     * @return 生成的字符串。
+     */
+    fun toJson(): JSONObject {
+        val jsonObject = JSONObject()
+        jsonObject.put("course", course.toJson())
+        val jsonArray = JSONArray()
+        classTimes.forEach {
+            jsonArray.put(it.toJson())
+        }
+        jsonObject.put("classTimes", jsonArray)
+        return jsonObject
+    }
 }

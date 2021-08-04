@@ -106,7 +106,7 @@
     <string name="preferences_ExportsICS_Summary">ICS file is use to import events into calendar apps.</string>
     <string name="activity_Settings_FailToBackup">Fail to export backup</string>
     <string name="activity_Settings_ImportError">Fail to import</string>
-    <string name="preferences_Backup_Summary">Export current table.Old backup may not be supported.</string>
+    <string name="preferences_Backup_Summary">Export current table.</string>
     <string name="activity_Main_ActionBarLabel_TodayOnly">Today</string>
     <string name="activity_Main_ActionBarLabel_All">All</string>
     <string name="activity_Settings_Info">Info</string>

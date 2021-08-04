@@ -3,6 +3,7 @@ package cn.unscientificjszhai.timemanager.ui.settings
 import android.Manifest
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.EditorInfo
 import android.widget.CheckBox
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -75,6 +76,7 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
                 val editText = root.findViewById<TextInputEditText>(R.id.NewTableDialog_EditText)
                 val checkBox = root.findViewById<CheckBox>(R.id.NewTableDialog_CheckBox)
                 editText.setHint(R.string.activity_Welcome_PromptText)
+                editText.imeOptions = EditorInfo.IME_ACTION_DONE
                 checkBox.isChecked = true
 
                 AlertDialog.Builder(this)

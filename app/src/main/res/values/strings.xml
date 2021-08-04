@@ -131,7 +131,7 @@
     <string name="preferences_ShowOnMainActivity_Today">显示今天的情况</string>
     <string name="preferences_Backup_CategoryTitle">备份和导入导出</string>
     <string name="preferences_Backup_Title">导出备份</string>
-    <string name="preferences_Backup_Summary">导出当前课程表的数据。请注意旧版本的备份文件可能无法在新版使用。</string>
+    <string name="preferences_Backup_Summary">导出当前课程表的数据。</string>
     <string name="preferences_Import_Title">导入备份</string>
     <string name="preferences_Import_Summary">导入的数据将创建一个新的课程表，无法与现有课程表合并。</string>
     <string name="preferences_ExportICS_Title">导出为ICS文件</string>
