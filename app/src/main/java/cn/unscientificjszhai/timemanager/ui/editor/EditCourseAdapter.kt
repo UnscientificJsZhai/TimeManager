@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.data.course.ClassTime
-import cn.unscientificjszhai.timemanager.ui.StaticViewHeaderAdapter
+import cn.unscientificjszhai.timemanager.ui.others.StaticViewHeaderAdapter
 
 /**
  * ClassTime编辑器的适配器。

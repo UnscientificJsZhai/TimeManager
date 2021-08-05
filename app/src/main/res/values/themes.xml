@@ -22,6 +22,7 @@
 
     <style name="Theme.TimeManager.Widget.FloatingButton" parent="Theme.TimeManager">
         <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondary">@color/skyBlue</item>
     </style>
 
     <style name="Theme.TimeManager.FloatingActivity" parent="Theme.AppCompat.Dialog">

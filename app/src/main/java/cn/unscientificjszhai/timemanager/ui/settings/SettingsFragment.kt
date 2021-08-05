@@ -14,7 +14,7 @@ import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.features.calendar.CalendarOperator
 import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
-import cn.unscientificjszhai.timemanager.ui.ProgressDialog
+import cn.unscientificjszhai.timemanager.ui.others.ProgressDialog
 import java.util.*
 import kotlin.concurrent.thread
 

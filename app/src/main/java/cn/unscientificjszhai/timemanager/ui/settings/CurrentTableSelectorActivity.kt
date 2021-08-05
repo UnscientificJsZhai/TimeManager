@@ -3,7 +3,6 @@ package cn.unscientificjszhai.timemanager.ui.settings
 import android.Manifest
 import android.os.Bundle
 import android.view.*
-import android.view.inputmethod.EditorInfo
 import android.widget.CheckBox
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -16,10 +15,10 @@ import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.features.calendar.CalendarOperator
-import cn.unscientificjszhai.timemanager.ui.ActivityUtility
-import cn.unscientificjszhai.timemanager.ui.ActivityUtility.runIfPermissionGranted
-import cn.unscientificjszhai.timemanager.ui.CalendarOperatorActivity
-import cn.unscientificjszhai.timemanager.ui.RecyclerViewWithContextMenu
+import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
+import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissionGranted
+import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
+import cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
 import com.google.android.material.textfield.TextInputEditText
 import kotlin.concurrent.thread
 

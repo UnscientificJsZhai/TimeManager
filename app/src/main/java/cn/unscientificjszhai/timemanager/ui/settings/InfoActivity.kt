@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import cn.unscientificjszhai.timemanager.R
-import cn.unscientificjszhai.timemanager.ui.ActivityUtility
+import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
 
 /**
  * 显示App简介的Activity。

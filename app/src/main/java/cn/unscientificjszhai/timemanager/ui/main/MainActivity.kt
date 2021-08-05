@@ -25,10 +25,10 @@ import cn.unscientificjszhai.timemanager.data.CurrentTimeMarker
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.database.CourseDatabase
 import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
-import cn.unscientificjszhai.timemanager.ui.ActivityUtility
-import cn.unscientificjszhai.timemanager.ui.ActivityUtility.jumpToSystemPermissionSettings
-import cn.unscientificjszhai.timemanager.ui.ActivityUtility.runIfPermissionGranted
-import cn.unscientificjszhai.timemanager.ui.RecyclerViewWithContextMenu
+import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
+import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.jumpToSystemPermissionSettings
+import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissionGranted
+import cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
 import cn.unscientificjszhai.timemanager.ui.WelcomeActivity
 import cn.unscientificjszhai.timemanager.ui.editor.EditCourseActivity
 import cn.unscientificjszhai.timemanager.ui.settings.SettingsActivity

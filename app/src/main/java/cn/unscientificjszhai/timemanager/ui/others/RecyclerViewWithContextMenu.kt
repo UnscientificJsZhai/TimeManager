@@ -1,4 +1,4 @@
-package cn.unscientificjszhai.timemanager.ui
+package cn.unscientificjszhai.timemanager.ui.others
 
 import android.content.Context
 import android.util.AttributeSet

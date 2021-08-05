@@ -1,4 +1,4 @@
-package cn.unscientificjszhai.timemanager.ui
+package cn.unscientificjszhai.timemanager.ui.others
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -6,7 +6,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import cn.unscientificjszhai.timemanager.R
-import cn.unscientificjszhai.timemanager.ui.ActivityUtility.jumpToSystemPermissionSettings
+import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.jumpToSystemPermissionSettings
 
 /**
  * 所有需要用到日历权限的Activity的基类。

@@ -13,8 +13,8 @@ import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.features.backup.BackupOperator
 import cn.unscientificjszhai.timemanager.features.backup.CourseICS
-import cn.unscientificjszhai.timemanager.ui.ActivityUtility
-import cn.unscientificjszhai.timemanager.ui.CalendarOperatorActivity
+import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
+import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
 import cn.unscientificjszhai.timemanager.ui.main.MainActivity
 import kotlin.concurrent.thread
 

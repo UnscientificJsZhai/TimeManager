@@ -21,10 +21,10 @@ import cn.unscientificjszhai.timemanager.data.course.Course
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.database.CourseDatabase
 import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
-import cn.unscientificjszhai.timemanager.ui.ActivityUtility
-import cn.unscientificjszhai.timemanager.ui.ActivityUtility.jumpToSystemPermissionSettings
-import cn.unscientificjszhai.timemanager.ui.ActivityUtility.runIfPermissionGranted
-import cn.unscientificjszhai.timemanager.ui.CalendarOperatorActivity
+import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
+import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.jumpToSystemPermissionSettings
+import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissionGranted
+import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
 import cn.unscientificjszhai.timemanager.ui.main.CourseDetailActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlin.concurrent.thread

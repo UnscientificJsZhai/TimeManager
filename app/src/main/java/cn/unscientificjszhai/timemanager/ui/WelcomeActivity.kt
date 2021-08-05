@@ -19,9 +19,11 @@ import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.features.backup.BackupOperator
 import cn.unscientificjszhai.timemanager.features.calendar.CalendarOperator
 import cn.unscientificjszhai.timemanager.features.calendar.EmptyAuthenticator
-import cn.unscientificjszhai.timemanager.ui.ActivityUtility.jumpToSystemPermissionSettings
-import cn.unscientificjszhai.timemanager.ui.ActivityUtility.runIfPermissionGranted
+import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.jumpToSystemPermissionSettings
+import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissionGranted
 import cn.unscientificjszhai.timemanager.ui.main.MainActivity
+import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
+import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
 import kotlin.concurrent.thread
 
 /**
