@@ -144,4 +144,5 @@
     <string name="color_Cocoa">Cocoa</string>
     <string name="color_Graphite">Graphite</string>
     <string name="color_Birch">Birch</string>
+    <string name="activity_Main_GuideToast">Click floating button to add course</string>
 </resources>

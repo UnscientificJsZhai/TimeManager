@@ -13,6 +13,9 @@ import cn.unscientificjszhai.timemanager.ui.settings.SettingsActivity
 import kotlin.concurrent.thread
 import kotlin.reflect.KProperty
 
+/**
+ * 全局单例Application对象。提供当前课程表的属性委托功能。
+ */
 class TimeManagerApplication : Application(), CourseTable.Getter {
 
     companion object {

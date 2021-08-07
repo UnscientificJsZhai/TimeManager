@@ -38,7 +38,7 @@ class CourseICS(
          * 生成用于启动导出ics过程的Intent。
          *
          * @param courseTable 将要导出的课程表对象，用于获取标题以决定文件名。
-         * @return 生成的Intent。以这个Intent调用[Activity.startActivityForResult]或者[ActivityResultLauncher.launch]方法，
+         * @return 生成的Intent。以这个Intent为参数调用[Activity.startActivityForResult]或者[ActivityResultLauncher.launch]方法，
          * 启动系统文件管理器选择文件存储。
          */
         @JvmStatic

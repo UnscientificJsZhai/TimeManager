@@ -9,7 +9,7 @@ import java.util.*
 import kotlin.reflect.KProperty
 
 /**
- * 标注现在所处时间的标记类，也提供一些基于当前时间的实用功能，比如排序。
+ * 标注现在所处时间的标记类，也提供一些基于当前时间的实用功能，比如给课程排序。
  *
  * @param startDate 学期开始日，Calendar对象。
  */

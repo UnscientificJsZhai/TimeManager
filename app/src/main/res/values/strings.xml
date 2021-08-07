@@ -65,6 +65,7 @@
     <string name="activity_Main_TodayOnlyMode_Finished">已结束</string>
     <string name="activity_Main_ActionBarLabel_TodayOnly">今天的课程</string>
     <string name="activity_Main_ActionBarLabel_All">所有课程</string>
+    <string name="activity_Main_GuideToast">点击加号添加课程\n点击右上角查看更多</string>
 
     <!-- 包ui.editor使用 -->
     <string name="activity_EditCourse_Label">编辑</string>

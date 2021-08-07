@@ -25,12 +25,12 @@ import cn.unscientificjszhai.timemanager.data.CurrentTimeMarker
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.database.CourseDatabase
 import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
+import cn.unscientificjszhai.timemanager.ui.WelcomeActivity
+import cn.unscientificjszhai.timemanager.ui.editor.EditCourseActivity
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.jumpToSystemPermissionSettings
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissionGranted
 import cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
-import cn.unscientificjszhai.timemanager.ui.WelcomeActivity
-import cn.unscientificjszhai.timemanager.ui.editor.EditCourseActivity
 import cn.unscientificjszhai.timemanager.ui.settings.SettingsActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
@@ -52,6 +52,11 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
          */
         const val COURSE_DATABASE_CHANGE_ACTION =
             "cn.unscientificjszhai.timemanager.COURSE_DATABASE_CHANGE"
+
+        /**
+         * 确定是否显示帮助的Key，在SharedPreference：[TimeManagerApplication.INITIAL]中查找。
+         */
+        const val SHOW_GUIDE_KEY = "mainActivityGuideShowed"
     }
 
     private lateinit var timeManagerApplication: TimeManagerApplication
@@ -179,6 +184,14 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
         registerReceiver(this.dateChangeReceiver, IntentFilter().apply {
             addAction(Intent.ACTION_TIME_TICK)
         })
+
+        //首次打开则显示帮助
+        val sharedPreferences =
+            getSharedPreferences(TimeManagerApplication.INITIAL, Context.MODE_PRIVATE)
+        if (!sharedPreferences.getBoolean(SHOW_GUIDE_KEY, false)) {
+            Toast.makeText(this, R.string.activity_Main_GuideToast, Toast.LENGTH_LONG).show()
+            sharedPreferences.edit().putBoolean(SHOW_GUIDE_KEY, true).apply()
+        }
     }
 
     override fun onStart() {
