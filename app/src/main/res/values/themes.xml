@@ -32,6 +32,8 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <style name="Theme.TimeManager.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert"/>
+
     <style name="Theme.TimeManager.Widget.TextView.HeadLine" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/black</item>
     </style>

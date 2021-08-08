@@ -10,18 +10,18 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.course.ClassTime
 import cn.unscientificjszhai.timemanager.data.course.Course
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.dao.CourseDao
-import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
+import cn.unscientificjszhai.timemanager.ui.editor.EditCourseActivity
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.jumpToSystemPermissionSettings
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissionGranted
-import cn.unscientificjszhai.timemanager.ui.editor.EditCourseActivity
+import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.concurrent.thread
 
 /**
  * Dialog形式的Activity。用于在[MainActivity]中点击一个项目的时候显示它的详情。
@@ -102,7 +102,7 @@ class CourseDetailActivity : AppCompatActivity() {
         this.viewModel = ViewModelProvider(
             this,
             CourseDetailActivityViewModel.Factory(courseWithClassTimesLiveData)
-        ).get(CourseDetailActivityViewModel::class.java)
+        )[CourseDetailActivityViewModel::class.java]
 
         //监听数据变更
         viewModel.courseWithClassTimes.observe(this) { courseWithClassTimes ->
@@ -143,7 +143,7 @@ class CourseDetailActivity : AppCompatActivity() {
         //定义删除按钮
         findViewById<Button>(R.id.CourseDetailActivity_DeleteButton).setOnClickListener {
 
-            AlertDialog.Builder(this)
+            AlertDialog.Builder(this, R.style.Theme_TimeManager_AlertDialog)
                 .setTitle(R.string.activity_CourseDetail_DeleteConfirm)
                 .setNegativeButton(R.string.common_cancel) { dialog, _ ->
                     dialog?.dismiss()
@@ -169,22 +169,11 @@ class CourseDetailActivity : AppCompatActivity() {
 
                         if (courseWithClassTimes != null) {
                             delete = true
-                            thread(start = true) {
-                                //从日历中删除。
-                                val courseTable =
-                                    (application as TimeManagerApplication).courseTable!!
-                                EventsOperator.deleteEvent(
+                            viewModel.viewModelScope.launch {
+                                MainActivityViewModel.deleteCourse(
                                     this@CourseDetailActivity,
-                                    courseTable,
                                     courseWithClassTimes
                                 )
-                                //从数据库中删除。
-                                val database =
-                                    (application as TimeManagerApplication).getCourseDatabase()
-                                val courseDao = database.courseDao()
-                                val classTimeDao = database.classTimeDao()
-                                courseDao.deleteCourse(courseWithClassTimes.course)
-                                classTimeDao.deleteClassTimes(courseWithClassTimes.classTimes)
                             }
                         } else {
                             Toast.makeText(
@@ -196,7 +185,7 @@ class CourseDetailActivity : AppCompatActivity() {
                         dialog.dismiss()
                         finish()
                     }
-                }.create().show()
+                }.show()
         }
     }
 

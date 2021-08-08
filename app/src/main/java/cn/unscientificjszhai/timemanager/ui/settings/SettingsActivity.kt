@@ -9,14 +9,18 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.features.backup.BackupOperator
 import cn.unscientificjszhai.timemanager.features.backup.CourseICS
+import cn.unscientificjszhai.timemanager.ui.main.MainActivity
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
 import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
-import cn.unscientificjszhai.timemanager.ui.main.MainActivity
-import kotlin.concurrent.thread
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * 设置Activity，设置项的初始化在SettingsFragment中。使用了JetPack库的Preference库。
@@ -26,6 +30,8 @@ import kotlin.concurrent.thread
 class SettingsActivity : CalendarOperatorActivity() {
 
     private lateinit var timeManagerApplication: TimeManagerApplication
+
+    internal lateinit var viewModel: SettingsActivityViewModel
 
     private lateinit var backupLauncher: ActivityResultLauncher<Intent>
     private lateinit var importLauncher: ActivityResultLauncher<Intent>
@@ -47,30 +53,33 @@ class SettingsActivity : CalendarOperatorActivity() {
     private var settingsFragment: SettingsFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onCreate(null)
         setContentView(R.layout.activity_settings)
 
         //设置SystemUI颜色
         ActivityUtility.setSystemUIAppearance(this)
 
         this.timeManagerApplication = application as TimeManagerApplication
+        val courseTable by timeManagerApplication
+
+        val dataStore = SettingsDataStore(
+            courseTable,
+            timeManagerApplication.getCourseTableDatabase().courseTableDao(),
+            this,
+            timeManagerApplication::updateTableID
+        )
+        this.viewModel = ViewModelProvider(
+            this,
+            SettingsActivityViewModel.Factory(dataStore)
+        )[SettingsActivityViewModel::class.java]
 
         //替换Fragment
-        val courseTable by timeManagerApplication
-        if (savedInstanceState == null) {
-            this.settingsFragment = SettingsFragment(
-                SettingsDataStore(
-                    courseTable,
-                    timeManagerApplication.getCourseTableDatabase().courseTableDao(),
-                    this,
-                    timeManagerApplication::updateTableID
-                )
-            )
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.settings, this.settingsFragment!!)
-                .commit()
-        }
+
+        this.settingsFragment = SettingsFragment()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.settings, this.settingsFragment!!)
+            .commit()
 
         //监听数据库变更
         val intentFilter = IntentFilter()
@@ -106,13 +115,14 @@ class SettingsActivity : CalendarOperatorActivity() {
                 if (it.resultCode == RESULT_OK) {
                     val uri = it.data?.data
                     if (uri != null) {
-                        thread(start = true) {
-                            val courseList =
-                                timeManagerApplication.getCourseDatabase().courseDao().getCourses()
-                            val courseICS = CourseICS(courseList, courseTable)
-                            runOnUiThread {
-                                courseICS.writeToFile(this, uri)
+                        viewModel.viewModelScope.launch {
+                            val courseICS = withContext(Dispatchers.Default) {
+                                val courseList =
+                                    timeManagerApplication.getCourseDatabase().courseDao()
+                                        .getCourses()
+                                CourseICS(courseList, courseTable)
                             }
+                            courseICS.writeToFile(this@SettingsActivity, uri)
                         }
                     }
                 }

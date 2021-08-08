@@ -9,11 +9,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
-import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.data.tables.FormattedTime
 
 internal class TimeTableEditorAdapter(
-    val courseTable: CourseTable,
     private val viewModel: TimeTableEditorActivityViewModel
 ) :
     RecyclerView.Adapter<TimeTableEditorAdapter.ViewHolder>() {
@@ -29,6 +27,8 @@ internal class TimeTableEditorAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.recycler_time_table_editor, parent, false)
         val holder = ViewHolder(view)
+
+        val courseTable = viewModel.courseTable
 
         view.setOnClickListener {
             //获取计时方法
@@ -89,7 +89,7 @@ internal class TimeTableEditorAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val formattedTime = FormattedTime(courseTable.timeTable[position])
+        val formattedTime = FormattedTime(viewModel.courseTable.timeTable[position])
 
         holder.titleTextView.setText(R.string.activity_TimeTableEditor_RecyclerItemTitle)
         holder.titleTextView.text = holder.titleTextView.text.toString().format(position + 1)
@@ -99,7 +99,7 @@ internal class TimeTableEditorAdapter(
             "${timeNumberFormat(formattedTime.endH)}:${timeNumberFormat(formattedTime.endM)}"
     }
 
-    override fun getItemCount() = this.courseTable.classesPerDay
+    override fun getItemCount() = viewModel.courseTable.classesPerDay
 
     /**
      * 格式化整型数为2位字符串。

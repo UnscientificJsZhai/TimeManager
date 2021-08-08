@@ -5,12 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,14 +20,13 @@ import cn.unscientificjszhai.timemanager.data.course.ClassTime
 import cn.unscientificjszhai.timemanager.data.course.Course
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.database.CourseDatabase
-import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
+import cn.unscientificjszhai.timemanager.ui.main.CourseDetailActivity
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.jumpToSystemPermissionSettings
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissionGranted
 import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
-import cn.unscientificjszhai.timemanager.ui.main.CourseDetailActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlin.concurrent.thread
+import kotlinx.coroutines.launch
 
 class EditCourseActivity : CalendarOperatorActivity() {
 
@@ -84,7 +83,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
         setContentView(R.layout.activity_edit_course)
 
         //初始化ViewModel
-        this.viewModel = ViewModelProvider(this).get(EditCourseActivityViewModel::class.java)
+        this.viewModel = ViewModelProvider(this)[EditCourseActivityViewModel::class.java]
 
         ActivityUtility.setSystemUIAppearance(this)
 
@@ -190,7 +189,9 @@ class EditCourseActivity : CalendarOperatorActivity() {
                     }
             }) {
                 clearChildViewFocus()
-                saveData()
+                viewModel.viewModelScope.launch {
+                    viewModel.saveData(this@EditCourseActivity)
+                }
             }
         } else if (item.itemId == android.R.id.home) {
             //按下左上角返回箭头的逻辑
@@ -221,7 +222,9 @@ class EditCourseActivity : CalendarOperatorActivity() {
             if (grantResults.isNotEmpty() &&
                 grantResults[0] == PackageManager.PERMISSION_GRANTED
             ) {
-                saveData()
+                viewModel.viewModelScope.launch {
+                    viewModel.saveData(this@EditCourseActivity)
+                }
             }
         } else super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
@@ -256,124 +259,6 @@ class EditCourseActivity : CalendarOperatorActivity() {
 
             true
         }
-
-    /**
-     * 保存数据的逻辑。调用时应该已经确定获得了日历写入权限。
-     */
-    private fun saveData() {
-        //保存数据的逻辑
-        thread(start = true) {
-            val courseTable = (application as TimeManagerApplication).courseTable!!
-            //创建可读取数据库对象
-            val courseDao = courseDatabase.courseDao()
-            val classTimeDao = courseDatabase.classTimeDao()
-
-            val course = this.viewModel.course
-
-            if (course?.title?.isBlank() == true) {
-                runOnUiThread {
-                    Toast.makeText(
-                        this,
-                        R.string.activity_EditCourse_DataError,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                return@thread
-            }
-
-            when {
-                course == null -> {
-                    Toast.makeText(
-                        this,
-                        R.string.activity_EditCourse_DataError,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                course.id == null -> {
-                    //新建Course对象时
-                    for (classTime in viewModel.classTimes) {
-                        if (!classTime.isLegitimacy()) {
-                            runOnUiThread {
-                                Toast.makeText(
-                                    this,
-                                    getText(R.string.activity_EditCourse_DataError),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                            return@thread
-                        }
-                    }
-
-                    //插入日历表
-                    val courseWithClassTimes = CourseWithClassTimes(course, viewModel.classTimes)
-                    EventsOperator.addEvent(this, courseTable, courseWithClassTimes)
-
-                    //正式开始插入
-                    try {
-                        val courseId = courseDao.insertCourse(course)
-                        for (classTime in viewModel.classTimes) {
-                            classTime.courseId = courseId
-                            classTimeDao.insertClassTime(classTime)
-                        }
-                    } catch (e: Exception) {
-                        Log.e("EditCourseActivity", "saveData: Can not access Room database")
-                        EventsOperator.deleteEvent(this, courseTable, courseWithClassTimes)
-                    }
-
-                    finish()
-                }
-                else -> {
-                    //修改现有Course对象时
-                    for (classTime: ClassTime in viewModel.classTimes) {
-                        if (!classTime.isLegitimacy()) {
-                            runOnUiThread {
-                                Toast.makeText(
-                                    this,
-                                    getText(R.string.activity_EditCourse_DataError),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                            return@thread
-                        }
-                    }
-
-                    //从数据库中删除应该被删除的对象
-                    for (removedClassTime: ClassTime in viewModel.removedClassTimes) {
-                        viewModel.classTimes.removeIf { classTime ->
-                            classTime.id == removedClassTime.id
-                        }
-                        classTimeDao.deleteClassTime(removedClassTime)
-                    }
-
-                    //修改日历表
-                    val courseWithClassTimes = CourseWithClassTimes(course, viewModel.classTimes)
-                    EventsOperator.updateEvent(this, courseTable, courseWithClassTimes)
-
-                    //写入数据库的Course表
-                    courseDao.updateCourse(course)
-                    //写入数据库的ClassTime表
-                    for (classTime: ClassTime in viewModel.classTimes) {
-                        if (classTime.courseId == null) {
-                            classTime.courseId = course.id
-                        }
-                        if (classTime.id == null) {
-                            classTime.id = classTimeDao.insertClassTime(classTime)
-                        } else {
-                            classTimeDao.updateClassTime(classTime)
-                        }
-                    }
-
-                    val intent = Intent()
-
-                    intent.putExtra(
-                        CourseDetailActivity.EDIT_INTENT_RESULT,
-                        CourseWithClassTimes(course, viewModel.classTimes)
-                    )
-                    finish()
-                }
-            }
-        }
-    }
 
     /**
      * 清除所有输入框的焦点，迫使数据保存。

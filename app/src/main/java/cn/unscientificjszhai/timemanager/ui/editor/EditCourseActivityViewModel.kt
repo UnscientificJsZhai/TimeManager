@@ -1,8 +1,18 @@
 package cn.unscientificjszhai.timemanager.ui.editor
 
+import android.content.Intent
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import cn.unscientificjszhai.timemanager.R
+import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.course.ClassTime
 import cn.unscientificjszhai.timemanager.data.course.Course
+import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
+import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
+import cn.unscientificjszhai.timemanager.ui.main.CourseDetailActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * EditCourseActivity的ViewModel。
@@ -10,6 +20,7 @@ import cn.unscientificjszhai.timemanager.data.course.Course
  * @see EditCourseActivity
  */
 internal class EditCourseActivityViewModel : ViewModel() {
+
     /**
      * 如果是修改已有Course的话，则不为空。
      */
@@ -34,4 +45,127 @@ internal class EditCourseActivityViewModel : ViewModel() {
      * 是否从上一个复制。
      */
     var copyFromPrevious = true
+
+    /**
+     * 保存数据的逻辑。调用时应该已经确定获得了日历写入权限。
+     *
+     * @param context 执行此次操作的Activity。
+     */
+    suspend fun saveData(context: EditCourseActivity) {
+        val application = context.application as TimeManagerApplication
+        withContext(Dispatchers.Default) {
+            val courseTable = application.courseTable!!
+            //创建可读取数据库对象
+            val courseDatabase = application.getCourseDatabase()
+            val courseDao = courseDatabase.courseDao()
+            val classTimeDao = courseDatabase.classTimeDao()
+
+            val course = this@EditCourseActivityViewModel.course
+
+            if (course?.title?.isBlank() == true) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context,
+                        R.string.activity_EditCourse_DataError,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                return@withContext
+            }
+
+            when {
+                course == null -> {
+                    Toast.makeText(
+                        context,
+                        R.string.activity_EditCourse_DataError,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                course.id == null -> {
+                    //新建Course对象时
+                    for (classTime in this@EditCourseActivityViewModel.classTimes) {
+                        if (!classTime.isLegitimacy()) {
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(
+                                    context,
+                                    R.string.activity_EditCourse_DataError,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            return@withContext
+                        }
+                    }
+
+                    //插入日历表
+                    val courseWithClassTimes =
+                        CourseWithClassTimes(course, this@EditCourseActivityViewModel.classTimes)
+                    EventsOperator.addEvent(context, courseTable, courseWithClassTimes)
+
+                    //正式开始插入
+                    try {
+                        val courseId = courseDao.insertCourse(course)
+                        for (classTime in this@EditCourseActivityViewModel.classTimes) {
+                            classTime.courseId = courseId
+                            classTimeDao.insertClassTime(classTime)
+                        }
+                    } catch (e: Exception) {
+                        Log.e("EditCourseActivity", "saveData: Can not access Room database")
+                        EventsOperator.deleteEvent(context, courseTable, courseWithClassTimes)
+                    }
+
+                    context.finish()
+                }
+                else -> {
+                    //修改现有Course对象时
+                    for (classTime: ClassTime in this@EditCourseActivityViewModel.classTimes) {
+                        if (!classTime.isLegitimacy()) {
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(
+                                    context,
+                                    R.string.activity_EditCourse_DataError,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            return@withContext
+                        }
+                    }
+
+                    //从数据库中删除应该被删除的对象
+                    for (removedClassTime: ClassTime in this@EditCourseActivityViewModel.removedClassTimes) {
+                        this@EditCourseActivityViewModel.classTimes.removeIf { classTime ->
+                            classTime.id == removedClassTime.id
+                        }
+                        classTimeDao.deleteClassTime(removedClassTime)
+                    }
+
+                    //修改日历表
+                    val courseWithClassTimes =
+                        CourseWithClassTimes(course, this@EditCourseActivityViewModel.classTimes)
+                    EventsOperator.updateEvent(context, courseTable, courseWithClassTimes)
+
+                    //写入数据库的Course表
+                    courseDao.updateCourse(course)
+                    //写入数据库的ClassTime表
+                    for (classTime: ClassTime in this@EditCourseActivityViewModel.classTimes) {
+                        if (classTime.courseId == null) {
+                            classTime.courseId = course.id
+                        }
+                        if (classTime.id == null) {
+                            classTime.id = classTimeDao.insertClassTime(classTime)
+                        } else {
+                            classTimeDao.updateClassTime(classTime)
+                        }
+                    }
+
+                    val intent = Intent()
+
+                    intent.putExtra(
+                        CourseDetailActivity.EDIT_INTENT_RESULT,
+                        CourseWithClassTimes(course, this@EditCourseActivityViewModel.classTimes)
+                    )
+                    context.finish()
+                }
+            }
+        }
+    }
 }

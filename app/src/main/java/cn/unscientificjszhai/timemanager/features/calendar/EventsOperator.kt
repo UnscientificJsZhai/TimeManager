@@ -176,6 +176,7 @@ object EventsOperator {
     /**
      * 更新所有和这个课程相关的日历项目。
      * 调用这个方法相当于调用了[deleteEvent]和[addEvent]这两个方法。
+     * 数据未保存，需要手动保存。
      *
      * @param context 更新操作的上下文。
      * @param courseTable 要更新的课程项所属的课程表。
@@ -194,6 +195,7 @@ object EventsOperator {
     /**
      * 更新全部事件。适用于更改课程表属性后更新全部事件。
      * 实际上是删除了全部事件并重新添加。
+     * 更新后的数据立即保存。
      *
      * @param context 更新操作的上下文。
      * @param courseTable 要更新的课程表。
@@ -207,6 +209,7 @@ object EventsOperator {
         for (courseWithClassTimes in courses) {
             deleteEvent(context, courseTable, courseWithClassTimes)
             addEvent(context, courseTable, courseWithClassTimes)
+            courseDao.updateCourse(courseWithClassTimes.course)
         }
     }
 

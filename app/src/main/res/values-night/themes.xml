@@ -36,6 +36,8 @@
         <item name="buttonStyle">@style/Theme.TimeManager.Widget.Button</item>
     </style>
 
+    <style name="Theme.TimeManager.AlertDialog" parent="Theme.AppCompat.DayNight.Dialog.Alert"/>
+
     <style name="Theme.TimeManager.Widget.TextView.HeadLine" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/white</item>
     </style>

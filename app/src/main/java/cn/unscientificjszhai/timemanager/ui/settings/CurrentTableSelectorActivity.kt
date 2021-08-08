@@ -9,18 +9,18 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
-import cn.unscientificjszhai.timemanager.features.calendar.CalendarOperator
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissionGranted
 import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
 import cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
 import com.google.android.material.textfield.TextInputEditText
-import kotlin.concurrent.thread
+import kotlinx.coroutines.launch
 
 /**
  * 当前课程表的选择器。用于添加和选择当前的课程表。
@@ -46,7 +46,7 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
                 CurrentTableSelectorActivityViewModel.Factory(
                     timeManagerApplication.getCourseTableDatabase().courseTableDao()
                 )
-            ).get(CurrentTableSelectorActivityViewModel::class.java)
+            )[CurrentTableSelectorActivityViewModel::class.java]
 
         this.recyclerView = findViewById(R.id.SettingsActivity_RecyclerView)
         registerForContextMenu(recyclerView)
@@ -101,18 +101,14 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
                             showPermissionDeniedDialog()
                             dialog.dismiss()
                         }) {
-                            thread(start = true) {
-                                CalendarOperator.createCalendarTable(this, courseTable)
+                            viewModel.viewModelScope.launch {
+                                viewModel.addCourseTable(
+                                    this@CurrentTableSelectorActivity,
+                                    courseTable
+                                )
 
-                                val dao =
-                                    timeManagerApplication.getCourseTableDatabase().courseTableDao()
-                                val id = dao.insertCourseTable(courseTable)
-                                timeManagerApplication.updateTableID(id)
-
-                                runOnUiThread {
-                                    dialog.dismiss()
-                                    this.finish()
-                                }
+                                dialog.dismiss()
+                                this@CurrentTableSelectorActivity.finish()
                             }
                         }
                     }.show()
@@ -162,27 +158,20 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
                         .setNegativeButton(R.string.common_cancel) { dialog, _ ->
                             dialog?.dismiss()
                         }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
-
-                            courseTable.name = editText.text.toString()
-
                             runIfPermissionGranted(Manifest.permission.WRITE_CALENDAR, {
                                 showPermissionDeniedDialog()
                             }) {
-                                thread(start = true) {
-                                    CalendarOperator.updateCalendarTable(this, courseTable)
+                                viewModel.viewModelScope.launch {
 
-                                    val dao =
-                                        timeManagerApplication.getCourseTableDatabase()
-                                            .courseTableDao()
-                                    dao.updateCourseTable(courseTable)
-                                    courseTable.id?.let {
-                                        timeManagerApplication.updateTableID(it)
-                                    }
-                                    runOnUiThread {
-                                        this@CurrentTableSelectorActivity.adapter.submitList(
-                                            viewModel.tableList.value!!
-                                        )
-                                    }
+                                    courseTable.name = editText.text.toString()
+                                    viewModel.renameCourseTable(
+                                        this@CurrentTableSelectorActivity,
+                                        courseTable
+                                    )
+
+                                    this@CurrentTableSelectorActivity.adapter.submitList(
+                                        viewModel.tableList.value!!
+                                    )
                                 }
                             }
                             dialog.dismiss()
@@ -244,14 +233,8 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
                 runIfPermissionGranted(Manifest.permission.WRITE_CALENDAR, {
                     showPermissionDeniedDialog()
                 }) {
-                    thread(start = true) {
-                        CalendarOperator.deleteCalendarTable(this, courseTable)
-
-                        val dao =
-                            timeManagerApplication.getCourseTableDatabase()
-                                .courseTableDao()
-                        dao.deleteCourseTable(courseTable)
-                        deleteDatabase("table${courseTable.id}.db")
+                    viewModel.viewModelScope.launch {
+                        viewModel.deleteCourseTable(this@CurrentTableSelectorActivity, courseTable)
                     }
                 }
             }

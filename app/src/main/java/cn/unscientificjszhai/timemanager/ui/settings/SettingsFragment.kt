@@ -5,25 +5,23 @@ import android.os.Bundle
 import android.text.InputType
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.viewModelScope
 import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import cn.unscientificjszhai.timemanager.R
-import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
-import cn.unscientificjszhai.timemanager.features.calendar.CalendarOperator
-import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
 import cn.unscientificjszhai.timemanager.ui.others.ProgressDialog
+import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.concurrent.thread
 
 /**
  * 供设置Activity使用的Fragment。只能用于设置Activity。
  *
  * @see SettingsActivity
  */
-internal class SettingsFragment(private val dataStore: SettingsDataStore) :
+internal class SettingsFragment :
     PreferenceFragmentCompat(),
     Preference.SummaryProvider<Preference> {
 
@@ -64,7 +62,7 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
 
     private var saveBackupPreference: Preference? = null
     private var importBackupPreference: Preference? = null
-    private var exportIcsPreference:Preference? = null
+    private var exportIcsPreference: Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_preferences, rootKey)
@@ -72,6 +70,9 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
         //当前课程表的设置项
         this.currentTablePreference = findPreference(CURRENT_TABLE_KEY)
         currentTablePreference?.summaryProvider = this
+
+        val viewModel = (requireActivity() as SettingsActivity).viewModel
+        val dataStore by viewModel
 
         //学期周数的设置项
         this.howManyWeeksPreference = findPreference(MAX_WEEK_KEY)
@@ -125,36 +126,16 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
                 }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
                     val progressDialog = ProgressDialog(requireActivity())
                     progressDialog.show()
-                    thread(start = true) {
-                        //删除全部日历并重新创建。
-                        val courseTable = dataStore.nowCourseTable
-                        CalendarOperator.deleteCalendarTable(requireContext(), courseTable)
-                        CalendarOperator.createCalendarTable(requireContext(), courseTable)
-                        val application =
-                            requireContext().applicationContext as TimeManagerApplication
-                        val tableDao =
-                            application.getCourseTableDatabase().courseTableDao()
-                        tableDao.updateCourseTable(courseTable)
-                        val courseDao = application.getCourseDatabase().courseDao()
-                        courseDao.getCourses().run {
-                            for (courseWithClassTimes in this) {
-                                EventsOperator.addEvent(
-                                    requireContext(),
-                                    courseTable,
-                                    courseWithClassTimes
-                                )
-                                courseDao.updateCourse(courseWithClassTimes.course)
-                            }
-                        }
-
+                    viewModel.viewModelScope.launch {
+                        viewModel.updateCalendar(requireActivity())
                         //完成后关闭ProgressDialog。
                         progressDialog.postDismiss()
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.preferences_UpdateCalendar_Complete,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-                    Toast.makeText(
-                        requireContext(),
-                        R.string.preferences_UpdateCalendar_Complete,
-                        Toast.LENGTH_SHORT
-                    ).show()
                     dialog.dismiss()
                 }.show()
             true
@@ -163,9 +144,8 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
         this.calendarColorPreference = findPreference(CALENDAR_COLOR_KEY)
         calendarColorPreference?.setOnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
-                val color = newValue.toInt()
-                thread(start = true) {
-                    CalendarOperator.updateCalendarColor(requireContext(), color)
+                viewModel.viewModelScope.launch {
+                    viewModel.setCalendarColor(requireActivity(), newValue)
                 }
             }
             true
@@ -193,6 +173,7 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
      * @param courseTable 更新后的CourseTable。
      */
     internal fun updateCourseTable(courseTable: CourseTable) {
+        val dataStore by (requireActivity() as SettingsActivity).viewModel
         dataStore.nowCourseTable = courseTable
         //通过重设summaryProvider的方法更新Summary
         this.currentTablePreference?.summaryProvider = this
@@ -201,17 +182,20 @@ internal class SettingsFragment(private val dataStore: SettingsDataStore) :
         this.startDatePreference?.summaryProvider = this
     }
 
-    override fun provideSummary(preference: Preference?) = when (preference) {
-        this.currentTablePreference -> dataStore.nowCourseTable.name
-        this.howManyWeeksPreference -> dataStore.nowCourseTable.maxWeeks.toString() +
-                getString(R.string.preferences_CurrentTable_MaxWeeksSummary)
-        this.classesPerDayPreference -> dataStore.nowCourseTable.classesPerDay.toString() +
-                getString(R.string.preferences_CurrentTable_ClassesPerDaySummary)
-        this.startDatePreference -> getString(R.string.preferences_CurrentTable_StartDateSummary).format(
-            dataStore.nowCourseTable.startDate.get(Calendar.YEAR),
-            dataStore.nowCourseTable.startDate.get(Calendar.MONTH) + 1,
-            dataStore.nowCourseTable.startDate.get(Calendar.DATE)
-        )
-        else -> ""
+    override fun provideSummary(preference: Preference?): String {
+        val dataStore by (requireActivity() as SettingsActivity).viewModel
+        return when (preference) {
+            this.currentTablePreference -> dataStore.nowCourseTable.name
+            this.howManyWeeksPreference -> dataStore.nowCourseTable.maxWeeks.toString() +
+                    getString(R.string.preferences_CurrentTable_MaxWeeksSummary)
+            this.classesPerDayPreference -> dataStore.nowCourseTable.classesPerDay.toString() +
+                    getString(R.string.preferences_CurrentTable_ClassesPerDaySummary)
+            this.startDatePreference -> getString(R.string.preferences_CurrentTable_StartDateSummary).format(
+                dataStore.nowCourseTable.startDate.get(Calendar.YEAR),
+                dataStore.nowCourseTable.startDate.get(Calendar.MONTH) + 1,
+                dataStore.nowCourseTable.startDate.get(Calendar.DATE)
+            )
+            else -> ""
+        }
     }
 }

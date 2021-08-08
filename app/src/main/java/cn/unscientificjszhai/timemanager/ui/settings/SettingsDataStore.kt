@@ -7,6 +7,7 @@ import cn.unscientificjszhai.timemanager.data.dao.CourseTableDao
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
 import kotlin.concurrent.thread
+import kotlin.reflect.KProperty
 
 /**
  * 用于定义Preferences数据存储的自定义DataStore。
@@ -21,6 +22,14 @@ internal class SettingsDataStore(
     private val context: Context,
     val notifyApplicationCourseTableChanged: (Long) -> Unit
 ) : PreferenceDataStore() {
+
+    /**
+     * 为[SettingsDataStore]提供属性委托功能。
+     */
+    interface Getter {
+
+        operator fun getValue(thisRef: Any?, property: KProperty<*>): SettingsDataStore
+    }
 
     override fun putString(key: String?, value: String?) {
 
@@ -57,15 +66,15 @@ internal class SettingsDataStore(
     }
 
     override fun getString(key: String?, defValue: String?): String? {
-        when (key) {
+        return when (key) {
             SettingsFragment.MAX_WEEK_KEY -> {
-                return this.nowCourseTable.maxWeeks.toString()
+                this.nowCourseTable.maxWeeks.toString()
             }
             SettingsFragment.CLASSES_PER_DAY_KEY -> {
-                return this.nowCourseTable.classesPerDay.toString()
+                this.nowCourseTable.classesPerDay.toString()
             }
             else -> {
-                return null
+                null
             }
         }
     }

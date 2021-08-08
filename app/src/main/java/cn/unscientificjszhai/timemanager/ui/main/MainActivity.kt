@@ -16,6 +16,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +25,6 @@ import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.CurrentTimeMarker
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.database.CourseDatabase
-import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
 import cn.unscientificjszhai.timemanager.ui.WelcomeActivity
 import cn.unscientificjszhai.timemanager.ui.editor.EditCourseActivity
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
@@ -33,8 +33,8 @@ import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissi
 import cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
 import cn.unscientificjszhai.timemanager.ui.settings.SettingsActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.concurrent.thread
 import kotlin.reflect.KProperty
 
 /**
@@ -150,8 +150,10 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
         //初始化ViewModel
         this.viewModel =
-            ViewModelProvider(this, MainActivityViewModel.Factory(courseDatabase.courseDao()))
-                .get(MainActivityViewModel::class.java)
+            ViewModelProvider(
+                this,
+                MainActivityViewModel.Factory(courseDatabase.courseDao())
+            )[MainActivityViewModel::class.java]
 
         this.progressBar = findViewById(R.id.MainActivity_ProgressBar)
 
@@ -249,7 +251,6 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
                     }
                 }
                 R.id.MainActivity_Delete -> {
-
                     AlertDialog.Builder(this)
                         .setTitle(R.string.activity_CourseDetail_DeleteConfirm)
                         .setNegativeButton(R.string.common_cancel) { dialog, _ ->
@@ -273,22 +274,11 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
                                     }
                             }) {
                                 if (courseWithClassTimes != null) {
-                                    thread(start = true) {
-                                        //从日历中删除。
-                                        val courseTable =
-                                            (application as TimeManagerApplication).courseTable!!
-                                        EventsOperator.deleteEvent(
+                                    viewModel.viewModelScope.launch {
+                                        MainActivityViewModel.deleteCourse(
                                             this@MainActivity,
-                                            courseTable,
                                             courseWithClassTimes
                                         )
-                                        //从数据库中删除。
-                                        val database =
-                                            (application as TimeManagerApplication).getCourseDatabase()
-                                        val courseDao = database.courseDao()
-                                        val classTimeDao = database.classTimeDao()
-                                        courseDao.deleteCourse(courseWithClassTimes.course)
-                                        classTimeDao.deleteClassTimes(courseWithClassTimes.classTimes)
                                     }
                                 } else {
                                     Toast.makeText(

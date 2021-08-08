@@ -1,10 +1,15 @@
 package cn.unscientificjszhai.timemanager.ui.main
 
+import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.dao.CourseDao
+import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * MainActivity的ViewModel。
@@ -14,6 +19,37 @@ import cn.unscientificjszhai.timemanager.data.dao.CourseDao
  */
 internal class MainActivityViewModel(var courseList: LiveData<List<CourseWithClassTimes>>) :
     ViewModel() {
+
+    companion object {
+
+        /**
+         * MainActivity和CourseDetailActivity操作删除课程。
+         *
+         * @param context MainActivity的实例，用于获取Application的引用和打开数据库等。
+         * @param courseWithClassTimes 要删除的课程对象。
+         */
+        suspend fun deleteCourse(
+            context: Activity,
+            courseWithClassTimes: CourseWithClassTimes
+        ) {
+            val application = (context.application) as TimeManagerApplication
+            //从日历中删除。
+            withContext(Dispatchers.Default) {
+                val courseTable = application.courseTable!!
+                EventsOperator.deleteEvent(
+                    context,
+                    courseTable,
+                    courseWithClassTimes
+                )
+                //从数据库中删除。
+                val database = application.getCourseDatabase()
+                val courseDao = database.courseDao()
+                val classTimeDao = database.classTimeDao()
+                courseDao.deleteCourse(courseWithClassTimes.course)
+                classTimeDao.deleteClassTimes(courseWithClassTimes.classTimes)
+            }
+        }
+    }
 
     /**
      * 主界面是否只显示今天的课程。

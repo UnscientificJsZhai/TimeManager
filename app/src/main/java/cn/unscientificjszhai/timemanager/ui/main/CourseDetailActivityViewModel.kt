@@ -24,7 +24,7 @@ class CourseDetailActivityViewModel(var courseWithClassTimes: LiveData<CourseWit
         ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return CourseDetailActivityViewModel(courseWithClassTimes) as T
         }
     }

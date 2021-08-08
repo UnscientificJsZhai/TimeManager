@@ -7,16 +7,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
-import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.data.tables.FormattedTime
-import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
-import kotlin.concurrent.thread
+import kotlinx.coroutines.launch
 
 /**
  * 修改上课时间的Activity。只会修改当前的CourseTable的属性。
@@ -30,7 +29,6 @@ class TimeTableEditorActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: TimeTableEditorAdapter
     private lateinit var headerAdapter: TimeTableHeaderAdapter
-    private lateinit var courseTable: CourseTable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +36,13 @@ class TimeTableEditorActivity : AppCompatActivity() {
 
         ActivityUtility.setSystemUIAppearance(this)
 
-        this.viewModel = ViewModelProvider(this).get(TimeTableEditorActivityViewModel::class.java)
+        this.viewModel = ViewModelProvider(this)[TimeTableEditorActivityViewModel::class.java]
 
         this.timeManagerApplication = application as TimeManagerApplication
 
         try {
-            this.courseTable = this.timeManagerApplication.courseTable!!
+            val courseTable = this.timeManagerApplication.courseTable!!
+            viewModel.courseTable = courseTable
             this.viewModel.originTimeTable = courseTable.timeTable.typeConvert()
         } catch (e: NullPointerException) {
             Toast.makeText(this, R.string.activity_EditCourse_DataError, Toast.LENGTH_SHORT).show()
@@ -52,9 +51,9 @@ class TimeTableEditorActivity : AppCompatActivity() {
         }
 
         //初始化ViewModel中的数据
-        viewModel.duration = FormattedTime(this.courseTable.timeTable[0]).duration()
+        viewModel.duration = FormattedTime(viewModel.courseTable.timeTable[0]).duration()
 
-        this.adapter = TimeTableEditorAdapter(this.courseTable, this.viewModel)
+        this.adapter = TimeTableEditorAdapter(this.viewModel)
         this.headerAdapter = TimeTableHeaderAdapter(this.viewModel)
         this.recyclerView = findViewById(R.id.TimeTableEditorActivity_RecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -70,21 +69,20 @@ class TimeTableEditorActivity : AppCompatActivity() {
         if (item.itemId == android.R.id.home) {
             onBackPressed()
         } else if (item.itemId == R.id.TimeTableEditorActivity_Done) {
-            val id = courseTable.id
-            if (id != null && this.courseTable.timeTable.typeConvert() != this.viewModel.originTimeTable) {
-                thread(start = true) {
-                    timeManagerApplication.getCourseTableDatabase().courseTableDao()
-                        .updateCourseTable(adapter.courseTable)
-                    timeManagerApplication.updateTableID(id)
+            viewModel.viewModelScope.launch {
 
-                    EventsOperator.updateAllEvents(this, this.courseTable)
+            }
+            val id = viewModel.courseTable.id
+            if (id != null && viewModel.courseTable.timeTable.typeConvert() != this.viewModel.originTimeTable) {
+                viewModel.viewModelScope.launch {
+                    viewModel.save(this@TimeTableEditorActivity)
+                    finish()
                 }
-            } else if (this.courseTable.timeTable.typeConvert() != this.viewModel.originTimeTable) {
+            } else if (viewModel.courseTable.timeTable.typeConvert() != this.viewModel.originTimeTable) {
                 Toast.makeText(this, R.string.activity_EditCourse_DataError, Toast.LENGTH_SHORT)
                     .show()
+                finish()
             }
-
-            finish()
         }
         return true
     }
@@ -100,9 +98,13 @@ class TimeTableEditorActivity : AppCompatActivity() {
             }.show()
     }
 
+    /**
+     * 将时间表转换成字符串形式，来帮助确定是否修改过时间表。
+     *
+     * @return 转换成的字符串，会保存在ViewModel中。
+     */
     private fun Array<String>.typeConvert(): String {
         val converter by viewModel
         return converter.setTimeTable(this)
     }
-
 }
