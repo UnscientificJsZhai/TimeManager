@@ -53,6 +53,10 @@
             android:name=".ui.settings.InfoActivity"
             android:exported="true"
             android:label="@string/activity_Settings_Info"
+            android:parentActivityName=".ui.settings.SettingsActivity" /> <!-- parse包 -->
+        <activity
+            android:name=".ui.parse.ParseCourseActivity"
+            android:label="@string/activity_ParseCourseActivity_Label"
             android:parentActivityName=".ui.settings.SettingsActivity" />
 
         <service

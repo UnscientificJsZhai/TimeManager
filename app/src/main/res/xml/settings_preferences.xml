@@ -92,6 +92,14 @@
             app:key="ics"
             app:summary="@string/preferences_ExportsICS_Summary"
             app:title="@string/preferences_ExportICS_Title" />
+
+        <Preference
+            app:key="parse"
+            app:title="@string/activity_ParseCourseActivity_Label">
+            <intent
+                android:targetClass="cn.unscientificjszhai.timemanager.ui.parse.ParseCourseActivity"
+                android:targetPackage="cn.unscientificjszhai.timemanager" />
+        </Preference>
     </PreferenceCategory>
 
 </PreferenceScreen>
