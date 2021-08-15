@@ -6,7 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
-import com.github.unscientificjszhai.unscientificcourseparser.bean.factory.ParserFactory
+import com.github.unscientificjszhai.unscientificcourseparser.core.data.Course as SourceCourse
+import com.github.unscientificjszhai.unscientificcourseparser.core.factory.ParserFactory
 import kotlin.reflect.KProperty
 
 class ParseCourseActivity : AppCompatActivity() {
@@ -44,12 +45,5 @@ class ParseCourseActivity : AppCompatActivity() {
      */
     operator fun getValue(thisRef: Any?, property: KProperty<*>): ParserFactory {
         return this.viewModel.parserFactory
-    }
-
-    internal fun startWebViewFragment(beanName: String) {
-        val webViewFragment = WebViewFragment.newInstance(beanName)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.ParseCourseActivity_RootView, webViewFragment)
-            .commit()
     }
 }

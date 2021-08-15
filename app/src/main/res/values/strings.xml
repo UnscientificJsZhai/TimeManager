@@ -50,7 +50,7 @@
     <string name="activity_CourseDetail_DeleteConfirm">确认删除？</string>
     <string name="activity_CourseDetail_AskPermissionText">需要授予日历访问权限才能删除，是否授予权限？如果同意，将跳转到应用详情页，请在那里授予此应用读写日历权限。</string>
     <string name="activity_CourseDetail_DataError">数据异常，请重新尝试</string>
-    <string name="activity_CourseDetail_WeekFormatText">%d-%d周</string>
+    <string name="activity_CourseDetail_WeekFormatText">从%d到%d周</string>
     <string name="activity_CourseDetail_LessonNumberFormatText">%s节课</string>
     <string name="activity_Welcome">欢迎使用</string>
     <string name="activity_Welcome_StartButton">开始</string>
@@ -169,5 +169,6 @@
     <!-- 导入 -->
     <string name="activity_ParseCourseActivity_Label">从教务系统导入</string>
     <string name="activity_ParseCourseActivity_HelpToast">当网页显示出课程表并加载完成后点击完成按钮来解析</string>
+    <string name="fragment_CourseListFragment_ClassTimeDescription">包含%d个上课时间段</string>
 
 </resources>

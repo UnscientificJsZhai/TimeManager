@@ -5,10 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.parse.WebViewFragment">
 
-    <TextView
-        android:id="@+id/WebViewFragment_TextView"
+    <WebView
+        android:id="@+id/WebViewFragment_WebView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="TextView" />
-
+        android:layout_height="match_parent" />
 </FrameLayout>

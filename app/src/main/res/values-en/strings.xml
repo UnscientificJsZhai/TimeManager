@@ -145,4 +145,7 @@
     <string name="color_Graphite">Graphite</string>
     <string name="color_Birch">Birch</string>
     <string name="activity_Main_GuideToast">Click floating button to add course</string>
+    <string name="activity_ParseCourseActivity_Label">Import from your school web page</string>
+    <string name="activity_ParseCourseActivity_HelpToast">Click done button after your schedule table complete loading</string>
+    <string name="fragment_CourseListFragment_ClassTimeDescription">Including %d time periods.</string>
 </resources>

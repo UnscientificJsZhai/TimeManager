@@ -3,23 +3,22 @@ package cn.unscientificjszhai.timemanager.features.parse
 import cn.unscientificjszhai.timemanager.data.course.ClassTime
 import cn.unscientificjszhai.timemanager.data.course.Course
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
-import com.github.unscientificjszhai.unscientificcourseparser.bean.data.ClassTime as SourceClassTime
-import com.github.unscientificjszhai.unscientificcourseparser.bean.data.Course as SourceCourse
+import com.github.unscientificjszhai.unscientificcourseparser.core.export.CoursesJson
+import com.github.unscientificjszhai.unscientificcourseparser.core.data.ClassTime as SourceClassTime
+import com.github.unscientificjszhai.unscientificcourseparser.core.data.Course as SourceCourse
 
 class ParserTypeConverter(private val coursesSource: List<SourceCourse>) :
     List<SourceCourse> by coursesSource {
 
     companion object {
 
-        /**
-         *
-         */
-        @JvmStatic
-        fun List<SourceCourse>.toOwnType() = ParserTypeConverter(this).generateConvertedCourse()
+        fun fromJson(jsonString: String): ParserTypeConverter {
+            return ParserTypeConverter(CoursesJson.jsonToCourse(jsonString))
+        }
     }
 
     /**
-     * 生成转换
+     * 生成转换后的对象。
      */
     fun generateConvertedCourse(): List<CourseWithClassTimes> {
         val courseWithClassTimes = ArrayList<CourseWithClassTimes>()

@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
-import com.github.unscientificjszhai.unscientificcourseparser.bean.factory.ParserFactory
+import com.github.unscientificjszhai.unscientificcourseparser.core.factory.ParserFactory
 
 /**
  * 展示解析器列表的Fragment。
@@ -67,7 +67,12 @@ class ParserListFragment : Fragment() {
         val factory by activity
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = ParserAdapter(factory) { beanName ->
-            activity.startWebViewFragment(beanName)
+            //启动第二Fragment
+            val webViewFragment = WebViewFragment.newInstance(beanName)
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.ParseCourseActivity_RootView, webViewFragment)
+                .addToBackStack(null)
+                .commit()
         }
 
         return view
