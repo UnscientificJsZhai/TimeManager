@@ -170,5 +170,9 @@
     <string name="activity_ParseCourseActivity_Label">从教务系统导入</string>
     <string name="activity_ParseCourseActivity_HelpToast">当网页显示出课程表并加载完成后点击完成按钮来解析</string>
     <string name="fragment_CourseListFragment_ClassTimeDescription">包含%d个上课时间段</string>
+    <string name="fragment_CourseListFragment_Dialog_CompleteTitle">导入成功</string>
+    <string name="fragment_CourseListFragment_Dialog_FailTitle">导入失败</string>
+    <string name="fragment_CourseListFragment_Dialog_CompleteMessage">但是以下课程因为数据不合法无法导入，请尝试手动导入：</string>
+    <string name="fragment_CourseListFragment_Dialog_FailMessage">没有解析到数据，请重新尝试</string>
 
 </resources>

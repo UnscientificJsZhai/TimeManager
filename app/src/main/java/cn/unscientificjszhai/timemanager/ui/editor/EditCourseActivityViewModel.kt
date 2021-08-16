@@ -84,7 +84,7 @@ internal class EditCourseActivityViewModel : ViewModel() {
                 course.id == null -> {
                     //新建Course对象时
                     for (classTime in this@EditCourseActivityViewModel.classTimes) {
-                        if (!classTime.isLegitimacy()) {
+                        if (!classTime.isLegitimacy(courseTable)) {
                             withContext(Dispatchers.Main) {
                                 Toast.makeText(
                                     context,
@@ -118,7 +118,7 @@ internal class EditCourseActivityViewModel : ViewModel() {
                 else -> {
                     //修改现有Course对象时
                     for (classTime: ClassTime in this@EditCourseActivityViewModel.classTimes) {
-                        if (!classTime.isLegitimacy()) {
+                        if (!classTime.isLegitimacy(courseTable)) {
                             withContext(Dispatchers.Main) {
                                 Toast.makeText(
                                     context,

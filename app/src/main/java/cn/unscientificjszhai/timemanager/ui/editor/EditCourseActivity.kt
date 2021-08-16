@@ -125,8 +125,8 @@ class EditCourseActivity : CalendarOperatorActivity() {
         this.courseDatabase = (application as TimeManagerApplication).getCourseDatabase()
 
         //浮动按钮的监听器
-        val floatingActionButton =
-            findViewById<FloatingActionButton>(R.id.EditCourseActivity_PlusButton)
+        val floatingActionButton: FloatingActionButton =
+            findViewById(R.id.EditCourseActivity_PlusButton)
         floatingActionButton.setOnClickListener {
             val lastClassTime = viewModel.classTimes.lastOrNull()
             if (lastClassTime == null || !viewModel.copyFromPrevious) {

@@ -2,6 +2,7 @@ package cn.unscientificjszhai.timemanager.ui.parse
 
 import androidx.lifecycle.ViewModel
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
+import cn.unscientificjszhai.timemanager.data.course.Course
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
 import kotlinx.coroutines.Dispatchers
@@ -20,21 +21,27 @@ internal class CourseListFragmentViewModel : ViewModel() {
      * 将从教务系统解析到的数据导入当前课程表。
      *
      * @param application 用于导入和获取数据库对象的上下文。
+     * @return 未能成功添加的课程列表。或者null如果本身就没有解析到的数据。
      */
-    suspend fun save(application: TimeManagerApplication) {
+    suspend fun save(application: TimeManagerApplication): List<String>? {
         if (this.courseList.isEmpty()) {
-            return
+            return null
         }
+        val exceptionList = ArrayList<String>()
         withContext(Dispatchers.IO) {
-            //导入德奥当前的课程表中
+            //导入到当前的课程表中
             val courseDatabase = application.getCourseDatabase()
             val courseTable by application
             val courseDao = courseDatabase.courseDao()
             val classTimesDao = courseDatabase.classTimeDao()
 
             for (courseWithClassTime in this@CourseListFragmentViewModel.courseList) {
+                if (!Course.checkLegitimacy(courseWithClassTime, courseTable)) {
+                    exceptionList.add(courseWithClassTime.course.title)
+                    continue
+                }
                 val course = courseWithClassTime.course
-                EventsOperator.addEvent(application,courseTable,courseWithClassTime)
+                EventsOperator.addEvent(application, courseTable, courseWithClassTime)
                 val courseId = courseDao.insertCourse(course)
                 for (classTime in courseWithClassTime.classTimes) {
                     classTime.courseId = courseId
@@ -42,5 +49,7 @@ internal class CourseListFragmentViewModel : ViewModel() {
                 }
             }
         }
+
+        return exceptionList
     }
 }

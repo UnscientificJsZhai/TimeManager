@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.Serializable
@@ -42,7 +43,7 @@ data class Course(
          * @param serializable 可序列化对象。
          * @return 若目标对象合法则其必须满足：标题不为空，学分大于0，关联的[ClassTime]对象全部合法。
          */
-        fun checkLegitimacy(serializable: Serializable?): Boolean {
+        fun checkLegitimacy(serializable: Serializable?,courseTable: CourseTable): Boolean {
             if (serializable is CourseWithClassTimes) {
                 val course = serializable.course
                 when {
@@ -51,7 +52,7 @@ data class Course(
                     serializable.classTimes.isEmpty() -> return false
                     else -> {
                         for (classTime: ClassTime in serializable.classTimes) {
-                            if (!classTime.isLegitimacy()) return false
+                            if (!classTime.isLegitimacy(courseTable)) return false
                         }
                         return true
                     }

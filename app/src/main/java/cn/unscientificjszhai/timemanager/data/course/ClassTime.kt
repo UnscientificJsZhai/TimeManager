@@ -124,10 +124,11 @@ data class ClassTime(
      *
      * @return 是否合法。是则返回true，否则false
      */
-    fun isLegitimacy(): Boolean {
+    fun isLegitimacy(courseTable: CourseTable): Boolean {
         if (this.whichDay > 6) return false
         if (this.whichDay < 0) return false
         if (this.start < 1) return false
+        if (this.end > courseTable.classesPerDay) return false
         return if (end < start) false else this.week != 0
     }
 

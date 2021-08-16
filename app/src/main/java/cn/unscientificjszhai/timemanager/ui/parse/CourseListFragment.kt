@@ -1,11 +1,13 @@
 package cn.unscientificjszhai.timemanager.ui.parse
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
@@ -47,11 +49,7 @@ class CourseListFragment : Fragment() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val rootView = LayoutInflater.from(parent.context)
                 .inflate(R.layout.recycler_course_list_fragment, parent, false)
-            val viewHolder = ViewHolder(rootView)
-
-            //TODO 点击查看详情
-
-            return viewHolder
+            return ViewHolder(rootView)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -97,6 +95,7 @@ class CourseListFragment : Fragment() {
         this.viewModel = ViewModelProvider(this)[CourseListFragmentViewModel::class.java]
         if (savedInstanceState == null) {
             val jsonString = arguments?.getString(RESULT_KEY) ?: ""
+            Log.e("CourseListFragment", "\n$jsonString")
             this.viewModel.courseList =
                 ParserTypeConverter.fromJson(jsonString).generateConvertedCourse()
         }
@@ -126,12 +125,38 @@ class CourseListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.ParseCourseActivity_Done) {
             val dialog = ProgressDialog(requireActivity())
-            viewModel.viewModelScope.launch {
+            lifecycleScope.launch {
                 dialog.show()
-                viewModel.save(requireActivity().application as TimeManagerApplication)
+                val errorList =
+                    viewModel.save(requireActivity().application as TimeManagerApplication)
                 dialog.postDismiss()
+                //显示确认按钮
+                if (errorList?.isNotEmpty() == true || errorList == null) {
+                    AlertDialog.Builder(requireContext()).apply {
+                        if (errorList == null) {
+                            setTitle(R.string.fragment_CourseListFragment_Dialog_FailTitle)
+                            setMessage(R.string.fragment_CourseListFragment_Dialog_FailMessage)
+                        } else {
+                            setTitle(R.string.fragment_CourseListFragment_Dialog_CompleteTitle)
+                            val message =
+                                StringBuilder(getString(R.string.fragment_CourseListFragment_Dialog_CompleteMessage))
+                            for (title in errorList) {
+                                message.append("\n$title")
+                            }
+                            setMessage(message.toString())
+                        }
+                        setPositiveButton(R.string.common_confirm) { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        setOnDismissListener {
+                            requireActivity().finish()
+                        }
+                    }.show()
+                } else {
+                    //完全正常导入
+                    requireActivity().finish()
+                }
             }
-            requireActivity().finish()
             return true
         }
         return super.onOptionsItemSelected(item)
