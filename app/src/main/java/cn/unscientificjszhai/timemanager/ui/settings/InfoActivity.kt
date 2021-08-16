@@ -4,6 +4,7 @@ import android.content.*
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +14,7 @@ import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
 /**
  * 显示App简介的Activity。
  */
-class InfoActivity : AppCompatActivity() {
+class InfoActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
 
@@ -26,6 +27,7 @@ class InfoActivity : AppCompatActivity() {
     private lateinit var bilibiliButton: Button
     private lateinit var mailButton: Button
     private lateinit var coolApkButton: Button
+    private lateinit var parseLibrary: Button
 
     private lateinit var designerMailButton: Button
 
@@ -39,63 +41,32 @@ class InfoActivity : AppCompatActivity() {
         this.bilibiliButton = findViewById(R.id.InfoActivity_BilibiliButton)
         this.mailButton = findViewById(R.id.InfoActivity_MailButton)
         this.coolApkButton = findViewById(R.id.InfoActivity_CoolApkButton)
+        this.parseLibrary = findViewById(R.id.InfoActivity_ParserGitHubButton)
 
         this.designerMailButton = findViewById(R.id.InfoActivity_DesignerMailButton)
 
-        githubButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse("https://github.com/UnscientificJsZhai/TimeManager")
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-        }
-
-        bilibiliButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse("https://space.bilibili.com/13054331")
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-        }
-
-        mailButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO)
-            intent.putExtra(Intent.EXTRA_EMAIL, MAIL_ADDRESS)
-            try {
-                startActivity(intent)
-            } catch (e: ActivityNotFoundException) {
-                Toast.makeText(this, R.string.info_UnableToSendEmail, Toast.LENGTH_SHORT).show()
-            }
-        }
+        githubButton.setOnClickListener(this)
+        bilibiliButton.setOnClickListener(this)
+        mailButton.setOnClickListener(this)
 
         mailButton.setOnLongClickListener {
             Toast.makeText(this, MAIL_ADDRESS, Toast.LENGTH_LONG).show()
             val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            clipboardManager.setPrimaryClip(ClipData.newPlainText(null,MAIL_ADDRESS))
+            clipboardManager.setPrimaryClip(ClipData.newPlainText(null, MAIL_ADDRESS))
             true
         }
 
-        coolApkButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse("http://www.coolapk.com/u/675535")
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-        }
-
-        designerMailButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO)
-            intent.putExtra(Intent.EXTRA_EMAIL, LOGO_DESIGNER_MAIL_ADDRESS)
-            try {
-                startActivity(intent)
-            } catch (e: ActivityNotFoundException) {
-                Toast.makeText(this, R.string.info_UnableToSendEmail, Toast.LENGTH_SHORT).show()
-            }
-        }
+        coolApkButton.setOnClickListener(this)
+        designerMailButton.setOnClickListener(this)
 
         designerMailButton.setOnLongClickListener {
-            Toast.makeText(this, LOGO_DESIGNER_MAIL_ADDRESS,Toast.LENGTH_LONG).show()
+            Toast.makeText(this, LOGO_DESIGNER_MAIL_ADDRESS, Toast.LENGTH_LONG).show()
             val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             clipboardManager.setPrimaryClip(ClipData.newPlainText(null, LOGO_DESIGNER_MAIL_ADDRESS))
             true
         }
+
+        parseLibrary.setOnClickListener(this)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -104,6 +75,54 @@ class InfoActivity : AppCompatActivity() {
             true
         } else {
             super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onClick(v: View?) {
+        when (v) {
+            this.githubButton -> {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse("https://github.com/UnscientificJsZhai/TimeManager")
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+            this.bilibiliButton -> {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse("https://space.bilibili.com/13054331")
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+            this.mailButton -> {
+                val intent = Intent(Intent.ACTION_SENDTO)
+                intent.putExtra(Intent.EXTRA_EMAIL, MAIL_ADDRESS)
+                try {
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(this, R.string.info_UnableToSendEmail, Toast.LENGTH_SHORT).show()
+                }
+            }
+            this.coolApkButton -> {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse("http://www.coolapk.com/u/675535")
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+            this.designerMailButton -> {
+                val intent = Intent(Intent.ACTION_SENDTO)
+                intent.putExtra(Intent.EXTRA_EMAIL, LOGO_DESIGNER_MAIL_ADDRESS)
+                try {
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(this, R.string.info_UnableToSendEmail, Toast.LENGTH_SHORT).show()
+                }
+            }
+            this.parseLibrary -> {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data =
+                    Uri.parse("https://github.com/UnscientificJsZhai/UnscientificCourseParser")
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
         }
     }
 }

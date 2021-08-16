@@ -2,15 +2,21 @@ package cn.unscientificjszhai.timemanager.ui.parse
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
-import com.github.unscientificjszhai.unscientificcourseparser.core.data.Course as SourceCourse
+import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
 import com.github.unscientificjszhai.unscientificcourseparser.core.factory.ParserFactory
 import kotlin.reflect.KProperty
 
-class ParseCourseActivity : AppCompatActivity() {
+/**
+ * 从教务系统导入。
+ *
+ * @see ParserListFragment
+ * @see WebViewFragment
+ * @see CourseListFragment
+ */
+class ParseCourseActivity : CalendarOperatorActivity() {
 
     private lateinit var viewModel: ParseCourseActivityViewModel
 

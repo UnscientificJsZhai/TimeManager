@@ -129,6 +129,44 @@
             tools:ignore="TextContrastCheck" />
 
         <TextView
+            android:id="@+id/InfoActivity_ParseLibraryTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/info_CourseParseTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/InfoActivity_DesignerMailButton" />
+
+        <TextView
+            android:id="@+id/InfoActivity_ParseLibraryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/info_CourseParseInfo"
+            android:textSize="20sp"
+            android:theme="@style/Theme.TimeManager.Widget.TextView.HeadLine"
+            app:layout_constraintEnd_toStartOf="@+id/InfoActivity_ParserGitHubButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/InfoActivity_ParseLibraryTitle" />
+
+        <Button
+            android:id="@+id/InfoActivity_ParserGitHubButton"
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:backgroundTint="@color/github_gray"
+            android:text="@string/info_Button_Github"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/InfoActivity_ParseLibraryText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/InfoActivity_ParseLibraryText"
+            app:layout_constraintTop_toTopOf="@+id/InfoActivity_ParseLibraryText" />
+
+        <TextView
             android:id="@+id/InfoActivity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -142,7 +180,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/InfoActivity_DesignerMailButton" />
+            app:layout_constraintTop_toBottomOf="@+id/InfoActivity_ParseLibraryText" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

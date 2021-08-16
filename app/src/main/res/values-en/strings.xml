@@ -148,4 +148,9 @@
     <string name="activity_ParseCourseActivity_Label">Import from your school web page</string>
     <string name="activity_ParseCourseActivity_HelpToast">Click done button after your schedule table complete loading</string>
     <string name="fragment_CourseListFragment_ClassTimeDescription">Including %d time periods.</string>
+    <string name="fragment_CourseListFragment_Dialog_CompleteTitle">Success</string>
+    <string name="fragment_CourseListFragment_Dialog_FailTitle">Fail</string>
+    <string name="fragment_CourseListFragment_Dialog_CompleteMessage">Courses below can not be imported due to data illegality:</string>
+    <string name="fragment_CourseListFragment_Dialog_FailMessage">No course data found, please try again.</string>
+    <string name="info_CourseParseTitle">Parser Library</string>
 </resources>

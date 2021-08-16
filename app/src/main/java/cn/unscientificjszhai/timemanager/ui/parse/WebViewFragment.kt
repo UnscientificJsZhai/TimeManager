@@ -14,6 +14,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * 显示网页的Fragment。
+ *
+ * @see ParseCourseActivity
+ */
 class WebViewFragment : Fragment() {
 
     /**
@@ -150,7 +155,6 @@ class WebViewFragment : Fragment() {
 
         return view
     }
-
 
     /**
      * 解析方法，经过一系列调用后最后会把html返回到这里。

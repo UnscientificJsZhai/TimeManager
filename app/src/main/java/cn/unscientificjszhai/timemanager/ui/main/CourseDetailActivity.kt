@@ -205,9 +205,8 @@ class CourseDetailActivity : AppCompatActivity() {
                 stringBuilder.append(course.credit)
             }
             stringBuilder.append(getString(R.string.activity_EditCourse_Credit))
+            stringBuilder.append(" ")
         }
-
-        stringBuilder.append(" ")
 
         val courseTable by timeManagerApplication
         var veryStart = courseTable.maxWeeks

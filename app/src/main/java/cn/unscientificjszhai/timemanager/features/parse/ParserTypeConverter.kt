@@ -19,6 +19,8 @@ class ParserTypeConverter(private val coursesSource: List<SourceCourse>) :
 
     /**
      * 生成转换后的对象。
+     *
+     * @return 转换后的对象列表。合法性未检验。
      */
     fun generateConvertedCourse(): List<CourseWithClassTimes> {
         val courseWithClassTimes = ArrayList<CourseWithClassTimes>()

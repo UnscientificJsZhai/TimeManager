@@ -21,8 +21,7 @@ import java.util.*
  *
  * @see SettingsActivity
  */
-internal class SettingsFragment :
-    PreferenceFragmentCompat(),
+internal class SettingsFragment : PreferenceFragmentCompat(),
     Preference.SummaryProvider<Preference> {
 
     companion object {
@@ -47,8 +46,14 @@ internal class SettingsFragment :
          */
         const val START_DATE_KEY = "startDate"
 
+        /**
+         * Preference更新日历的Key。
+         */
         const val UPDATE_CALENDAR_KEY = "createCalendar"
 
+        /**
+         * Preference日历颜色的Key。
+         */
         const val CALENDAR_COLOR_KEY = "calendarColor"
     }
 
@@ -146,6 +151,25 @@ internal class SettingsFragment :
             if (newValue is String) {
                 viewModel.viewModelScope.launch {
                     viewModel.setCalendarColor(requireActivity(), newValue)
+                }
+            }
+            true
+        }
+
+        //提醒时间更新后立刻通知
+        findPreference<ListPreference>("remindTime")?.setOnPreferenceChangeListener { preference, newValue ->
+            if ((preference as ListPreference).value != (newValue as String)) {
+                //立刻更新日历
+                val progressDialog = ProgressDialog(requireActivity())
+                progressDialog.show()
+                viewModel.viewModelScope.launch {
+                    viewModel.updateCalendar(requireActivity())
+                    progressDialog.postDismiss()
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.preferences_UpdateCalendar_Complete,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             true
