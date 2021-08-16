@@ -50,7 +50,7 @@
     <string name="activity_CourseDetail_DeleteConfirm">确认删除？</string>
     <string name="activity_CourseDetail_AskPermissionText">需要授予日历访问权限才能删除，是否授予权限？如果同意，将跳转到应用详情页，请在那里授予此应用读写日历权限。</string>
     <string name="activity_CourseDetail_DataError">数据异常，请重新尝试</string>
-    <string name="activity_CourseDetail_WeekFormatText">%d-%d周</string>
+    <string name="activity_CourseDetail_WeekFormatText">从%d到%d周</string>
     <string name="activity_CourseDetail_LessonNumberFormatText">%s节课</string>
     <string name="activity_Welcome">欢迎使用</string>
     <string name="activity_Welcome_StartButton">开始</string>
@@ -165,5 +165,14 @@
     <string name="info_UnableToSendEmail">请安装邮箱客户端来发送邮件\n长按可以显示邮箱</string>
 
     <string name="info_Description">本应用是一个以系统日历功能为核心的课程表App。\n在本应用中添加的所有课程，会自动保存为日历事件，插入到系统日历中。这样就可以用系统级的通知提醒您上课。因此本应用不需要发送通知和后台运行，但是相对的，使用本App的时候必须授予日历访问权限。\n如果您对本应用有什么建议，欢迎给我发邮件。\n\n当您卸载本应用的时候，已经添加的课程的日历事件也会被自动清除。虽然您可以使用备份功能和导出ICS功能保存您的课程表，但是我还是建议您不要卸载本应用。当您清除本应用的数据时，日历事件不会被删除。要想清理这些日历事件，只需重新打开本应用即可。</string>
+
+    <!-- 导入 -->
+    <string name="activity_ParseCourseActivity_Label">从教务系统导入</string>
+    <string name="activity_ParseCourseActivity_HelpToast">当网页显示出课程表并加载完成后点击完成按钮来解析</string>
+    <string name="fragment_CourseListFragment_ClassTimeDescription">包含%d个上课时间段</string>
+    <string name="fragment_CourseListFragment_Dialog_CompleteTitle">导入成功</string>
+    <string name="fragment_CourseListFragment_Dialog_FailTitle">导入失败</string>
+    <string name="fragment_CourseListFragment_Dialog_CompleteMessage">但是以下课程因为数据不合法无法导入，请尝试手动导入：</string>
+    <string name="fragment_CourseListFragment_Dialog_FailMessage">没有解析到数据，请重新尝试</string>
 
 </resources>

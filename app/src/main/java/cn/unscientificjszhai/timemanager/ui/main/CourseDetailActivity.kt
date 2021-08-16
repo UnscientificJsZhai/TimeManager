@@ -105,8 +105,9 @@ class CourseDetailActivity : AppCompatActivity() {
         )[CourseDetailActivityViewModel::class.java]
 
         //监听数据变更
+        val courseTable by timeManagerApplication
         viewModel.courseWithClassTimes.observe(this) { courseWithClassTimes ->
-            if (!Course.checkLegitimacy(courseWithClassTimes)) {
+            if (!Course.checkLegitimacy(courseWithClassTimes,courseTable)) {
                 if (!delete) {
                     Toast.makeText(
                         this,

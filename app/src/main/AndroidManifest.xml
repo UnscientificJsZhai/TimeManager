@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".TimeManagerApplication"
@@ -19,6 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TimeManager"
+        android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup">
         <activity
             android:name=".ui.WelcomeActivity"
@@ -53,6 +55,10 @@
             android:name=".ui.settings.InfoActivity"
             android:exported="true"
             android:label="@string/activity_Settings_Info"
+            android:parentActivityName=".ui.settings.SettingsActivity" /> <!-- parse包 -->
+        <activity
+            android:name=".ui.parse.ParseCourseActivity"
+            android:label="@string/activity_ParseCourseActivity_Label"
             android:parentActivityName=".ui.settings.SettingsActivity" />
 
         <service
