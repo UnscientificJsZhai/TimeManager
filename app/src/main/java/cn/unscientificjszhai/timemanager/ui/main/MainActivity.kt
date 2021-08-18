@@ -32,6 +32,7 @@ import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.jumpToSystemPermissionSettings
 import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissionGranted
 import cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
+import cn.unscientificjszhai.timemanager.ui.parse.ParseCourseActivity
 import cn.unscientificjszhai.timemanager.ui.settings.SettingsActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -213,6 +214,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
         menu.findItem(R.id.MainActivity_ShowTodayOnly).isChecked = viewModel.showTodayOnly
+        menu.findItem(R.id.MainActivity_Parse).isVisible = viewModel.isListEmpty()
         return super.onMenuOpened(featureId, menu)
     }
 
@@ -332,6 +334,9 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
                         Uri.parse("content://com.android.calendar/time/${Calendar.getInstance().timeInMillis}")
                 }
                 startActivity(startCalendarIntent)
+            }
+            R.id.MainActivity_Parse -> {
+                startActivity(Intent(this, ParseCourseActivity::class.java))
             }
         }
         return super.onOptionsItemSelected(item)

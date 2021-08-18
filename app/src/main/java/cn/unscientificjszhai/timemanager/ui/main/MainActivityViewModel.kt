@@ -84,6 +84,16 @@ internal class MainActivityViewModel(var courseList: LiveData<List<CourseWithCla
     var showTodayOnly = false
 
     /**
+     * 课程列表是否为空。
+     *
+     * @return 如果为空则返回true。
+     */
+    fun isListEmpty(): Boolean {
+        val courseList = this.courseList.value
+        return courseList?.isEmpty() ?: true
+    }
+
+    /**
      * 创建MainActivity的ViewModel的Factory。
      *
      * @param dao 一个Dao对象，用于初始化ViewModel时传入LiveData的参数

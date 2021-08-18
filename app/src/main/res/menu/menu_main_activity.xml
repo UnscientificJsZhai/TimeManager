@@ -15,6 +15,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/MainActivity_Parse"
+        android:title="@string/activity_ParseCourseActivity_Label"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/MainActivity_Settings"
         android:icon="@drawable/outline_settings_24"
         android:title="@string/common_settings"
