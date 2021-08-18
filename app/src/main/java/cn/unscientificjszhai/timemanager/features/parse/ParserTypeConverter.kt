@@ -7,6 +7,11 @@ import com.github.unscientificjszhai.unscientificcourseparser.core.export.Course
 import com.github.unscientificjszhai.unscientificcourseparser.core.data.ClassTime as SourceClassTime
 import com.github.unscientificjszhai.unscientificcourseparser.core.data.Course as SourceCourse
 
+/**
+ * 从课程表导入的课程，使用此类进行数据转换。
+ *
+ * @param coursesSource 源。
+ */
 class ParserTypeConverter(private val coursesSource: List<SourceCourse>) :
     List<SourceCourse> by coursesSource {
 
