@@ -2,7 +2,6 @@ package cn.unscientificjszhai.timemanager.ui.parse
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.webkit.*
 import android.widget.Toast

@@ -5,6 +5,7 @@
     <string name="common_confirm">确定</string>
     <string name="common_cancel">取消</string>
     <string name="common_settings">设置</string>
+    <string name="common_undo">撤销</string>
 
     <string name="common_time_noon">上午</string>
     <string name="common_time_afternoon">下午</string>
@@ -66,6 +67,7 @@
     <string name="activity_Main_ActionBarLabel_TodayOnly">今天的课程</string>
     <string name="activity_Main_ActionBarLabel_All">所有课程</string>
     <string name="activity_Main_GuideToast">点击加号添加课程\n点击右上角查看更多</string>
+    <string name="activity_Main_DeletedMessage">已删除</string>
 
     <!-- 包ui.editor使用 -->
     <string name="activity_EditCourse_Label">编辑</string>
@@ -171,6 +173,10 @@
     <!-- 导入 -->
     <string name="activity_ParseCourseActivity_Label">从教务系统导入</string>
     <string name="activity_ParseCourseActivity_HelpToast">当网页显示出课程表并加载完成后点击完成按钮来解析</string>
+    <string name="fragment_ParserListFragment_ParserListInfo">关于教务系统解析</string>
+    <string name="fragment_ParserListFragment_ParserListMessage">本应用教务系统解析器基于该开源项目：\nUnscientificCourseParser\n如有问题，可到GitHub提交问题。\n当前适配器版本：\n0.0.1-alpha06</string>
+    <string name="fragment_ParserListFragment_DialogNegativeButton">关闭</string>
+    <string name="fragment_ParserListFragment_DialogPositiveButton">前往GitHub</string>
     <string name="fragment_CourseListFragment_ClassTimeDescription">包含%d个上课时间段</string>
     <string name="fragment_CourseListFragment_Dialog_CompleteTitle">导入成功</string>
     <string name="fragment_CourseListFragment_Dialog_FailTitle">导入失败</string>

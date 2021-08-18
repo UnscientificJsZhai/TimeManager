@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/MainActivity_RootView">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/MainActivity_RootLayout"
+        android:id="@+id/MainActivity_RecyclerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
@@ -46,7 +47,7 @@
         android:src="@drawable/outline_add_24"
         android:theme="@style/Theme.TimeManager.Widget.FloatingButton"
         android:tint="@color/white"
-        app:layout_anchor="@+id/MainActivity_RootLayout"
+        app:layout_anchor="@+id/MainActivity_RecyclerLayout"
         app:layout_anchorGravity="end|bottom"
         app:layout_behavior=".ui.others.CustomFloatingActionButtonBehavior"
         tools:ignore="ContentDescription" />

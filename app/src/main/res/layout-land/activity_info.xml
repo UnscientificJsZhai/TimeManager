@@ -48,7 +48,7 @@
         <Button
             android:id="@+id/InfoActivity_GitHubButton"
             android:layout_width="96dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="32dp"
             android:backgroundTint="@color/github_gray"
@@ -62,7 +62,7 @@
         <Button
             android:id="@+id/InfoActivity_BilibiliButton"
             android:layout_width="96dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:backgroundTint="@color/bilibili_pink"
             android:text="@string/info_Button_Bilibili"
             android:textAllCaps="false"
@@ -75,7 +75,7 @@
         <Button
             android:id="@+id/InfoActivity_MailButton"
             android:layout_width="96dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:backgroundTint="@color/skyBlue"
             android:text="@string/info_Button_Mail"
             android:textAllCaps="false"
@@ -88,10 +88,11 @@
         <Button
             android:id="@+id/InfoActivity_CoolApkButton"
             android:layout_width="96dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginEnd="24dp"
             android:backgroundTint="@color/coolapk_green"
             android:text="@string/info_Button_CoolApk"
+            android:textAllCaps="false"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/InfoActivity_MailButton"
@@ -112,7 +113,7 @@
         <Button
             android:id="@+id/InfoActivity_DesignerMailButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
@@ -152,7 +153,7 @@
         <Button
             android:id="@+id/InfoActivity_ParserGitHubButton"
             android:layout_width="96dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginEnd="24dp"
             android:backgroundTint="@color/github_gray"
             android:text="@string/info_Button_Github"

@@ -24,46 +24,54 @@
         tools:ignore="AllowBackup">
         <activity
             android:name=".ui.WelcomeActivity"
-            tools:ignore="IntentFilterExportedReceiver">
+            tools:ignore="IntentFilterExportedReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- main包 -->
-        <activity android:name=".ui.main.MainActivity" />
+        <activity android:name=".ui.main.MainActivity"
+            android:exported="false"/>
         <activity
             android:name=".ui.main.CourseDetailActivity"
             android:theme="@style/Theme.TimeManager.FloatingActivity" /> <!-- editor包 -->
         <activity
             android:name=".ui.editor.EditCourseActivity"
             android:label="@string/activity_EditCourse_Label"
-            android:parentActivityName=".ui.main.MainActivity" /> <!-- settings包 -->
+            android:parentActivityName=".ui.main.MainActivity"
+            android:exported="false"/> <!-- settings包 -->
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:label="@string/common_settings"
-            android:parentActivityName=".ui.main.MainActivity" />
+            android:parentActivityName=".ui.main.MainActivity"
+            android:exported="true"/>
         <activity
             android:name=".ui.settings.CurrentTableSelectorActivity"
             android:label="@string/activity_Settings_CurrentCourseListTable"
-            android:parentActivityName=".ui.settings.SettingsActivity" />
+            android:parentActivityName=".ui.settings.SettingsActivity"
+            android:exported="false"/>
         <activity
             android:name=".ui.settings.TimeTableEditorActivity"
             android:label="@string/preferences_CurrentTable_TimeTable"
-            android:parentActivityName=".ui.settings.SettingsActivity" />
+            android:parentActivityName=".ui.settings.SettingsActivity"
+            android:exported="false"/>
         <activity
             android:name=".ui.settings.InfoActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/activity_Settings_Info"
             android:parentActivityName=".ui.settings.SettingsActivity" /> <!-- parse包 -->
         <activity
             android:name=".ui.parse.ParseCourseActivity"
             android:label="@string/activity_ParseCourseActivity_Label"
-            android:parentActivityName=".ui.settings.SettingsActivity" />
+            android:parentActivityName=".ui.settings.SettingsActivity"
+            android:exported="false"/>
 
         <service
             android:name=".features.calendar.AuthenticatorService"
-            tools:ignore="ExportedService,IntentFilterExportedReceiver">
+            tools:ignore="ExportedService,IntentFilterExportedReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>

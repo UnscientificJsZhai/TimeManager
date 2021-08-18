@@ -32,8 +32,8 @@ internal class SettingsDataStore(
     }
 
     override fun putString(key: String?, value: String?) {
-
         when (key) {
+            //学期上课周数
             SettingsFragment.MAX_WEEK_KEY -> {
                 if (value?.isEmpty() == false) {
                     val newValue = try {
@@ -46,6 +46,7 @@ internal class SettingsDataStore(
                     }
                 }
             }
+
             SettingsFragment.CLASSES_PER_DAY_KEY -> {
                 if (value?.isEmpty() == false) {
                     val newValue: Int = try {
@@ -58,6 +59,7 @@ internal class SettingsDataStore(
                     }
                 }
             }
+
             else -> {
                 return super.putString(key, value)
             }

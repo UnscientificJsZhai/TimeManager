@@ -15,12 +15,15 @@
         <item>@string/color_Peacock</item>
         <item>@string/color_Cobalt</item>
         <item>@string/color_Blueberry</item>
+        <item>@string/color_Lavender</item>
         <item>@string/color_Wisteria</item>
         <item>@string/color_Amethyst</item>
         <item>@string/color_Grape</item>
         <item>@string/color_Radicchio</item>
         <item>@string/color_CherryBlossom</item>
+        <item>@string/color_Flamingo</item>
         <item>@string/color_Cocoa</item>
+        <item>@string/color_Graphite</item>
         <item>@string/color_Birch</item>
     </string-array>
 

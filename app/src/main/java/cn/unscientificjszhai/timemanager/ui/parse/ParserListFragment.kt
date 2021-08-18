@@ -1,10 +1,11 @@
 package cn.unscientificjszhai.timemanager.ui.parse
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -55,6 +56,11 @@ class ParserListFragment : Fragment() {
         override fun getItemCount() = this.parserList.size
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -76,5 +82,32 @@ class ParserListFragment : Fragment() {
         }
 
         return view
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.fragment_parser_list, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.ParseCourseActivity_Info) {
+            //展示说明
+            AlertDialog.Builder(requireContext())
+                .setIcon(R.drawable.outline_info_24)
+                .setTitle(R.string.fragment_ParserListFragment_ParserListInfo)
+                .setMessage(R.string.fragment_ParserListFragment_ParserListMessage)
+                .setNegativeButton(R.string.fragment_ParserListFragment_DialogNegativeButton) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton(R.string.fragment_ParserListFragment_DialogPositiveButton) { dialog, _ ->
+                    startActivity(Intent(Intent.ACTION_VIEW).apply {
+                        data =
+                            Uri.parse("https://github.com/UnscientificJsZhai/UnscientificCourseParser")
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    })
+                    dialog.dismiss()
+                }.show()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

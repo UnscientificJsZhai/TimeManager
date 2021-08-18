@@ -119,7 +119,7 @@ class CourseListFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.fragment_web_view, menu)
+        inflater.inflate(R.menu.fragment_course_list, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

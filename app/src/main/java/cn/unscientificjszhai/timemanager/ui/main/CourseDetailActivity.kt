@@ -107,7 +107,7 @@ class CourseDetailActivity : AppCompatActivity() {
         //监听数据变更
         val courseTable by timeManagerApplication
         viewModel.courseWithClassTimes.observe(this) { courseWithClassTimes ->
-            if (!Course.checkLegitimacy(courseWithClassTimes,courseTable)) {
+            if (!Course.checkLegitimacy(courseWithClassTimes, courseTable)) {
                 if (!delete) {
                     Toast.makeText(
                         this,
@@ -218,7 +218,7 @@ class CourseDetailActivity : AppCompatActivity() {
                     break
                 }
             }
-            for (index in veryEnd until courseTable.maxWeeks) {
+            for (index in veryEnd..courseTable.maxWeeks) {
                 if (classTime.getWeekData(index)) {
                     veryEnd = index
                 }

@@ -153,4 +153,10 @@
     <string name="fragment_CourseListFragment_Dialog_CompleteMessage">Courses below can not be imported due to data illegality:</string>
     <string name="fragment_CourseListFragment_Dialog_FailMessage">No course data found, please try again.</string>
     <string name="info_CourseParseTitle">Parser Library</string>
+    <string name="fragment_ParserListFragment_ParserListInfo">About Parser</string>
+    <string name="fragment_ParserListFragment_ParserListMessage">This app uses this open source library:\nUnscientificCourseParser</string>
+    <string name="fragment_ParserListFragment_DialogNegativeButton">Close</string>
+    <string name="fragment_ParserListFragment_DialogPositiveButton">Go to GitHub</string>
+    <string name="common_undo">Undo</string>
+    <string name="activity_Main_DeletedMessage">Deleted</string>
 </resources>

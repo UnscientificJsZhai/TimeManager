@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
@@ -33,6 +34,7 @@ import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissi
 import cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
 import cn.unscientificjszhai.timemanager.ui.settings.SettingsActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.reflect.KProperty
@@ -68,8 +70,9 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
     private lateinit var viewModel: MainActivityViewModel
 
-    private lateinit var rootView: RecyclerView
-    private lateinit var rootViewAdapter: CourseAdapter
+    private lateinit var rootView: CoordinatorLayout
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerViewAdapter: CourseAdapter
 
     private lateinit var progressBar: ProgressBar
 
@@ -156,14 +159,15 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
             )[MainActivityViewModel::class.java]
 
         this.progressBar = findViewById(R.id.MainActivity_ProgressBar)
+        this.rootView = findViewById(R.id.MainActivity_RootView)
 
         //初始化列表
-        this.rootView = findViewById(R.id.MainActivity_RootRecyclerView)
-        rootView.layoutManager = LinearLayoutManager(this)
+        this.recyclerView = findViewById(R.id.MainActivity_RootRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        this.rootViewAdapter = CourseAdapter(this)
-        rootView.adapter = this.rootViewAdapter
-        registerForContextMenu(rootView)
+        this.recyclerViewAdapter = CourseAdapter(this)
+        recyclerView.adapter = this.recyclerViewAdapter
+        registerForContextMenu(recyclerView)
 
         //监听LiveData变更
         viewModel.courseList.observe(this) { courseList ->
@@ -222,7 +226,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
         if (v is RecyclerView && menuInfo is RecyclerViewWithContextMenu.PositionMenuInfo) {
             try {
                 val courseWithClassTimes =
-                    (rootView.adapter as CourseAdapter).currentList[menuInfo.position]
+                    (recyclerView.adapter as CourseAdapter).currentList[menuInfo.position]
                 menu?.setHeaderTitle(courseWithClassTimes.course.title)
             } catch (e: NullPointerException) {
                 menu?.close()
@@ -236,7 +240,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
         val info = item.menuInfo
         if (info is RecyclerViewWithContextMenu.PositionMenuInfo) {
             val courseWithClassTimes =
-                (rootView.adapter as CourseAdapter).currentList[info.position]
+                (recyclerView.adapter as CourseAdapter).currentList[info.position]
 
             when (item.itemId) {
                 R.id.MainActivity_Edit -> {
@@ -279,6 +283,20 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
                                             this@MainActivity,
                                             courseWithClassTimes
                                         )
+                                        val snackBar = Snackbar.make(
+                                            rootView,
+                                            R.string.activity_Main_DeletedMessage,
+                                            Snackbar.LENGTH_LONG
+                                        )
+                                        snackBar.setAction(R.string.common_undo) {
+                                            viewModel.viewModelScope.launch {
+                                                MainActivityViewModel.undoDeleteCourse(
+                                                    this@MainActivity,
+                                                    courseWithClassTimes
+                                                )
+                                            }
+                                        }
+                                        snackBar.show()
                                     }
                                 } else {
                                     Toast.makeText(
@@ -337,9 +355,9 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
     private fun bindData(courseList: List<CourseWithClassTimes>) {
         progressBar.visibility = View.GONE
         if (viewModel.showTodayOnly) {
-            rootViewAdapter.submitList(this.currentTimeMarker.getTodayCourseList(courseList))
+            recyclerViewAdapter.submitList(this.currentTimeMarker.getTodayCourseList(courseList))
         } else {
-            rootViewAdapter.submitList(courseList)
+            recyclerViewAdapter.submitList(courseList)
         }
     }
 

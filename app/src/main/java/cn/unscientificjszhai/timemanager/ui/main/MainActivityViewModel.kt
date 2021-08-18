@@ -34,7 +34,7 @@ internal class MainActivityViewModel(var courseList: LiveData<List<CourseWithCla
         ) {
             val application = (context.application) as TimeManagerApplication
             //从日历中删除。
-            withContext(Dispatchers.Default) {
+            withContext(Dispatchers.IO) {
                 val courseTable = application.courseTable!!
                 EventsOperator.deleteEvent(
                     context,
@@ -47,6 +47,33 @@ internal class MainActivityViewModel(var courseList: LiveData<List<CourseWithCla
                 val classTimeDao = database.classTimeDao()
                 courseDao.deleteCourse(courseWithClassTimes.course)
                 classTimeDao.deleteClassTimes(courseWithClassTimes.classTimes)
+            }
+        }
+
+        /**
+         * 撤销删除操作。
+         *
+         * @param context MainActivity的实例，用于获取Application的引用和打开数据库等。
+         * @param courseWithClassTimes 要删除的课程对象。
+         */
+        suspend fun undoDeleteCourse(
+            context: Activity,
+            courseWithClassTimes: CourseWithClassTimes
+        ) {
+            val application = (context.application) as TimeManagerApplication
+            val courseTable by application
+            withContext(Dispatchers.IO) {
+                //清理之前的关联日历项，并重新添加回日历
+                courseWithClassTimes.course.associatedEventsId.clear()
+                EventsOperator.addEvent(context, courseTable, courseWithClassTimes)
+                //重新添加回数据库
+                val database = application.getCourseDatabase()
+                val courseDao = database.courseDao()
+                val classTimeDao = database.classTimeDao()
+                courseDao.insertCourse(courseWithClassTimes.course)
+                courseWithClassTimes.classTimes.forEach {
+                    classTimeDao.insertClassTime(it)
+                }
             }
         }
     }

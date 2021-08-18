@@ -3,7 +3,6 @@ package cn.unscientificjszhai.timemanager.features.calendar
 import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
-import android.graphics.Color
 import android.net.Uri
 import android.provider.CalendarContract
 import androidx.annotation.ColorInt
@@ -36,7 +35,7 @@ object CalendarOperator {
         val timeZone = TimeZone.getDefault()
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val color =
-            sharedPreferences.getString(SettingsFragment.CALENDAR_COLOR_KEY, Color.BLUE.toString())
+            sharedPreferences.getString(SettingsFragment.CALENDAR_COLOR_KEY, "-1409017")//默认芒果色
 
         val values = ContentValues().apply {
             put(CalendarContract.Calendars.NAME, courseTable.getCalendarTableName())

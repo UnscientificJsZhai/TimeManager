@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.annotation.UiThread
-import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AlertDialog
 import cn.unscientificjszhai.timemanager.R
 
@@ -84,9 +83,8 @@ class ProgressDialog(private val context: Activity) {
     }
 
     /**
-     * 使得对话框消失。
+     * 使得对话框消失。可在工作线程运行。
      */
-    @WorkerThread
     fun postDismiss() {
         context.runOnUiThread {
             dialog?.dismiss()

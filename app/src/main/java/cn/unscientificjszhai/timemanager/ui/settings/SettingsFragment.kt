@@ -146,6 +146,7 @@ internal class SettingsFragment : PreferenceFragmentCompat(),
             true
         }
 
+        //日历颜色设置
         this.calendarColorPreference = findPreference(CALENDAR_COLOR_KEY)
         calendarColorPreference?.setOnPreferenceChangeListener { _, newValue ->
             if (newValue is String) {
