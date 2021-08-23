@@ -6,6 +6,7 @@ import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.data.tables.FormattedTime
 import java.lang.ref.WeakReference
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.reflect.KProperty
 
 /**
@@ -45,14 +46,19 @@ class CurrentTimeMarker(private var startDate: Calendar) {
      * 计算当前日期是学期的第几周。
      * 会获取当前时间作为第二个参数进行计算。
      *
-     * @return 如果一个星期的星期二被设定为这个学期的开始日，那么这个星期的星期一到星期六都返回1.
+     * @return 如果一个星期的星期二被设定为这个学期的开始日，那么这个星期的星期一到星期六都返回1。如果学期尚未开始，返回0。
      */
     fun getWeekNumber(): Int {
         val nowDate = Calendar.getInstance()
-        return 1 + (getDateDistance(
+        val absoluteDateDistance = getDateDistance(
             this.startDate,
             nowDate
-        ) + startDate.get(Calendar.DAY_OF_WEEK) - 1) / 7
+        ) + startDate.get(Calendar.DAY_OF_WEEK) - 1
+
+        return if (absoluteDateDistance > -1) {
+            1 + absoluteDateDistance / 7
+        } else 0
+
     }
 
     /**
@@ -125,6 +131,10 @@ class CurrentTimeMarker(private var startDate: Calendar) {
      */
     fun getTodayCourseList(originalList: List<CourseWithClassTimes>): ArrayList<CourseWithClassTimes> {
         val weekNumber = this.getWeekNumber()
+        if(weekNumber == 0){
+            //学期未开始的时候返回空表
+            return ArrayList()
+        }
         val nowDate = Calendar.getInstance()
         val classTimes = ArrayList<ClassTimeCompareOperator>()
         val newList = ArrayList<CourseWithClassTimes>()

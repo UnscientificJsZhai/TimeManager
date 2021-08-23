@@ -61,6 +61,7 @@
     <string name="activity_Main_ShowTodayOnly">仅显示今天</string>
     <string name="activity_Main_JumpToCalendar">跳转到日历</string>
     <string name="activity_Main_TodayOnlyMode_DataError">数据错误，无法显示详情</string>
+    <string name="activity_Main_NotStartYet">学期尚未开始</string>
     <string name="activity_Main_TodayOnlyMode_Next">即将上课</string>
     <string name="activity_Main_TodayOnlyMode_During">正在上课</string>
     <string name="activity_Main_TodayOnlyMode_Finished">已结束</string>

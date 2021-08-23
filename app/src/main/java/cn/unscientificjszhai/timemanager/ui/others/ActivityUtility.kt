@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
@@ -119,6 +120,21 @@ object ActivityUtility {
                 val position = it.itemCount
                 scrollToPosition(recyclerView, position)
             }
+        }
+    }
+
+    /**
+     * 为RecyclerView的子元素添加下划线。
+     */
+    class RecyclerViewDecoration : RecyclerView.ItemDecoration() {
+
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+            outRect.set(0, 0, 0, 1)
         }
     }
 }

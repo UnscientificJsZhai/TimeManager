@@ -190,4 +190,18 @@ class WebViewFragment : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    /**
+     * WebView是否可以返回。
+     *
+     * @return WebView已经返回，返回true。如果WebView不能返回，返回false，调用Activity的返回回调。
+     */
+    internal fun canWebPageBack(): Boolean {
+        if (webView.canGoBack()) {
+            webView.goBack()
+            return true
+        } else {
+            return false
+        }
+    }
 }

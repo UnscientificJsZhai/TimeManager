@@ -14,7 +14,7 @@ import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
 /**
  * 显示App简介的Activity。
  */
-class InfoActivity : AppCompatActivity(), View.OnClickListener {
+class InfoActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClickListener {
 
     companion object {
 
@@ -49,22 +49,12 @@ class InfoActivity : AppCompatActivity(), View.OnClickListener {
         bilibiliButton.setOnClickListener(this)
         mailButton.setOnClickListener(this)
 
-        mailButton.setOnLongClickListener {
-            Toast.makeText(this, MAIL_ADDRESS, Toast.LENGTH_LONG).show()
-            val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            clipboardManager.setPrimaryClip(ClipData.newPlainText(null, MAIL_ADDRESS))
-            true
-        }
+        mailButton.setOnLongClickListener(this)
 
         coolApkButton.setOnClickListener(this)
         designerMailButton.setOnClickListener(this)
 
-        designerMailButton.setOnLongClickListener {
-            Toast.makeText(this, LOGO_DESIGNER_MAIL_ADDRESS, Toast.LENGTH_LONG).show()
-            val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            clipboardManager.setPrimaryClip(ClipData.newPlainText(null, LOGO_DESIGNER_MAIL_ADDRESS))
-            true
-        }
+        designerMailButton.setOnLongClickListener(this)
 
         parseLibrary.setOnClickListener(this)
     }
@@ -94,7 +84,7 @@ class InfoActivity : AppCompatActivity(), View.OnClickListener {
             }
             this.mailButton -> {
                 val intent = Intent(Intent.ACTION_SENDTO)
-                intent.putExtra(Intent.EXTRA_EMAIL, MAIL_ADDRESS)
+                intent.data = Uri.parse("mailto:$MAIL_ADDRESS")
                 try {
                     startActivity(intent)
                 } catch (e: ActivityNotFoundException) {
@@ -109,7 +99,7 @@ class InfoActivity : AppCompatActivity(), View.OnClickListener {
             }
             this.designerMailButton -> {
                 val intent = Intent(Intent.ACTION_SENDTO)
-                intent.putExtra(Intent.EXTRA_EMAIL, LOGO_DESIGNER_MAIL_ADDRESS)
+                intent.data = Uri.parse("mailto:$LOGO_DESIGNER_MAIL_ADDRESS")
                 try {
                     startActivity(intent)
                 } catch (e: ActivityNotFoundException) {
@@ -124,5 +114,30 @@ class InfoActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(intent)
             }
         }
+    }
+
+    override fun onLongClick(p0: View?): Boolean {
+        when (p0) {
+            mailButton -> {
+                Toast.makeText(this, MAIL_ADDRESS, Toast.LENGTH_LONG).show()
+                val clipboardManager =
+                    getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                clipboardManager.setPrimaryClip(ClipData.newPlainText(null, MAIL_ADDRESS))
+                return true
+            }
+            designerMailButton -> {
+                Toast.makeText(this, LOGO_DESIGNER_MAIL_ADDRESS, Toast.LENGTH_LONG).show()
+                val clipboardManager =
+                    getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                clipboardManager.setPrimaryClip(
+                    ClipData.newPlainText(
+                        null,
+                        LOGO_DESIGNER_MAIL_ADDRESS
+                    )
+                )
+                return true
+            }
+        }
+        return true
     }
 }

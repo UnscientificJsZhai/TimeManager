@@ -16,6 +16,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.edit
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
@@ -60,6 +61,11 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
          * 确定是否显示帮助的Key，在SharedPreference：[TimeManagerApplication.INITIAL]中查找。
          */
         const val SHOW_GUIDE_KEY = "mainActivityGuideShowed"
+
+        /**
+         * 确定是否为仅显示今天的Key，在SharedPreference：[TimeManagerApplication.INITIAL]中查找。
+         */
+        const val SHOW_TODAY_ONLY_KEY = "showTodayOnly"
     }
 
     private lateinit var timeManagerApplication: TimeManagerApplication
@@ -159,6 +165,11 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
                 MainActivityViewModel.Factory(courseDatabase.courseDao())
             )[MainActivityViewModel::class.java]
 
+        val sharedPreferences =
+            getSharedPreferences(TimeManagerApplication.INITIAL, Context.MODE_PRIVATE)
+        viewModel.showTodayOnly = sharedPreferences.getBoolean(SHOW_TODAY_ONLY_KEY, false)
+
+
         this.progressBar = findViewById(R.id.MainActivity_ProgressBar)
         this.rootView = findViewById(R.id.MainActivity_RootView)
 
@@ -193,8 +204,6 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
         })
 
         //首次打开则显示帮助
-        val sharedPreferences =
-            getSharedPreferences(TimeManagerApplication.INITIAL, Context.MODE_PRIVATE)
         if (!sharedPreferences.getBoolean(SHOW_GUIDE_KEY, false)) {
             Toast.makeText(this, R.string.activity_Main_GuideToast, Toast.LENGTH_LONG).show()
             sharedPreferences.edit().putBoolean(SHOW_GUIDE_KEY, true).apply()
@@ -203,8 +212,23 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
     override fun onStart() {
         super.onStart()
-        //更新ActionBar的内容
+        //更新ActionBar的内容。
         updateActionBarLabel()
+        //如果学期未开始就不要只显示今天。
+        if (currentTimeMarker.getWeekNumber() == 0) {
+            viewModel.showTodayOnly = false
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        //保存是否只显示今天的情况
+        val sharedPreferences =
+            getSharedPreferences(TimeManagerApplication.INITIAL, Context.MODE_PRIVATE)
+        sharedPreferences.edit {
+            putBoolean(SHOW_TODAY_ONLY_KEY, viewModel.showTodayOnly)
+            commit()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -213,7 +237,10 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
     }
 
     override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
-        menu.findItem(R.id.MainActivity_ShowTodayOnly).isChecked = viewModel.showTodayOnly
+        menu.findItem(R.id.MainActivity_ShowTodayOnly).apply {
+            isEnabled = currentTimeMarker.getWeekNumber() != 0
+            isChecked = viewModel.showTodayOnly
+        }
         menu.findItem(R.id.MainActivity_Parse).isVisible = viewModel.isListEmpty()
         return super.onMenuOpened(featureId, menu)
     }
@@ -402,22 +429,27 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
                     }
                 )
 
-                stringBuilder.append(
-                    getString(R.string.view_ClassTimeEdit_WeekItem_ForKotlin)
-                        .format(currentTimeMarker.getWeekNumber())
-                )
-                    .append(" ")
-                    .append(dayOfWeek())
-                    .append(" ")
-                    .append(
-                        getString(
-                            if (viewModel.showTodayOnly) {
-                                R.string.activity_Main_ActionBarLabel_TodayOnly
-                            } else {
-                                R.string.activity_Main_ActionBarLabel_All
-                            }
-                        )
+                val weekNumber = currentTimeMarker.getWeekNumber()
+                if (weekNumber == 0) {
+                    stringBuilder.append(getString(R.string.activity_Main_NotStartYet))
+                } else {
+                    stringBuilder.append(
+                        getString(R.string.view_ClassTimeEdit_WeekItem_ForKotlin)
+                            .format(currentTimeMarker.getWeekNumber())
                     )
+                        .append(" ")
+                        .append(dayOfWeek())
+                        .append(" ")
+                        .append(
+                            getString(
+                                if (viewModel.showTodayOnly) {
+                                    R.string.activity_Main_ActionBarLabel_TodayOnly
+                                } else {
+                                    R.string.activity_Main_ActionBarLabel_All
+                                }
+                            )
+                        )
+                }
             }
         }
         supportActionBar?.let { actionBar ->

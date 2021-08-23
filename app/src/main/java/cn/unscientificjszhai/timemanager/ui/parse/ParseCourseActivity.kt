@@ -52,4 +52,12 @@ class ParseCourseActivity : CalendarOperatorActivity() {
     operator fun getValue(thisRef: Any?, property: KProperty<*>): ParserFactory {
         return this.viewModel.parserFactory
     }
+
+    override fun onBackPressed() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.ParseCourseActivity_RootView)
+        if (fragment is WebViewFragment && fragment.canWebPageBack()) {
+            return
+        }
+        super.onBackPressed()
+    }
 }
