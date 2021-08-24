@@ -60,6 +60,20 @@ internal class SettingsDataStore(
                 }
             }
 
+            SettingsFragment.WEEK_START_KEY -> {
+                when (value) {
+                    "0" -> {
+                        this.nowCourseTable.weekStart = false
+                    }
+                    "1" -> {
+                        this.nowCourseTable.weekStart = true
+                    }
+                    else -> {
+                        return super.putString(key, value)
+                    }
+                }
+            }
+
             else -> {
                 return super.putString(key, value)
             }
@@ -72,13 +86,34 @@ internal class SettingsDataStore(
             SettingsFragment.MAX_WEEK_KEY -> {
                 this.nowCourseTable.maxWeeks.toString()
             }
+
             SettingsFragment.CLASSES_PER_DAY_KEY -> {
                 this.nowCourseTable.classesPerDay.toString()
             }
+
+            SettingsFragment.WEEK_START_KEY -> {
+                if (this.nowCourseTable.weekStart) {
+                    "1"
+                } else {
+                    "0"
+                }
+            }
+
             else -> {
                 null
             }
         }
+    }
+
+    override fun getInt(key: String?, defValue: Int): Int {
+        if(key == SettingsFragment.WEEK_START_KEY){
+            return if (this.nowCourseTable.weekStart) {
+                1
+            } else {
+                0
+            }
+        }
+        return super.getInt(key, defValue)
     }
 
     /**

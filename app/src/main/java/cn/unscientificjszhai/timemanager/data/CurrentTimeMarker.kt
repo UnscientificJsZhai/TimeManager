@@ -12,9 +12,9 @@ import kotlin.reflect.KProperty
 /**
  * 标注现在所处时间的标记类，也提供一些基于当前时间的实用功能，比如给课程排序。
  *
- * @param startDate 学期开始日，Calendar对象。
+ * @param courseTable 课程表对象。
  */
-class CurrentTimeMarker(private var startDate: Calendar) {
+class CurrentTimeMarker(private var courseTable: CourseTable) {
 
     /**
      * 为[CurrentTimeMarker]提供属性委托功能。
@@ -49,16 +49,20 @@ class CurrentTimeMarker(private var startDate: Calendar) {
      * @return 如果一个星期的星期二被设定为这个学期的开始日，那么这个星期的星期一到星期六都返回1。如果学期尚未开始，返回0。
      */
     fun getWeekNumber(): Int {
+        val startDate = this.courseTable.startDate
         val nowDate = Calendar.getInstance()
         val absoluteDateDistance = getDateDistance(
-            this.startDate,
+            startDate,
             nowDate
-        ) + startDate.get(Calendar.DAY_OF_WEEK) - 1
+        ) + startDate.get(Calendar.DAY_OF_WEEK) - if (courseTable.weekStart) { // 一周开始日
+            2
+        } else {
+            1
+        }
 
         return if (absoluteDateDistance > -1) {
             1 + absoluteDateDistance / 7
         } else 0
-
     }
 
     /**
@@ -131,7 +135,7 @@ class CurrentTimeMarker(private var startDate: Calendar) {
      */
     fun getTodayCourseList(originalList: List<CourseWithClassTimes>): ArrayList<CourseWithClassTimes> {
         val weekNumber = this.getWeekNumber()
-        if(weekNumber == 0){
+        if (weekNumber == 0) {
             //学期未开始的时候返回空表
             return ArrayList()
         }
@@ -159,7 +163,12 @@ class CurrentTimeMarker(private var startDate: Calendar) {
         return newList
     }
 
-    fun setStartDate(startDate: Calendar) {
-        this.startDate = startDate
+    /**
+     * 更新CourseTable的方法。
+     *
+     * @param courseTable 更改后的课程表对象。
+     */
+    fun setCourseTable(courseTable: CourseTable) {
+        this.courseTable = courseTable
     }
 }

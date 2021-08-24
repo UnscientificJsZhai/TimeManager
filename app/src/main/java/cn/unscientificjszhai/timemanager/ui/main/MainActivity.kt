@@ -38,6 +38,7 @@ import cn.unscientificjszhai.timemanager.ui.settings.SettingsActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
+import java.lang.RuntimeException
 import java.util.*
 import kotlin.reflect.KProperty
 
@@ -71,8 +72,8 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
     private lateinit var timeManagerApplication: TimeManagerApplication
     private val currentTimeMarker: CurrentTimeMarker by lazy {
         timeManagerApplication.courseTable?.let {
-            CurrentTimeMarker(it.startDate)
-        } ?: CurrentTimeMarker(Calendar.getInstance())
+            CurrentTimeMarker(it)
+        } ?: throw RuntimeException()
     }
 
     private lateinit var viewModel: MainActivityViewModel
@@ -101,7 +102,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
                 //更新NowTimeTagger
                 val courseTable by context.timeManagerApplication
-                context.currentTimeMarker.setStartDate(courseTable.startDate)
+                context.currentTimeMarker.setCourseTable(courseTable)
                 updateActionBarLabel()
             }
         }

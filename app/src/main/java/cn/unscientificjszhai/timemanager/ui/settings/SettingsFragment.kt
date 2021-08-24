@@ -47,6 +47,11 @@ internal class SettingsFragment : PreferenceFragmentCompat(),
         const val START_DATE_KEY = "startDate"
 
         /**
+         * Preference周开始日的Key。
+         */
+        const val WEEK_START_KEY = "weekStart"
+
+        /**
          * Preference更新日历的Key。
          */
         const val UPDATE_CALENDAR_KEY = "createCalendar"
@@ -61,6 +66,7 @@ internal class SettingsFragment : PreferenceFragmentCompat(),
     private var howManyWeeksPreference: EditTextPreference? = null
     private var classesPerDayPreference: EditTextPreference? = null
     private var startDatePreference: Preference? = null
+    private var weekStartPreference: ListPreference? = null
 
     private var updateCalendarPreference: Preference? = null
     private var calendarColorPreference: ListPreference? = null
@@ -121,6 +127,11 @@ internal class SettingsFragment : PreferenceFragmentCompat(),
         }
         startDatePreference?.summaryProvider = this
 
+        //周开始日的设置项
+        this.weekStartPreference = findPreference(WEEK_START_KEY)
+        weekStartPreference?.preferenceDataStore = dataStore
+
+        //更新日历的设置项
         this.updateCalendarPreference = findPreference(UPDATE_CALENDAR_KEY)
         updateCalendarPreference?.setOnPreferenceClickListener {
             AlertDialog.Builder(requireContext())
@@ -189,6 +200,13 @@ internal class SettingsFragment : PreferenceFragmentCompat(),
         this.exportIcsPreference = findPreference("ics")
         exportIcsPreference?.setOnPreferenceClickListener {
             (requireActivity() as SettingsActivity).exportIcs()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        this.weekStartPreference?.apply {
+            value = preferenceDataStore?.getString(key,"0")
         }
     }
 

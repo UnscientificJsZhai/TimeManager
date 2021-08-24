@@ -31,9 +31,15 @@ class TimeManagerApplication : Application(), CourseTable.Getter {
         const val NOW_TABLE_SP_KEY = "now"
 
         /**
-         * 数据库版本号。
+         * 课程表数据库版本号。
+         * 从1到2，添加了CourseTable的每周开始日列。
          */
-        const val DATABASE_VERSION: Int = 1
+        const val TABLE_DATABASE_VERSION: Int = 2
+
+        /**
+         * 课程数据库版本号。
+         */
+        const val COURSE_DATABASE_VERSION:Int = 1
 
         /**
          * 默认的[CourseTable]id，表示新创建的对象的id时使用（本来为null）。
@@ -114,7 +120,7 @@ class TimeManagerApplication : Application(), CourseTable.Getter {
                     this,
                     CourseTableDatabase::class.java,
                     "database.db"
-                ).build()
+                ).addMigrations(CourseTableDatabase.MIGRATION_1_2).build()
         }
         return this.courseTableDatabase!!
     }

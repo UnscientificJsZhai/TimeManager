@@ -32,6 +32,13 @@
         <Preference
             app:key="startDate"
             app:title="@string/preferences_CurrentTable_StartDate" />
+
+        <ListPreference
+            android:entries="@array/preferences_WeekStart_Entries"
+            android:entryValues="@array/preferences_WeekStart_EntryValues"
+            android:title="@string/preferences_WeekStart"
+            app:key="weekStart"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/preferences_CalendarOption_CategoryTitle">

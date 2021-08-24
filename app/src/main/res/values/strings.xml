@@ -114,6 +114,7 @@
     <string name="preferences_CurrentTable_ClassesPerDaySummary">节</string>
     <string name="preferences_CurrentTable_TimeTable">上课时间</string>
     <string name="preferences_CurrentTable_StartDate">学期开始日</string>
+    <string name="preferences_WeekStart">教学周开始日</string>
     <string name="preferences_CurrentTable_StartDateSummary">%d年%d月%d日</string>
     <string name="preferences_CalendarOption_CategoryTitle">日历选项</string>
     <string name="preferences_CalendarOption_UpdateCalendar">更新日历</string>

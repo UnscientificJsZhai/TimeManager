@@ -64,6 +64,12 @@ object EventsOperator {
             startTime.set(Calendar.HOUR_OF_DAY, formattedStartTime.startH)
             startTime.set(Calendar.MINUTE, formattedStartTime.startM)
 
+            //以上是周日为一周开始的情况，当周一为一周开始时，进行以下操作平移周日。
+            if (courseTable.weekStart && startTime.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                //向后平移7天。
+                startTime.set(Calendar.WEEK_OF_YEAR, startTime.get(Calendar.WEEK_OF_YEAR) + 1)
+            }
+
             this.put(CalendarContract.Events.DTSTART, startTime.timeInMillis)
 
             val formattedEndTime = FormattedTime(courseTable.timeTable[classTime.end - 1])

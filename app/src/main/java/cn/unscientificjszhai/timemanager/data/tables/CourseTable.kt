@@ -20,6 +20,7 @@ import kotlin.reflect.KProperty
  * @param maxWeeks 学期教学周数。
  * @param timeTable 学期上课时间安排表。
  * @param startDate 学期开始日。
+ * @param weekStart 教学周开始日。true为周一，false为周日。
  */
 @Entity(tableName = CourseTable.TABLE_NAME)
 @TypeConverters(TimetableTypeConverter::class)
@@ -30,7 +31,8 @@ data class CourseTable(
     @ColumnInfo(name = "max_weeks") var maxWeeks: Int,
     @ColumnInfo(name = "time_table") var timeTable: Array<String>,
     @ColumnInfo(name = "start_date") var startDate: Calendar,
-    @ColumnInfo(name = "calendar_id") var calendarID: Long?
+    @ColumnInfo(name = "calendar_id") var calendarID: Long?,
+    @ColumnInfo(name = "week_start") var weekStart: Boolean,
 ) : Serializable {
 
     companion object {
@@ -95,6 +97,13 @@ data class CourseTable(
             courseTable.classesPerDay = jsonObject.getInt("classPerDay")
             courseTable.maxWeeks = jsonObject.getInt("maxWeeks")
             courseTable.startDate = converter.getStartDate(jsonObject.getString("startDate"))
+
+            if (jsonObject.has("weekStart")) {
+                courseTable.weekStart = jsonObject.getBoolean("weekStart")
+            } else {
+                courseTable.weekStart = false
+            }
+
             return courseTable
         }
     }
@@ -107,14 +116,21 @@ data class CourseTable(
         operator fun getValue(thisRef: Any?, property: KProperty<*>): CourseTable
     }
 
+    /**
+     * 默认构造函数。
+     *
+     * @param name 课程表标题。
+     * @param timeTable 上课时间表。可选参数。
+     */
     constructor(name: String, timeTable: Array<String> = defaultTimeTable()) : this(
-        null,
-        name,
-        DEFAULT_CLASS_PER_DAY,
-        DEFAULT_MAX_WEEKS,
-        timeTable,
-        Calendar.getInstance(),
-        null
+        id = null,
+        name = name,
+        classesPerDay = DEFAULT_CLASS_PER_DAY,
+        maxWeeks = DEFAULT_MAX_WEEKS,
+        timeTable = timeTable,
+        startDate = Calendar.getInstance(),
+        calendarID = null,
+        weekStart = true
     )
 
     /**
@@ -216,6 +232,7 @@ data class CourseTable(
         jsonObject.put("maxWeeks", maxWeeks)
         jsonObject.put("timeTable", converter.setTimeTable(timeTable))
         jsonObject.put("startDate", converter.setStartDate(startDate))
+        jsonObject.put("weekStart", weekStart)
         return jsonObject
     }
 }

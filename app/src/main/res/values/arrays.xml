@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="preferences_WeekStart_Entries">
+        <item>@string/data_Week0</item>
+        <item>@string/data_Week1</item>
+    </string-array>
+
+    <string-array name="preferences_WeekStart_EntryValues">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
     <string-array name="preferences_CalendarColor_Entries">
         <item>@string/color_Tomato</item>
         <item>@string/color_Tangerine</item>
