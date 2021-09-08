@@ -160,4 +160,5 @@
     <string name="common_undo">Undo</string>
     <string name="activity_Main_DeletedMessage">Deleted</string>
     <string name="activity_Main_NotStartYet">Not started</string>
+    <string name="preferences_WeekStart">Start of a week</string>
 </resources>

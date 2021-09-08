@@ -14,22 +14,19 @@ class RecyclerViewWithContextMenu : RecyclerView {
     /**
      * 用于传递位置数据的MenuInfo
      */
-    class PositionMenuInfo : ContextMenu.ContextMenuInfo {
-
-        var position = -1
-    }
+    class PositionMenuInfo(var position: Int) : ContextMenu.ContextMenuInfo
 
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(
-        context,
-        attrs,
-        defStyle
+            context,
+            attrs,
+            defStyle
     )
 
-    private val contextInfo = PositionMenuInfo()
+    private val contextInfo = PositionMenuInfo(-1)
 
     override fun showContextMenuForChild(originalView: View, x: Float, y: Float): Boolean {
         if (layoutManager != null) {
@@ -42,5 +39,4 @@ class RecyclerViewWithContextMenu : RecyclerView {
     override fun getContextMenuInfo(): ContextMenu.ContextMenuInfo {
         return this.contextInfo
     }
-
 }

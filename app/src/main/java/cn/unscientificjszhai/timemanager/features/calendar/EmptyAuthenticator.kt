@@ -7,8 +7,7 @@ import android.os.Bundle
 /**
  * 空白身份验证器，用于创建系统账号，使日历绑定到账号
  */
-class EmptyAuthenticator(private val context: Context)
-    : AbstractAccountAuthenticator(context) {
+class EmptyAuthenticator(private val context: Context) : AbstractAccountAuthenticator(context) {
 
     companion object {
 

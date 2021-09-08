@@ -29,16 +29,12 @@ import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.database.CourseDatabase
 import cn.unscientificjszhai.timemanager.ui.WelcomeActivity
 import cn.unscientificjszhai.timemanager.ui.editor.EditCourseActivity
-import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
-import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.jumpToSystemPermissionSettings
-import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissionGranted
-import cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
+import cn.unscientificjszhai.timemanager.ui.others.*
 import cn.unscientificjszhai.timemanager.ui.parse.ParseCourseActivity
 import cn.unscientificjszhai.timemanager.ui.settings.SettingsActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
-import java.lang.RuntimeException
 import java.util.*
 import kotlin.reflect.KProperty
 
@@ -155,7 +151,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
         setContentView(R.layout.activity_main)
 
         //设置SystemUI颜色
-        ActivityUtility.setSystemUIAppearance(this)
+        setSystemUIAppearance(this)
 
         this.courseDatabase = this.timeManagerApplication.getCourseDatabase()
 

@@ -21,6 +21,9 @@ abstract class CourseTableDatabase : RoomDatabase() {
 
     companion object {
 
+        /**
+         * 添加了每周开始日的列。boolean类型。
+         */
         val MIGRATION_1_2 = object : Migration(1, 2) {
 
             override fun migrate(database: SupportSQLiteDatabase) {

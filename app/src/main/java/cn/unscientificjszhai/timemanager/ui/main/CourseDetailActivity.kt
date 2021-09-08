@@ -18,8 +18,8 @@ import cn.unscientificjszhai.timemanager.data.course.Course
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.dao.CourseDao
 import cn.unscientificjszhai.timemanager.ui.editor.EditCourseActivity
-import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.jumpToSystemPermissionSettings
-import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissionGranted
+import cn.unscientificjszhai.timemanager.ui.others.jumpToSystemPermissionSettings
+import cn.unscientificjszhai.timemanager.ui.others.runIfPermissionGranted
 import kotlinx.coroutines.launch
 import java.util.*
 

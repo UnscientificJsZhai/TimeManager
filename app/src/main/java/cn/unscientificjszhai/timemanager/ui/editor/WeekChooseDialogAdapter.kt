@@ -17,8 +17,8 @@ import cn.unscientificjszhai.timemanager.data.course.ClassTime
  * @see ClassTime
  */
 internal class WeekChooseDialogAdapter(
-    private val weekData: ClassTime,
-    private val items: Array<String>
+        private val weekData: ClassTime,
+        private val items: Array<String>
 ) : RecyclerView.Adapter<WeekChooseDialogAdapter.ViewHolder>() {
     inner class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
         val checkBox: CheckBox = rootView.findViewById(R.id.WeekChooseRecycler_CheckBox)
@@ -26,7 +26,7 @@ internal class WeekChooseDialogAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_week_choose_dialog, parent, false)
+                .inflate(R.layout.recycler_week_choose_dialog, parent, false)
         val holder = ViewHolder(view)
 
         //短按实现单项选择

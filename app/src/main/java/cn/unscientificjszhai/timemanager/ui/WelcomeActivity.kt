@@ -19,11 +19,11 @@ import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.features.backup.BackupOperator
 import cn.unscientificjszhai.timemanager.features.calendar.CalendarOperator
 import cn.unscientificjszhai.timemanager.features.calendar.EmptyAuthenticator
-import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.jumpToSystemPermissionSettings
-import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissionGranted
 import cn.unscientificjszhai.timemanager.ui.main.MainActivity
-import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
 import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
+import cn.unscientificjszhai.timemanager.ui.others.jumpToSystemPermissionSettings
+import cn.unscientificjszhai.timemanager.ui.others.runIfPermissionGranted
+import cn.unscientificjszhai.timemanager.ui.others.setSystemUIAppearance
 import kotlin.concurrent.thread
 
 /**
@@ -64,7 +64,7 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
             //如果当前所在表的ID为-1，就是没有初始化
             setContentView(R.layout.activity_welcome)
 
-            ActivityUtility.setSystemUIAppearance(this)
+            setSystemUIAppearance(this)
 
             this.tableTitleEditText = findViewById(R.id.WelcomeActivity_TableNameEditText)
             this.startButton = findViewById(R.id.WelcomeActivity_Button)

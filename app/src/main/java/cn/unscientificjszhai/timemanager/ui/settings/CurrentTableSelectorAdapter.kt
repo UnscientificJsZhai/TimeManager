@@ -19,18 +19,18 @@ import cn.unscientificjszhai.timemanager.data.tables.CourseTable
  * @see CurrentTableSelectorActivity
  */
 internal class CurrentTableSelectorAdapter(
-    private var nowTableId: Long,
-    val setTable: (CourseTable, Boolean) -> Unit
+        private var nowTableId: Long,
+        val setTable: (CourseTable, Boolean) -> Unit
 ) :
-    ListAdapter<CourseTable, CurrentTableSelectorAdapter.ViewHolder>(CourseTableDiffCallback) {
+        ListAdapter<CourseTable, CurrentTableSelectorAdapter.ViewHolder>(CourseTableDiffCallback) {
 
     private object CourseTableDiffCallback : DiffUtil.ItemCallback<CourseTable>() {
 
         override fun areItemsTheSame(oldItem: CourseTable, newItem: CourseTable) =
-            oldItem.id == newItem.id
+                oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: CourseTable, newItem: CourseTable) =
-            false
+                false
     }
 
     inner class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
@@ -40,7 +40,7 @@ internal class CurrentTableSelectorAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_current_table_selector, parent, false)
+                .inflate(R.layout.recycler_current_table_selector, parent, false)
 
         val viewHolder = ViewHolder(view)
 

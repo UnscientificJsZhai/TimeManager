@@ -43,7 +43,7 @@ data class Course(
          * @param serializable 可序列化对象。
          * @return 若目标对象合法则其必须满足：标题不为空，学分大于0，关联的[ClassTime]对象全部合法。
          */
-        fun checkLegitimacy(serializable: Serializable?,courseTable: CourseTable): Boolean {
+        fun checkLegitimacy(serializable: Serializable?, courseTable: CourseTable): Boolean {
             if (serializable is CourseWithClassTimes) {
                 val course = serializable.course
                 when {

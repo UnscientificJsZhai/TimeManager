@@ -39,7 +39,7 @@ class TimeManagerApplication : Application(), CourseTable.Getter {
         /**
          * 课程数据库版本号。
          */
-        const val COURSE_DATABASE_VERSION:Int = 1
+        const val COURSE_DATABASE_VERSION: Int = 1
 
         /**
          * 默认的[CourseTable]id，表示新创建的对象的id时使用（本来为null）。

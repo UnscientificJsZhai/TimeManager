@@ -17,10 +17,10 @@ import kotlin.reflect.KProperty
  * @param context 上下文，用于更新日历。
  */
 internal class SettingsDataStore(
-    var nowCourseTable: CourseTable,
-    private val courseTableDao: CourseTableDao,
-    private val context: Context,
-    val notifyApplicationCourseTableChanged: (Long) -> Unit
+        var nowCourseTable: CourseTable,
+        private val courseTableDao: CourseTableDao,
+        private val context: Context,
+        val notifyApplicationCourseTableChanged: (Long) -> Unit
 ) : PreferenceDataStore() {
 
     /**
@@ -106,7 +106,7 @@ internal class SettingsDataStore(
     }
 
     override fun getInt(key: String?, defValue: Int): Int {
-        if(key == SettingsFragment.WEEK_START_KEY){
+        if (key == SettingsFragment.WEEK_START_KEY) {
             return if (this.nowCourseTable.weekStart) {
                 1
             } else {

@@ -21,10 +21,7 @@ import cn.unscientificjszhai.timemanager.data.course.Course
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.database.CourseDatabase
 import cn.unscientificjszhai.timemanager.ui.main.CourseDetailActivity
-import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
-import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.jumpToSystemPermissionSettings
-import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissionGranted
-import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
+import cn.unscientificjszhai.timemanager.ui.others.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
@@ -58,8 +55,8 @@ class EditCourseActivity : CalendarOperatorActivity() {
          */
         @JvmStatic
         fun startThisActivity(
-            context: Context,
-            courseWithClassTimes: CourseWithClassTimes
+                context: Context,
+                courseWithClassTimes: CourseWithClassTimes
         ) {
             val intent = Intent(context, EditCourseActivity::class.java)
             intent.putExtra(CourseDetailActivity.INTENT_EXTRA_COURSE, courseWithClassTimes)
@@ -85,14 +82,14 @@ class EditCourseActivity : CalendarOperatorActivity() {
         //初始化ViewModel
         this.viewModel = ViewModelProvider(this)[EditCourseActivityViewModel::class.java]
 
-        ActivityUtility.setSystemUIAppearance(this)
+        setSystemUIAppearance(this)
 
         this.timeManagerApplication = application as TimeManagerApplication
 
         this.rootRecyclerView = findViewById(R.id.EditCourseActivity_RecyclerView)
 
         val courseWithClassTimes =
-            intent.getSerializableExtra(CourseDetailActivity.INTENT_EXTRA_COURSE)
+                intent.getSerializableExtra(CourseDetailActivity.INTENT_EXTRA_COURSE)
         if (courseWithClassTimes is CourseWithClassTimes) {
             //给ViewModel设定值
             this.viewModel.course = courseWithClassTimes.course
@@ -113,8 +110,8 @@ class EditCourseActivity : CalendarOperatorActivity() {
 
         this.headerAdapter = EditCourseHeaderAdapter(viewModel.course ?: Course())
         this.adapter = EditCourseAdapter(
-            viewModel.classTimes,
-            timeManagerApplication.courseTable?.maxWeeks ?: ClassTime.MAX_STORAGE_SIZE
+                viewModel.classTimes,
+                timeManagerApplication.courseTable?.maxWeeks ?: ClassTime.MAX_STORAGE_SIZE
         )
 
         val linearLayoutManager = LinearLayoutManager(this)
@@ -126,31 +123,31 @@ class EditCourseActivity : CalendarOperatorActivity() {
 
         //浮动按钮的监听器
         val floatingActionButton: FloatingActionButton =
-            findViewById(R.id.EditCourseActivity_PlusButton)
+                findViewById(R.id.EditCourseActivity_PlusButton)
         floatingActionButton.setOnClickListener {
             val lastClassTime = viewModel.classTimes.lastOrNull()
             if (lastClassTime == null || !viewModel.copyFromPrevious) {
                 viewModel.classTimes.add(ClassTime())
             } else {
-                clearChildViewFocus()
+                rootRecyclerView.clearFocus()
                 viewModel.classTimes.add(ClassTime(lastClassTime))
             }
             this.adapter.notifyItemInserted(adapter.itemCount - 1)
 
             //滚动到底部
-            ActivityUtility.RecyclerScrollHelper.scrollToBottom(this.rootRecyclerView)
+            RecyclerScrollHelper.scrollToBottom(this.rootRecyclerView)
         }
         floatingActionButton.setOnLongClickListener {
             viewModel.copyFromPrevious = !viewModel.copyFromPrevious
 
             Toast.makeText(
-                this,
-                if (viewModel.copyFromPrevious) {
-                    R.string.activity_EditCourse_CopyFromPrevious_True
-                } else {
-                    R.string.activity_EditCourse_CopyFromPrevious_False
-                },
-                Toast.LENGTH_SHORT
+                    this,
+                    if (viewModel.copyFromPrevious) {
+                        R.string.activity_EditCourse_CopyFromPrevious_True
+                    } else {
+                        R.string.activity_EditCourse_CopyFromPrevious_False
+                    },
+                    Toast.LENGTH_SHORT
             ).show()
 
             true
@@ -172,23 +169,23 @@ class EditCourseActivity : CalendarOperatorActivity() {
             runIfPermissionGranted(Manifest.permission.WRITE_CALENDAR, {
                 //没有获得权限时。
                 AlertDialog.Builder(this)
-                    .setTitle(R.string.activity_WelcomeActivity_AskPermissionTitle)
-                    .setMessage(R.string.activity_EditCourse_AskPermissionText)
-                    .setNegativeButton(R.string.common_cancel) { dialog, _ ->
-                        dialog.dismiss()
-                    }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
-                        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_CALENDAR)) {
-                            requestPermissions(
-                                arrayOf(Manifest.permission.WRITE_CALENDAR),
-                                SAVING_REQUEST_CODE
-                            )
-                        } else {
-                            jumpToSystemPermissionSettings()
+                        .setTitle(R.string.activity_WelcomeActivity_AskPermissionTitle)
+                        .setMessage(R.string.activity_EditCourse_AskPermissionText)
+                        .setNegativeButton(R.string.common_cancel) { dialog, _ ->
+                            dialog.dismiss()
+                        }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
+                            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_CALENDAR)) {
+                                requestPermissions(
+                                        arrayOf(Manifest.permission.WRITE_CALENDAR),
+                                        SAVING_REQUEST_CODE
+                                )
+                            } else {
+                                jumpToSystemPermissionSettings()
+                            }
+                            dialog.dismiss()
                         }
-                        dialog.dismiss()
-                    }
             }) {
-                clearChildViewFocus()
+                rootRecyclerView.clearFocus()
                 viewModel.viewModelScope.launch {
                     viewModel.saveData(this@EditCourseActivity)
                 }
@@ -202,25 +199,25 @@ class EditCourseActivity : CalendarOperatorActivity() {
 
     override fun onBackPressed() {
         AlertDialog.Builder(this).setTitle(R.string.activity_EditCourse_UnsavedAlertTitle)
-            //确定按键
-            .setPositiveButton(R.string.common_confirm) { dialog, _ ->
-                dialog?.dismiss()
-                this.finish()
-            }
-            //取消按键
-            .setNegativeButton(R.string.common_cancel) { dialog, _ ->
-                dialog?.dismiss()
-            }.create().show()
+                //确定按键
+                .setPositiveButton(R.string.common_confirm) { dialog, _ ->
+                    dialog?.dismiss()
+                    this.finish()
+                }
+                //取消按键
+                .setNegativeButton(R.string.common_cancel) { dialog, _ ->
+                    dialog?.dismiss()
+                }.create().show()
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         if (requestCode == SAVING_REQUEST_CODE) {
             if (grantResults.isNotEmpty() &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED
             ) {
                 viewModel.viewModelScope.launch {
                     viewModel.saveData(this@EditCourseActivity)
@@ -236,34 +233,27 @@ class EditCourseActivity : CalendarOperatorActivity() {
      * @return 如果成功移除则返回true，否则false。
      */
     internal fun removeClassTime(classTime: ClassTime): Boolean =
-        if (viewModel.classTimes.size < 2) {
-            Toast.makeText(
-                this,
-                getString(R.string.activity_EditCourse_NoMoreClassTimeObjectToast),
-                Toast.LENGTH_SHORT
-            ).show()
-            false
-        } else if (!viewModel.classTimes.contains(classTime)) {
-            false
-        } else {
-            //滚动到被删除项的前一个
-            val index = viewModel.classTimes.indexOf(classTime)
-            if (index > -1) {
-                viewModel.classTimes.remove(classTime)
-                this.adapter.notifyItemRemoved(index)
-                if (classTime.id != null) {
-                    //当id为空时则说明该对象还未插入数据库
-                    viewModel.removedClassTimes.add(classTime)
+            if (viewModel.classTimes.size < 2) {
+                Toast.makeText(
+                        this,
+                        getString(R.string.activity_EditCourse_NoMoreClassTimeObjectToast),
+                        Toast.LENGTH_SHORT
+                ).show()
+                false
+            } else if (!viewModel.classTimes.contains(classTime)) {
+                false
+            } else {
+                //滚动到被删除项的前一个
+                val index = viewModel.classTimes.indexOf(classTime)
+                if (index > -1) {
+                    viewModel.classTimes.remove(classTime)
+                    this.adapter.notifyItemRemoved(index)
+                    if (classTime.id != null) {
+                        //当id为空时则说明该对象还未插入数据库
+                        viewModel.removedClassTimes.add(classTime)
+                    }
                 }
+
+                true
             }
-
-            true
-        }
-
-    /**
-     * 清除所有输入框的焦点，迫使数据保存。
-     */
-    private fun clearChildViewFocus() {
-        rootRecyclerView.clearFocus()
-    }
 }

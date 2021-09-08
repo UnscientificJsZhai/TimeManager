@@ -12,9 +12,9 @@ import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.data.tables.FormattedTime
 
 internal class TimeTableEditorAdapter(
-    private val viewModel: TimeTableEditorActivityViewModel
+        private val viewModel: TimeTableEditorActivityViewModel
 ) :
-    RecyclerView.Adapter<TimeTableEditorAdapter.ViewHolder>() {
+        RecyclerView.Adapter<TimeTableEditorAdapter.ViewHolder>() {
 
     inner class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
 
@@ -25,7 +25,7 @@ internal class TimeTableEditorAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_time_table_editor, parent, false)
+                .inflate(R.layout.recycler_time_table_editor, parent, false)
         val holder = ViewHolder(view)
 
         val courseTable = viewModel.courseTable
@@ -33,26 +33,26 @@ internal class TimeTableEditorAdapter(
         view.setOnClickListener {
             //获取计时方法
             val is24HourView = Settings.System.getString(
-                parent.context.contentResolver,
-                Settings.System.TIME_12_24
+                    parent.context.contentResolver,
+                    Settings.System.TIME_12_24
             ) == "24"
 
             val formattedTime = FormattedTime(courseTable.timeTable[holder.bindingAdapterPosition])
             val timePickerDialog = TimePickerDialog(
-                parent.context,
-                { _, hourOfDay, minute ->
-                    formattedTime.startH = hourOfDay
-                    formattedTime.startM = minute
+                    parent.context,
+                    { _, hourOfDay, minute ->
+                        formattedTime.startH = hourOfDay
+                        formattedTime.startM = minute
 
-                    //从ViewModel中读取间隔时间
-                    formattedTime.autoSetEndTime(viewModel.duration)
+                        //从ViewModel中读取间隔时间
+                        formattedTime.autoSetEndTime(viewModel.duration)
 
-                    courseTable.timeTable[holder.bindingAdapterPosition] = formattedTime.toString()
-                    this.notifyItemChanged(holder.bindingAdapterPosition)
-                },
-                formattedTime.startH,
-                formattedTime.startM,
-                is24HourView
+                        courseTable.timeTable[holder.bindingAdapterPosition] = formattedTime.toString()
+                        this.notifyItemChanged(holder.bindingAdapterPosition)
+                    },
+                    formattedTime.startH,
+                    formattedTime.startM,
+                    is24HourView
             )
             timePickerDialog.setTitle(R.string.activity_TimeTableEditor_StartTime)
             timePickerDialog.show()
@@ -60,23 +60,23 @@ internal class TimeTableEditorAdapter(
         view.setOnLongClickListener {
             //获取计时方法
             val is24HourView = Settings.System.getString(
-                parent.context.contentResolver,
-                Settings.System.TIME_12_24
+                    parent.context.contentResolver,
+                    Settings.System.TIME_12_24
             ) == "24"
 
             val formattedTime = FormattedTime(courseTable.timeTable[holder.bindingAdapterPosition])
             val timePickerDialog = TimePickerDialog(
-                parent.context,
-                { _, hourOfDay, minute ->
-                    formattedTime.endH = hourOfDay
-                    formattedTime.endM = minute
+                    parent.context,
+                    { _, hourOfDay, minute ->
+                        formattedTime.endH = hourOfDay
+                        formattedTime.endM = minute
 
-                    courseTable.timeTable[holder.bindingAdapterPosition] = formattedTime.toString()
-                    this.notifyItemChanged(holder.bindingAdapterPosition)
-                },
-                formattedTime.endH,
-                formattedTime.endM,
-                is24HourView
+                        courseTable.timeTable[holder.bindingAdapterPosition] = formattedTime.toString()
+                        this.notifyItemChanged(holder.bindingAdapterPosition)
+                    },
+                    formattedTime.endH,
+                    formattedTime.endM,
+                    is24HourView
             )
             timePickerDialog.setTitle(R.string.activity_TimeTableEditor_EndTime)
             timePickerDialog.show()
@@ -94,9 +94,9 @@ internal class TimeTableEditorAdapter(
         holder.titleTextView.setText(R.string.activity_TimeTableEditor_RecyclerItemTitle)
         holder.titleTextView.text = holder.titleTextView.text.toString().format(position + 1)
         holder.startTextView.text =
-            "${timeNumberFormat(formattedTime.startH)}:${timeNumberFormat(formattedTime.startM)}"
+                "${timeNumberFormat(formattedTime.startH)}:${timeNumberFormat(formattedTime.startM)}"
         holder.endTextView.text =
-            "${timeNumberFormat(formattedTime.endH)}:${timeNumberFormat(formattedTime.endM)}"
+                "${timeNumberFormat(formattedTime.endH)}:${timeNumberFormat(formattedTime.endM)}"
     }
 
     override fun getItemCount() = viewModel.courseTable.classesPerDay
@@ -107,9 +107,9 @@ internal class TimeTableEditorAdapter(
      * @param number 要格式化的整型数。
      */
     private fun timeNumberFormat(number: Int) =
-        if (number < 10) {
-            "0$number"
-        } else {
-            number.toString()
-        }
+            if (number < 10) {
+                "0$number"
+            } else {
+                number.toString()
+            }
 }

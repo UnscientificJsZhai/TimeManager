@@ -15,10 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
-import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
-import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility.runIfPermissionGranted
-import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
-import cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
+import cn.unscientificjszhai.timemanager.ui.others.*
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 
@@ -37,7 +34,7 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_current_table_selector)
-        ActivityUtility.setSystemUIAppearance(this)
+        setSystemUIAppearance(this)
         this.timeManagerApplication = application as TimeManagerApplication
 
         this.viewModel =

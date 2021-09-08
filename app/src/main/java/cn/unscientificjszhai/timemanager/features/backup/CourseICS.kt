@@ -104,7 +104,10 @@ class CourseICS(
             //以上是周日为一周开始的情况，当周一为一周开始时，进行以下操作平移周日。
             if (courseTable.weekStart && calendarObject.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
                 //向后平移7天。
-                calendarObject.set(Calendar.WEEK_OF_YEAR, calendarObject.get(Calendar.WEEK_OF_YEAR) + 1)
+                calendarObject.set(
+                    Calendar.WEEK_OF_YEAR,
+                    calendarObject.get(Calendar.WEEK_OF_YEAR) + 1
+                )
             }
 
             calendarObject.get(Calendar.HOUR_OF_DAY) //调用Calendar的complete()方法应用刚才的更新

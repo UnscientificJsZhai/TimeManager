@@ -65,9 +65,9 @@ internal class EditCourseActivityViewModel : ViewModel() {
             if (course?.title?.isBlank() == true) {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
-                        context,
-                        R.string.activity_EditCourse_DataError,
-                        Toast.LENGTH_SHORT
+                            context,
+                            R.string.activity_EditCourse_DataError,
+                            Toast.LENGTH_SHORT
                     ).show()
                 }
                 return@withContext
@@ -76,9 +76,9 @@ internal class EditCourseActivityViewModel : ViewModel() {
             when {
                 course == null -> {
                     Toast.makeText(
-                        context,
-                        R.string.activity_EditCourse_DataError,
-                        Toast.LENGTH_SHORT
+                            context,
+                            R.string.activity_EditCourse_DataError,
+                            Toast.LENGTH_SHORT
                     ).show()
                 }
                 course.id == null -> {
@@ -87,9 +87,9 @@ internal class EditCourseActivityViewModel : ViewModel() {
                         if (!classTime.isLegitimacy(courseTable)) {
                             withContext(Dispatchers.Main) {
                                 Toast.makeText(
-                                    context,
-                                    R.string.activity_EditCourse_DataError,
-                                    Toast.LENGTH_SHORT
+                                        context,
+                                        R.string.activity_EditCourse_DataError,
+                                        Toast.LENGTH_SHORT
                                 ).show()
                             }
                             return@withContext
@@ -98,7 +98,7 @@ internal class EditCourseActivityViewModel : ViewModel() {
 
                     //插入日历表
                     val courseWithClassTimes =
-                        CourseWithClassTimes(course, this@EditCourseActivityViewModel.classTimes)
+                            CourseWithClassTimes(course, this@EditCourseActivityViewModel.classTimes)
                     EventsOperator.addEvent(context, courseTable, courseWithClassTimes)
 
                     //正式开始插入
@@ -121,9 +121,9 @@ internal class EditCourseActivityViewModel : ViewModel() {
                         if (!classTime.isLegitimacy(courseTable)) {
                             withContext(Dispatchers.Main) {
                                 Toast.makeText(
-                                    context,
-                                    R.string.activity_EditCourse_DataError,
-                                    Toast.LENGTH_SHORT
+                                        context,
+                                        R.string.activity_EditCourse_DataError,
+                                        Toast.LENGTH_SHORT
                                 ).show()
                             }
                             return@withContext
@@ -140,7 +140,7 @@ internal class EditCourseActivityViewModel : ViewModel() {
 
                     //修改日历表
                     val courseWithClassTimes =
-                        CourseWithClassTimes(course, this@EditCourseActivityViewModel.classTimes)
+                            CourseWithClassTimes(course, this@EditCourseActivityViewModel.classTimes)
                     EventsOperator.updateEvent(context, courseTable, courseWithClassTimes)
 
                     //写入数据库的Course表
@@ -160,8 +160,8 @@ internal class EditCourseActivityViewModel : ViewModel() {
                     val intent = Intent()
 
                     intent.putExtra(
-                        CourseDetailActivity.EDIT_INTENT_RESULT,
-                        CourseWithClassTimes(course, this@EditCourseActivityViewModel.classTimes)
+                            CourseDetailActivity.EDIT_INTENT_RESULT,
+                            CourseWithClassTimes(course, this@EditCourseActivityViewModel.classTimes)
                     )
                     context.finish()
                 }

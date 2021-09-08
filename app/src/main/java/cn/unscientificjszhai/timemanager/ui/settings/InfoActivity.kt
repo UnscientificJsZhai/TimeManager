@@ -9,7 +9,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import cn.unscientificjszhai.timemanager.R
-import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
+import cn.unscientificjszhai.timemanager.ui.others.setSystemUIAppearance
 
 /**
  * 显示App简介的Activity。
@@ -35,7 +35,7 @@ class InfoActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_info)
 
-        ActivityUtility.setSystemUIAppearance(this)
+        setSystemUIAppearance(this)
 
         this.githubButton = findViewById(R.id.InfoActivity_GitHubButton)
         this.bilibiliButton = findViewById(R.id.InfoActivity_BilibiliButton)
@@ -109,7 +109,7 @@ class InfoActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
             this.parseLibrary -> {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data =
-                    Uri.parse("https://github.com/UnscientificJsZhai/UnscientificCourseParser")
+                        Uri.parse("https://github.com/UnscientificJsZhai/UnscientificCourseParser")
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             }
@@ -121,19 +121,19 @@ class InfoActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
             mailButton -> {
                 Toast.makeText(this, MAIL_ADDRESS, Toast.LENGTH_LONG).show()
                 val clipboardManager =
-                    getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 clipboardManager.setPrimaryClip(ClipData.newPlainText(null, MAIL_ADDRESS))
                 return true
             }
             designerMailButton -> {
                 Toast.makeText(this, LOGO_DESIGNER_MAIL_ADDRESS, Toast.LENGTH_LONG).show()
                 val clipboardManager =
-                    getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 clipboardManager.setPrimaryClip(
-                    ClipData.newPlainText(
-                        null,
-                        LOGO_DESIGNER_MAIL_ADDRESS
-                    )
+                        ClipData.newPlainText(
+                                null,
+                                LOGO_DESIGNER_MAIL_ADDRESS
+                        )
                 )
                 return true
             }

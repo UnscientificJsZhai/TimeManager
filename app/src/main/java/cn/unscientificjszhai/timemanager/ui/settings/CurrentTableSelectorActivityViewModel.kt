@@ -71,10 +71,10 @@ internal class CurrentTableSelectorActivityViewModel(val tableList: LiveData<Lis
         }
     }
 
-    suspend fun deleteCourseTable(context: Activity,courseTable: CourseTable){
+    suspend fun deleteCourseTable(context: Activity, courseTable: CourseTable) {
         val timeManagerApplication = context.application as TimeManagerApplication
 
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             CalendarOperator.deleteCalendarTable(context, courseTable)
 
             val dao =

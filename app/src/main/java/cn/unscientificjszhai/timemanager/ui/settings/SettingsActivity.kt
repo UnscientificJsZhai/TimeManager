@@ -16,8 +16,8 @@ import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.features.backup.BackupOperator
 import cn.unscientificjszhai.timemanager.features.backup.CourseICS
 import cn.unscientificjszhai.timemanager.ui.main.MainActivity
-import cn.unscientificjszhai.timemanager.ui.others.ActivityUtility
 import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
+import cn.unscientificjszhai.timemanager.ui.others.setSystemUIAppearance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -57,29 +57,29 @@ class SettingsActivity : CalendarOperatorActivity() {
         setContentView(R.layout.activity_settings)
 
         //设置SystemUI颜色
-        ActivityUtility.setSystemUIAppearance(this)
+        setSystemUIAppearance(this)
 
         this.timeManagerApplication = application as TimeManagerApplication
         val courseTable by timeManagerApplication
 
         val dataStore = SettingsDataStore(
-            courseTable,
-            timeManagerApplication.getCourseTableDatabase().courseTableDao(),
-            this,
-            timeManagerApplication::updateTableID
+                courseTable,
+                timeManagerApplication.getCourseTableDatabase().courseTableDao(),
+                this,
+                timeManagerApplication::updateTableID
         )
         this.viewModel = ViewModelProvider(
-            this,
-            SettingsActivityViewModel.Factory(dataStore)
+                this,
+                SettingsActivityViewModel.Factory(dataStore)
         )[SettingsActivityViewModel::class.java]
 
         //替换Fragment
 
         this.settingsFragment = SettingsFragment()
         supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.settings, this.settingsFragment!!)
-            .commit()
+                .beginTransaction()
+                .replace(R.id.settings, this.settingsFragment!!)
+                .commit()
 
         //监听数据库变更
         val intentFilter = IntentFilter()
@@ -89,44 +89,44 @@ class SettingsActivity : CalendarOperatorActivity() {
 
         //定义保存备份的逻辑
         this.backupLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == RESULT_OK) {
-                    val uri = it.data?.data
-                    if (uri != null) {
-                        BackupOperator.exportBackup(this, uri)
-                    }
-                }
-            }
-
-        //定义导入备份的逻辑
-        this.importLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == RESULT_OK) {
-                    val uri = it.data?.data
-                    if (uri != null) {
-                        BackupOperator.importBackup(this, uri)
-                    }
-                }
-            }
-
-        //定义导出ICS的逻辑
-        this.exportIcsLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == RESULT_OK) {
-                    val uri = it.data?.data
-                    if (uri != null) {
-                        viewModel.viewModelScope.launch {
-                            val courseICS = withContext(Dispatchers.Default) {
-                                val courseList =
-                                    timeManagerApplication.getCourseDatabase().courseDao()
-                                        .getCourses()
-                                CourseICS(courseList, courseTable)
-                            }
-                            courseICS.writeToFile(this@SettingsActivity, uri)
+                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                    if (it.resultCode == RESULT_OK) {
+                        val uri = it.data?.data
+                        if (uri != null) {
+                            BackupOperator.exportBackup(this, uri)
                         }
                     }
                 }
-            }
+
+        //定义导入备份的逻辑
+        this.importLauncher =
+                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                    if (it.resultCode == RESULT_OK) {
+                        val uri = it.data?.data
+                        if (uri != null) {
+                            BackupOperator.importBackup(this, uri)
+                        }
+                    }
+                }
+
+        //定义导出ICS的逻辑
+        this.exportIcsLauncher =
+                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                    if (it.resultCode == RESULT_OK) {
+                        val uri = it.data?.data
+                        if (uri != null) {
+                            viewModel.viewModelScope.launch {
+                                val courseICS = withContext(Dispatchers.Default) {
+                                    val courseList =
+                                            timeManagerApplication.getCourseDatabase().courseDao()
+                                                    .getCourses()
+                                    CourseICS(courseList, courseTable)
+                                }
+                                courseICS.writeToFile(this@SettingsActivity, uri)
+                            }
+                        }
+                    }
+                }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
