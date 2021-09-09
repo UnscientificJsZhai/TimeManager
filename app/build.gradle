@@ -12,8 +12,8 @@ android {
         applicationId "cn.unscientificjszhai.timemanager"
         minSdkVersion 26
         targetSdkVersion 31
-        versionCode 7
-        versionName "1.2.3"
+        versionCode 8
+        versionName "1.2.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -68,5 +68,5 @@ dependencies {
     //Sqlite的ARM原生包
     implementation files("libs/sqlite-jdbc-3.32.3.3.jar")
 
-    implementation "com.github.UnscientificJsZhai:UnscientificCourseParser:0.0.1-alpha06"
+    implementation "com.github.UnscientificJsZhai:UnscientificCourseParser:0.0.1"
 }

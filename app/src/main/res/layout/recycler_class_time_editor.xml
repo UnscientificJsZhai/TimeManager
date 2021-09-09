@@ -8,10 +8,10 @@
     android:layout_marginTop="6dp"
     android:layout_marginEnd="12dp"
     android:layout_marginBottom="6dp"
+    android:background="@color/CardView_BackgroundColor"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    app:cardMaxElevation="12dp"
-    android:background="@color/CardView_BackgroundColor">
+    app:cardMaxElevation="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -58,8 +58,8 @@
             android:layout_marginEnd="16dp"
             android:background="?attr/selectableItemBackground"
             android:gravity="center_vertical|start"
-            android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
             android:textSize="20sp"
+            android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
             app:layout_constraintBottom_toBottomOf="@+id/WeekImage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/WeekImage"
@@ -78,10 +78,11 @@
 
         <TextView
             android:id="@+id/ClassTimeEditView_DayText"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:text="@string/data_Week0"
+            android:textAlignment="center"
             android:textSize="20sp"
             android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
             app:layout_constraintBottom_toBottomOf="@+id/CalenderImage"
@@ -128,11 +129,11 @@
             android:id="@+id/ClassTimeEditView_FromEditText"
             android:layout_width="36dp"
             android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
             android:inputType="number"
             app:layout_constraintBottom_toBottomOf="@+id/DayImage"
             app:layout_constraintStart_toEndOf="@+id/Text_From"
             app:layout_constraintTop_toTopOf="@+id/DayImage"
-            android:imeOptions="actionNext"
             tools:ignore="Autofill,LabelFor" />
 
         <TextView
@@ -196,9 +197,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/TextInputEditText_BackgroundColor"
-                android:textSize="16sp"
+                android:imeOptions="actionNext"
                 android:inputType="text"
-                android:imeOptions="actionNext"/>
+                android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
@@ -232,9 +233,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/TextInputEditText_BackgroundColor"
-                android:textSize="16sp"
+                android:imeOptions="actionNext"
                 android:inputType="text"
-                android:imeOptions="actionNext" />
+                android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
