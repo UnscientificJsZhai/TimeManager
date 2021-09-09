@@ -13,6 +13,7 @@ import cn.unscientificjszhai.timemanager.data.course.Course
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.data.tables.FormattedTime
+import cn.unscientificjszhai.timemanager.ui.main.fragments.CourseListFragment
 import cn.unscientificjszhai.timemanager.ui.others.ProgressDialog
 import java.io.IOException
 import java.lang.ref.WeakReference

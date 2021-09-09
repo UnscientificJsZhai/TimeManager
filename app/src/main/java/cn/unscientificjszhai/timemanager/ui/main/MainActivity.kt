@@ -1,40 +1,22 @@
 package cn.unscientificjszhai.timemanager.ui.main
 
-import android.Manifest
-import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.net.Uri
 import android.os.Bundle
-import android.view.ContextMenu
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.ProgressBar
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.edit
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.CurrentTimeMarker
-import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
-import cn.unscientificjszhai.timemanager.data.database.CourseDatabase
 import cn.unscientificjszhai.timemanager.ui.WelcomeActivity
-import cn.unscientificjszhai.timemanager.ui.editor.EditCourseActivity
+import cn.unscientificjszhai.timemanager.ui.main.fragments.CourseListFragment
 import cn.unscientificjszhai.timemanager.ui.others.*
-import cn.unscientificjszhai.timemanager.ui.parse.ParseCourseActivity
-import cn.unscientificjszhai.timemanager.ui.settings.SettingsActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.reflect.KProperty
 
@@ -42,7 +24,7 @@ import kotlin.reflect.KProperty
  * 主页Activity。其中的RecyclerView的Adapter参见[CourseAdapter]。
  *
  * @see CourseAdapter
- * @see MainActivityViewModel
+ * @see MainFragmentViewModel
  */
 class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
@@ -74,13 +56,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
     private lateinit var viewModel: MainActivityViewModel
 
-    private lateinit var rootView: CoordinatorLayout
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var recyclerViewAdapter: CourseAdapter
-
-    private lateinit var progressBar: ProgressBar
-
-    private lateinit var courseDatabase: CourseDatabase
+    private lateinit var rootView: FrameLayout
 
     /**
      * 用于处理当前课程表更改事件的广播接收器。
@@ -89,17 +65,22 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
         override fun onReceive(context: Context?, intent: Intent?) {
             if (context is MainActivity) {
-                context.courseDatabase = context.timeManagerApplication.getCourseDatabase()
-                context.viewModel.courseList.removeObservers(this@MainActivity)
-                context.viewModel.courseList = context.courseDatabase.courseDao().getLiveCourses()
-                context.viewModel.courseList.observe(this@MainActivity) { courseList ->
-                    bindData(courseList)
-                }
+                val fragment =
+                    supportFragmentManager.findFragmentById(R.id.SingleFragmentActivity_RootView)
+                if (fragment is CourseListFragment && fragment.lifecycle.currentState == Lifecycle.State.STARTED) {
+                    fragment.viewModel.courseList.removeObservers(this@MainActivity)
+                    fragment.viewModel.courseList =
+                        context.timeManagerApplication.getCourseDatabase().courseDao()
+                            .getLiveCourses()
+                    fragment.viewModel.courseList.observe(this@MainActivity) { courseList ->
+                        fragment.bindData(courseList)
+                    }
 
-                //更新NowTimeTagger
-                val courseTable by context.timeManagerApplication
-                context.currentTimeMarker.setCourseTable(courseTable)
-                updateActionBarLabel()
+                    //更新NowTimeTagger
+                    val courseTable by context.timeManagerApplication
+                    context.currentTimeMarker.setCourseTable(courseTable)
+                    fragment.updateActionBarLabel()
+                }
             }
         }
     }
@@ -123,7 +104,13 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
                 ) {
                     if (context is MainActivity) {
                         //如果为只显示今天则更新数据集
-                        bindData(viewModel.courseList.value ?: ArrayList())
+                        val fragment =
+                            context.supportFragmentManager.findFragmentById(R.id.SingleFragmentActivity_RootView)
+                        if (fragment is CourseListFragment && fragment.lifecycle.currentState == Lifecycle.State.STARTED) {
+                            fragment.run {
+                                bindData(viewModel.courseList.value ?: ArrayList())
+                            }
+                        }
                     }
                 }
 
@@ -148,45 +135,24 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
             return
         }
 
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_single_fragment)
 
         //设置SystemUI颜色
         setSystemUIAppearance(this)
 
-        this.courseDatabase = this.timeManagerApplication.getCourseDatabase()
+        this.viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
 
-        //初始化ViewModel
-        this.viewModel =
-            ViewModelProvider(
-                this,
-                MainActivityViewModel.Factory(courseDatabase.courseDao())
-            )[MainActivityViewModel::class.java]
+        this.rootView = findViewById(R.id.SingleFragmentActivity_RootView)
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.SingleFragmentActivity_RootView, CourseListFragment())
+                .commit()
+        }
 
         val sharedPreferences =
             getSharedPreferences(TimeManagerApplication.INITIAL, Context.MODE_PRIVATE)
         viewModel.showTodayOnly = sharedPreferences.getBoolean(SHOW_TODAY_ONLY_KEY, false)
-
-
-        this.progressBar = findViewById(R.id.MainActivity_ProgressBar)
-        this.rootView = findViewById(R.id.MainActivity_RootView)
-
-        //初始化列表
-        this.recyclerView = findViewById(R.id.MainActivity_RootRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        this.recyclerViewAdapter = CourseAdapter(this)
-        recyclerView.adapter = this.recyclerViewAdapter
-        registerForContextMenu(recyclerView)
-
-        //监听LiveData变更
-        viewModel.courseList.observe(this) { courseList ->
-            bindData(courseList)
-        }
-
-        findViewById<FloatingActionButton>(R.id.MainActivity_FloatingActionButton)
-            .setOnClickListener {
-                EditCourseActivity.startThisActivity(this)
-            }
 
         //监听数据库变更
         this.databaseChangeReceiver = DatabaseChangeReceiver()
@@ -207,16 +173,6 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        //更新ActionBar的内容。
-        updateActionBarLabel()
-        //如果学期未开始就不要只显示今天。
-        if (currentTimeMarker.getWeekNumber() == 0) {
-            viewModel.showTodayOnly = false
-        }
-    }
-
     override fun onStop() {
         super.onStop()
         //保存是否只显示今天的情况
@@ -226,144 +182,6 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
             putBoolean(SHOW_TODAY_ONLY_KEY, viewModel.showTodayOnly)
             commit()
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main_activity, menu)
-        return true
-    }
-
-    override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
-        menu.findItem(R.id.MainActivity_ShowTodayOnly).apply {
-            isEnabled = currentTimeMarker.getWeekNumber() != 0
-            isChecked = viewModel.showTodayOnly
-        }
-        menu.findItem(R.id.MainActivity_Parse).isVisible = viewModel.isListEmpty()
-        return super.onMenuOpened(featureId, menu)
-    }
-
-    override fun onCreateContextMenu(
-        menu: ContextMenu?,
-        v: View?,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        menuInflater.inflate(R.menu.context_main, menu)
-        if (v is RecyclerView && menuInfo is RecyclerViewWithContextMenu.PositionMenuInfo) {
-            try {
-                val courseWithClassTimes =
-                    (recyclerView.adapter as CourseAdapter).currentList[menuInfo.position]
-                menu?.setHeaderTitle(courseWithClassTimes.course.title)
-            } catch (e: NullPointerException) {
-                menu?.close()
-            }
-        } else {
-            menu?.close()
-        }
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        val info = item.menuInfo
-        if (info is RecyclerViewWithContextMenu.PositionMenuInfo) {
-            val courseWithClassTimes =
-                (recyclerView.adapter as CourseAdapter).currentList[info.position]
-
-            when (item.itemId) {
-                R.id.MainActivity_Edit -> {
-                    if (courseWithClassTimes != null) {
-                        EditCourseActivity.startThisActivity(this, courseWithClassTimes)
-                    } else {
-                        Toast.makeText(
-                            this,
-                            R.string.activity_CourseDetail_DataError,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                R.id.MainActivity_Delete -> {
-                    AlertDialog.Builder(this)
-                        .setTitle(R.string.activity_CourseDetail_DeleteConfirm)
-                        .setNegativeButton(R.string.common_cancel) { dialog, _ ->
-                            dialog?.dismiss()
-                        }
-                        .setPositiveButton(R.string.common_confirm) { dialog, _ ->
-
-                            runIfPermissionGranted(Manifest.permission.WRITE_CALENDAR, {
-                                dialog.dismiss()
-                                AlertDialog.Builder(this)
-                                    .setTitle(R.string.activity_WelcomeActivity_AskPermissionTitle)
-                                    .setMessage(R.string.activity_CourseDetail_AskPermissionText)
-                                    .setNegativeButton(R.string.common_cancel) { permissionDialog, _ ->
-                                        //拒绝授予日历权限。
-                                        permissionDialog.dismiss()
-                                    }
-                                    .setPositiveButton(R.string.common_confirm) { permissionDialog, _ ->
-                                        //同意授予日历权限，跳转到系统设置进行授权。
-                                        this@MainActivity.jumpToSystemPermissionSettings()
-                                        permissionDialog.dismiss()
-                                    }
-                            }) {
-                                if (courseWithClassTimes != null) {
-                                    viewModel.viewModelScope.launch {
-                                        MainActivityViewModel.deleteCourse(
-                                            this@MainActivity,
-                                            courseWithClassTimes
-                                        )
-                                        val snackBar = Snackbar.make(
-                                            rootView,
-                                            R.string.activity_Main_DeletedMessage,
-                                            Snackbar.LENGTH_LONG
-                                        )
-                                        snackBar.setAction(R.string.common_undo) {
-                                            viewModel.viewModelScope.launch {
-                                                MainActivityViewModel.undoDeleteCourse(
-                                                    this@MainActivity,
-                                                    courseWithClassTimes
-                                                )
-                                            }
-                                        }
-                                        snackBar.show()
-                                    }
-                                } else {
-                                    Toast.makeText(
-                                        this,
-                                        R.string.activity_CourseDetail_DataError,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                dialog.dismiss()
-                            }
-                        }.create().show()
-                }
-            }
-        }
-        return super.onContextItemSelected(item)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.MainActivity_Settings -> {
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.MainActivity_ShowTodayOnly -> {
-                viewModel.showTodayOnly = !item.isChecked
-                bindData(viewModel.courseList.value ?: ArrayList())
-                updateActionBarLabel()
-            }
-            R.id.MainActivity_JumpToCalendar -> {
-                Calendar.getInstance().timeInMillis
-                val startCalendarIntent = Intent(Intent.ACTION_VIEW).apply {
-                    data =
-                        Uri.parse("content://com.android.calendar/time/${Calendar.getInstance().timeInMillis}")
-                }
-                startActivity(startCalendarIntent)
-            }
-            R.id.MainActivity_Parse -> {
-                startActivity(Intent(this, ParseCourseActivity::class.java))
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {
@@ -377,80 +195,9 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
     }
 
     /**
-     * 更新列表数据的方法。会判断是否仅显示今天的课程，然后传入正确的列表给[CourseAdapter]。
-     *
-     * @param courseList 完整的Course列表。
-     */
-    private fun bindData(courseList: List<CourseWithClassTimes>) {
-        progressBar.visibility = View.GONE
-        if (viewModel.showTodayOnly) {
-            recyclerViewAdapter.submitList(this.currentTimeMarker.getTodayCourseList(courseList))
-        } else {
-            recyclerViewAdapter.submitList(courseList)
-        }
-    }
-
-    /**
      * 查询是否只显示今天，提供给Adapter使用。
      *
      * @return 是否只显示今天。
      */
     internal fun isShowTodayOnly(): Boolean = this.viewModel.showTodayOnly
-
-    /**
-     * 更新ActionBar的标题。
-     */
-    private fun updateActionBarLabel() {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val option = sharedPreferences.getString("showOnMainActivity", "table")
-        val stringBuilder = StringBuilder()
-        val courseTable by timeManagerApplication
-        when (option) {
-            "table" -> stringBuilder.append(courseTable.name)
-            "today" -> {
-
-                /**
-                 * 用来获取当前是星期几的局部函数。
-                 *
-                 * @return 表示星期几的字符串，可以直接用于显示。
-                 */
-                fun dayOfWeek(): String = getString(
-                    when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
-                        Calendar.MONDAY -> R.string.data_Week1
-                        Calendar.TUESDAY -> R.string.data_Week2
-                        Calendar.WEDNESDAY -> R.string.data_Week3
-                        Calendar.THURSDAY -> R.string.data_Week4
-                        Calendar.FRIDAY -> R.string.data_Week5
-                        Calendar.SATURDAY -> R.string.data_Week6
-                        else -> R.string.data_Week0
-                    }
-                )
-
-                val weekNumber = currentTimeMarker.getWeekNumber()
-                if (weekNumber == 0) {
-                    stringBuilder.append(getString(R.string.activity_Main_NotStartYet))
-                } else {
-                    stringBuilder.append(
-                        getString(R.string.view_ClassTimeEdit_WeekItem_ForKotlin)
-                            .format(currentTimeMarker.getWeekNumber())
-                    )
-                        .append(" ")
-                        .append(dayOfWeek())
-                        .append(" ")
-                        .append(
-                            getString(
-                                if (viewModel.showTodayOnly) {
-                                    R.string.activity_Main_ActionBarLabel_TodayOnly
-                                } else {
-                                    R.string.activity_Main_ActionBarLabel_All
-                                }
-                            )
-                        )
-                }
-            }
-        }
-        supportActionBar?.let { actionBar ->
-            actionBar.title = stringBuilder.toString()
-        }
-    }
 }

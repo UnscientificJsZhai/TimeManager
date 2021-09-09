@@ -22,7 +22,7 @@ class ParseCourseActivity : CalendarOperatorActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_parse_course)
+        setContentView(R.layout.activity_single_fragment)
 
         setSystemUIAppearance(this)
 
@@ -31,7 +31,7 @@ class ParseCourseActivity : CalendarOperatorActivity() {
         if (savedInstanceState == null) {
             //旋转屏幕时不重新进入ParserListFragment
             supportFragmentManager.beginTransaction()
-                .replace(R.id.ParseCourseActivity_RootView, ParserListFragment())
+                .replace(R.id.SingleFragmentActivity_RootView, ParserListFragment())
                 .commit()
         }
     }
@@ -54,7 +54,7 @@ class ParseCourseActivity : CalendarOperatorActivity() {
     }
 
     override fun onBackPressed() {
-        val fragment = supportFragmentManager.findFragmentById(R.id.ParseCourseActivity_RootView)
+        val fragment = supportFragmentManager.findFragmentById(R.id.SingleFragmentActivity_RootView)
         if (fragment is WebViewFragment && fragment.canWebPageBack()) {
             return
         }

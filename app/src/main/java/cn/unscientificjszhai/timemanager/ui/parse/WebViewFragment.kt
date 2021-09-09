@@ -173,7 +173,7 @@ class WebViewFragment : Fragment() {
 
             //启动第三Fragment
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.ParseCourseActivity_RootView, CourseListFragment.newInstance(list))
+                .replace(R.id.SingleFragmentActivity_RootView, CourseListFragment.newInstance(list))
                 .addToBackStack(null)
                 .commit()
         }

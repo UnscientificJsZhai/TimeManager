@@ -76,7 +76,7 @@ class ParserListFragment : Fragment() {
             //启动第二Fragment
             val webViewFragment = WebViewFragment.newInstance(beanName)
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.ParseCourseActivity_RootView, webViewFragment)
+                .replace(R.id.SingleFragmentActivity_RootView, webViewFragment)
                 .addToBackStack(null)
                 .commit()
         }
