@@ -93,6 +93,7 @@
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/Button_CourseDetailButtonColor"
         android:text="@string/activity_CourseDetail_Delete"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

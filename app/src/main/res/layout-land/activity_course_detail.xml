@@ -96,6 +96,7 @@
         android:layout_marginEnd="16dp"
         android:backgroundTint="@color/Button_CourseDetailButtonColor"
         android:text="@string/activity_CourseDetail_Delete"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/scrollView2"
