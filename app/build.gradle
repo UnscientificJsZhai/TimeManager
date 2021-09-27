@@ -56,8 +56,8 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
 
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0-alpha03"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0-beta01"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0"
 
     def room_version = "2.3.0"
@@ -68,5 +68,5 @@ dependencies {
     //Sqlite的ARM原生包
     implementation files("libs/sqlite-jdbc-3.32.3.3.jar")
 
-    implementation "com.github.UnscientificJsZhai:UnscientificCourseParser:0.0.1"
+    implementation "com.github.UnscientificJsZhai:UnscientificCourseParser:1.0.0-alpha01"
 }

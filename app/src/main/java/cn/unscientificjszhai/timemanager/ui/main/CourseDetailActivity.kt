@@ -171,7 +171,7 @@ class CourseDetailActivity : AppCompatActivity() {
                         if (courseWithClassTimes != null) {
                             delete = true
                             viewModel.viewModelScope.launch {
-                                MainFragmentViewModel.deleteCourse(
+                                MainActivityViewModel.deleteCourse(
                                     this@CourseDetailActivity,
                                     courseWithClassTimes
                                 )

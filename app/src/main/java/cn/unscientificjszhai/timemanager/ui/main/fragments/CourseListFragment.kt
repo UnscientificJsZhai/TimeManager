@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +22,6 @@ import cn.unscientificjszhai.timemanager.ui.editor.EditCourseActivity
 import cn.unscientificjszhai.timemanager.ui.main.CourseAdapter
 import cn.unscientificjszhai.timemanager.ui.main.MainActivity
 import cn.unscientificjszhai.timemanager.ui.main.MainActivityViewModel
-import cn.unscientificjszhai.timemanager.ui.main.MainFragmentViewModel
 import cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
 import cn.unscientificjszhai.timemanager.ui.others.jumpToSystemPermissionSettings
 import cn.unscientificjszhai.timemanager.ui.others.runIfPermissionGranted
@@ -36,8 +34,7 @@ import java.util.*
 
 class CourseListFragment : Fragment() {
 
-    internal lateinit var viewModel: MainFragmentViewModel
-    private val activityViewModel: MainActivityViewModel by activityViewModels()
+    internal val viewModel: MainActivityViewModel by activityViewModels()
 
     private lateinit var rootView: CoordinatorLayout
     private lateinit var recyclerView: RecyclerView
@@ -48,14 +45,6 @@ class CourseListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
-        val application = requireActivity().application as TimeManagerApplication
-        val courseDatabase = application.getCourseDatabase()
-        this.viewModel =
-            ViewModelProvider(
-                this,
-                MainFragmentViewModel.Factory(courseDatabase.courseDao())
-            )[MainFragmentViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -79,11 +68,6 @@ class CourseListFragment : Fragment() {
                 EditCourseActivity.startThisActivity(requireContext())
             }
 
-        //监听LiveData变更
-        this.viewModel.courseList.observe(viewLifecycleOwner) {
-            bindData(it)
-        }
-
         return view
     }
 
@@ -98,7 +82,7 @@ class CourseListFragment : Fragment() {
 
         menu.findItem(R.id.MainActivity_ShowTodayOnly).apply {
             isEnabled = currentTimeMarker.getWeekNumber() != 0
-            isChecked = activityViewModel.showTodayOnly
+            isChecked = viewModel.showTodayOnly
         }
         menu.findItem(R.id.MainActivity_Parse).isVisible = viewModel.isListEmpty()
     }
@@ -110,7 +94,7 @@ class CourseListFragment : Fragment() {
                 startActivity(intent)
             }
             R.id.MainActivity_ShowTodayOnly -> {
-                activityViewModel.showTodayOnly = !item.isChecked
+                viewModel.showTodayOnly = !item.isChecked
                 bindData(viewModel.courseList.value ?: ArrayList())
                 updateActionBarLabel()
             }
@@ -194,7 +178,7 @@ class CourseListFragment : Fragment() {
                                 }) {
                                 if (courseWithClassTimes != null) {
                                     viewModel.viewModelScope.launch {
-                                        MainFragmentViewModel.deleteCourse(
+                                        MainActivityViewModel.deleteCourse(
                                             requireActivity(),
                                             courseWithClassTimes
                                         )
@@ -205,7 +189,7 @@ class CourseListFragment : Fragment() {
                                         )
                                         snackBar.setAction(R.string.common_undo) {
                                             viewModel.viewModelScope.launch {
-                                                MainFragmentViewModel.undoDeleteCourse(
+                                                MainActivityViewModel.undoDeleteCourse(
                                                     requireActivity(),
                                                     courseWithClassTimes
                                                 )
@@ -237,7 +221,7 @@ class CourseListFragment : Fragment() {
     fun bindData(courseList: List<CourseWithClassTimes>) {
         val currentTimeMarker by requireActivity() as MainActivity
         progressBar.visibility = View.GONE
-        if (activityViewModel.showTodayOnly) {
+        if (viewModel.showTodayOnly) {
             recyclerViewAdapter.submitList(currentTimeMarker.getTodayCourseList(courseList))
         } else {
             recyclerViewAdapter.submitList(courseList)
@@ -245,12 +229,22 @@ class CourseListFragment : Fragment() {
     }
 
     override fun onStart() {
-        val currentTimeMarker by requireActivity() as MainActivity
         super.onStart()
+        val currentTimeMarker by requireActivity() as MainActivity
         updateActionBarLabel()
         if (currentTimeMarker.getWeekNumber() == 0) {
-            activityViewModel.showTodayOnly = false
+            viewModel.showTodayOnly = false
         }
+
+        //监听LiveData变更
+        this.viewModel.courseList.observe(viewLifecycleOwner) {
+            bindData(it)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.courseList.removeObservers(viewLifecycleOwner) //每次暂停都移除监听
     }
 
     /**
@@ -297,7 +291,7 @@ class CourseListFragment : Fragment() {
                         .append(" ")
                         .append(
                             getString(
-                                if (activityViewModel.showTodayOnly) {
+                                if (viewModel.showTodayOnly) {
                                     R.string.activity_Main_ActionBarLabel_TodayOnly
                                 } else {
                                     R.string.activity_Main_ActionBarLabel_All
@@ -307,6 +301,6 @@ class CourseListFragment : Fragment() {
                 }
             }
         }
-        requireActivity().actionBar?.title = stringBuilder.toString()
+        (requireActivity() as MainActivity).updateLabel(stringBuilder.toString())
     }
 }

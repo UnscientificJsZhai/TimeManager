@@ -5,6 +5,7 @@ import org.junit.Test
 import java.util.*
 
 class WeekDataTest {
+
     @Test
     fun changeTest() {
         val classTime = ClassTime()

@@ -1,7 +1,6 @@
 package cn.unscientificjszhai.timemanager.ui.parse
 
 import androidx.lifecycle.ViewModel
-import com.github.unscientificjszhai.unscientificcourseparser.core.factory.HardcodeScanner
 import com.github.unscientificjszhai.unscientificcourseparser.core.factory.ParserFactory
 
 /**
@@ -12,6 +11,6 @@ import com.github.unscientificjszhai.unscientificcourseparser.core.factory.Parse
 internal class ParseCourseActivityViewModel : ViewModel() {
 
     val parserFactory by lazy {
-        ParserFactory(HardcodeScanner())
+        ParserFactory()
     }
 }

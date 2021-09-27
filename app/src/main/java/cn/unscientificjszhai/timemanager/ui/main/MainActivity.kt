@@ -24,7 +24,7 @@ import kotlin.reflect.KProperty
  * 主页Activity。其中的RecyclerView的Adapter参见[CourseAdapter]。
  *
  * @see CourseAdapter
- * @see MainFragmentViewModel
+ * @see MainActivityViewModel
  */
 class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
@@ -68,10 +68,9 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
                 val fragment =
                     supportFragmentManager.findFragmentById(R.id.SingleFragmentActivity_RootView)
                 if (fragment is CourseListFragment && fragment.lifecycle.currentState == Lifecycle.State.STARTED) {
-                    fragment.viewModel.courseList.removeObservers(this@MainActivity)
-                    fragment.viewModel.courseList =
-                        context.timeManagerApplication.getCourseDatabase().courseDao()
-                            .getLiveCourses()
+                    fragment.viewModel.courseList.removeObservers(fragment.viewLifecycleOwner)
+                    viewModel.courseList = context.timeManagerApplication
+                        .getCourseDatabase().courseDao().getLiveCourses() //更新ViewModel中的LiveData
                     fragment.viewModel.courseList.observe(this@MainActivity) { courseList ->
                         fragment.bindData(courseList)
                     }
@@ -80,6 +79,9 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
                     val courseTable by context.timeManagerApplication
                     context.currentTimeMarker.setCourseTable(courseTable)
                     fragment.updateActionBarLabel()
+                } else {
+                    viewModel.courseList = context.timeManagerApplication
+                        .getCourseDatabase().courseDao().getLiveCourses() //更新ViewModel中的LiveData
                 }
             }
         }
@@ -140,10 +142,16 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
         //设置SystemUI颜色
         setSystemUIAppearance(this)
 
-        this.viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
+        val courseDatabase = timeManagerApplication.getCourseDatabase()
+        this.viewModel =
+            ViewModelProvider(
+                this,
+                MainActivityViewModel.Factory(courseDatabase.courseDao())
+            )[MainActivityViewModel::class.java]
 
         this.rootView = findViewById(R.id.SingleFragmentActivity_RootView)
 
+        //加载首个Fragment
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.SingleFragmentActivity_RootView, CourseListFragment())
@@ -171,6 +179,15 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
             Toast.makeText(this, R.string.activity_Main_GuideToast, Toast.LENGTH_LONG).show()
             sharedPreferences.edit().putBoolean(SHOW_GUIDE_KEY, true).apply()
         }
+    }
+
+    /**
+     * 更新主界面的ActionBar的Label。
+     *
+     * @param label 新的label。
+     */
+    fun updateLabel(label: String) {
+        supportActionBar?.title = label
     }
 
     override fun onStop() {
