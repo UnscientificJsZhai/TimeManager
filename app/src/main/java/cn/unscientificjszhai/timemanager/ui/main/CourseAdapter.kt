@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -64,8 +66,17 @@ internal class CourseAdapter(private val activity: MainActivity) :
 
         view.setOnClickListener {
             val course = getItem(holder.bindingAdapterPosition)
+            holder.titleText.transitionName = "CourseTitle"
+            val option = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                activity,
+                Pair(holder.titleText, "CourseTitle")
+            )
 
-            CourseDetailActivity.startThisActivity(view.context, course.course.id ?: -1)
+            CourseDetailActivity.startThisActivity(
+                view.context,
+                course.course.id ?: -1,
+                option.toBundle()
+            )
         }
         return holder
     }

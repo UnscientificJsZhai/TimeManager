@@ -53,6 +53,7 @@
     <string name="activity_CourseDetail_DataError">数据异常，请重新尝试</string>
     <string name="activity_CourseDetail_WeekFormatText">从%d到%d周</string>
     <string name="activity_CourseDetail_LessonNumberFormatText">%s节课</string>
+    <string name="activity_CourseDetail_Label">课程详情</string>
     <string name="activity_Welcome">欢迎使用</string>
     <string name="activity_Welcome_StartButton">开始</string>
     <string name="activity_Welcome_PromptText">输入课程表的名称</string>

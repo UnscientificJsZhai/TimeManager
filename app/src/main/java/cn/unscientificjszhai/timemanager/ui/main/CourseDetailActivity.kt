@@ -5,10 +5,12 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cn.unscientificjszhai.timemanager.R
@@ -20,6 +22,7 @@ import cn.unscientificjszhai.timemanager.data.dao.CourseDao
 import cn.unscientificjszhai.timemanager.ui.editor.EditCourseActivity
 import cn.unscientificjszhai.timemanager.ui.others.jumpToSystemPermissionSettings
 import cn.unscientificjszhai.timemanager.ui.others.runIfPermissionGranted
+import cn.unscientificjszhai.timemanager.ui.others.setSystemUIAppearance
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -39,12 +42,13 @@ class CourseDetailActivity : AppCompatActivity() {
          *
          * @param context 上下文。
          * @param courseId 数据对象。
+         * @param option 动画数据。
          */
         @JvmStatic
-        fun startThisActivity(context: Context, courseId: Long) {
+        fun startThisActivity(context: Context, courseId: Long, option: Bundle?) {
             val intent = Intent(context, CourseDetailActivity::class.java)
             intent.putExtra(INTENT_EXTRA_COURSE, courseId)
-            context.startActivity(intent)
+            ActivityCompat.startActivity(context, intent, option)
         }
 
         /**
@@ -80,6 +84,8 @@ class CourseDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course_detail)
+
+        setSystemUIAppearance(this)
 
         this.timeManagerApplication = application as TimeManagerApplication
         this.courseDao = this.timeManagerApplication.getCourseDatabase().courseDao()
@@ -189,6 +195,16 @@ class CourseDetailActivity : AppCompatActivity() {
                 }.show()
         }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
 
     /**
      * 生成第一行描述性文字。
