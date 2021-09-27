@@ -177,7 +177,7 @@
     <string name="activity_ParseCourseActivity_Label">从教务系统导入</string>
     <string name="activity_ParseCourseActivity_HelpToast">当网页显示出课程表并加载完成后点击完成按钮来解析</string>
     <string name="fragment_ParserListFragment_ParserListInfo">关于教务系统解析</string>
-    <string name="fragment_ParserListFragment_ParserListMessage">本应用教务系统解析器基于该开源项目：\nUnscientificCourseParser\n如有问题，可到GitHub提交问题。\n当前适配器版本：\n1.0.0-alpha</string>
+    <string name="fragment_ParserListFragment_ParserListMessage">本应用教务系统解析器基于该开源项目：\nUnscientificCourseParser\n如有问题，可到GitHub提交问题。\n当前适配器版本：\n1.0.0-alpha01</string>
     <string name="fragment_ParserListFragment_DialogNegativeButton">关闭</string>
     <string name="fragment_ParserListFragment_DialogPositiveButton">前往GitHub</string>
     <string name="fragment_CourseListFragment_ClassTimeDescription">包含%d个上课时间段</string>

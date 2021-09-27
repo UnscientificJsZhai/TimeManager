@@ -205,6 +205,10 @@ class CourseDetailActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
+
 
     /**
      * 生成第一行描述性文字。

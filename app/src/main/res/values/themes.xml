@@ -29,7 +29,6 @@
         <item name="android:windowActivityTransitions">true</item>
 
         <item name="android:windowSharedElementEnterTransition">@transition/course_detail_transition</item>
-        <item name="android:windowSharedElementExitTransition">@transition/course_detail_transition</item>
     </style>
 
     <style name="Theme.TimeManager.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert" />
