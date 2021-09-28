@@ -17,6 +17,7 @@ import cn.unscientificjszhai.timemanager.data.CurrentTimeMarker
 import cn.unscientificjszhai.timemanager.ui.WelcomeActivity
 import cn.unscientificjszhai.timemanager.ui.main.fragments.CourseListFragment
 import cn.unscientificjszhai.timemanager.ui.others.*
+import cn.unscientificjszhai.timemanager.util.setSystemUIAppearance
 import java.util.*
 import kotlin.reflect.KProperty
 

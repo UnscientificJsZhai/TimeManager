@@ -11,24 +11,24 @@ import cn.unscientificjszhai.timemanager.data.course.Course
 import com.google.android.material.textfield.TextInputEditText
 
 internal class EditCourseHeaderAdapter(private val course: Course) :
-        RecyclerView.Adapter<EditCourseHeaderAdapter.HeaderViewHolder>() {
+    RecyclerView.Adapter<EditCourseHeaderAdapter.HeaderViewHolder>() {
 
     class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val constraintLayout =
-                view.findViewById<ConstraintLayout>(R.id.widget_ClassTImeEditor_RootLayout)
+            view.findViewById<ConstraintLayout>(R.id.widget_ClassTImeEditor_RootLayout)
 
         val titleEditText: TextInputEditText =
-                constraintLayout.findViewById(R.id.EditCourseActivity_TitleEditText)
+            constraintLayout.findViewById(R.id.EditCourseActivity_TitleEditText)
         val creditEditText: TextInputEditText =
-                constraintLayout.findViewById(R.id.EditCourseActivity_CreditEditText)
+            constraintLayout.findViewById(R.id.EditCourseActivity_CreditEditText)
         val descriptionEditText: EditText =
-                constraintLayout.findViewById(R.id.EditCourseActivity_DescriptionEditText)
+            constraintLayout.findViewById(R.id.EditCourseActivity_DescriptionEditText)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeaderViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.widget_course_editor, parent, false)
+            .inflate(R.layout.widget_course_editor, parent, false)
         val viewHolder = HeaderViewHolder(view)
 
         viewHolder.apply {

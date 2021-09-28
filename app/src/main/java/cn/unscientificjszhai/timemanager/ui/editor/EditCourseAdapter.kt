@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.data.course.ClassTime
 import cn.unscientificjszhai.timemanager.ui.others.StaticViewHeaderAdapter
+import cn.unscientificjszhai.timemanager.util.getWeekDescriptionString
 
 /**
  * ClassTime编辑器的适配器。
@@ -29,10 +30,10 @@ import cn.unscientificjszhai.timemanager.ui.others.StaticViewHeaderAdapter
  * @see EditCourseActivity
  */
 internal class EditCourseAdapter(
-        private val classTimes: ArrayList<ClassTime>,
-        private val maxWeeks: Int
+    private val classTimes: ArrayList<ClassTime>,
+    private val maxWeeks: Int
 ) :
-        RecyclerView.Adapter<EditCourseAdapter.ViewHolder>() {
+    RecyclerView.Adapter<EditCourseAdapter.ViewHolder>() {
 
     companion object {
 
@@ -52,73 +53,73 @@ internal class EditCourseAdapter(
         val startEditText: EditText = rootView.findViewById(R.id.ClassTimeEditView_FromEditText)
         val endEditText: EditText = rootView.findViewById(R.id.ClassTimeEditView_ToEditText)
         val teacherEditText: EditText =
-                rootView.findViewById(R.id.ClassTimeEditView_TeacherNameEditText)
+            rootView.findViewById(R.id.ClassTimeEditView_TeacherNameEditText)
         val locationEditText: EditText =
-                rootView.findViewById(R.id.ClassTimeEditView_LocationEditText)
+            rootView.findViewById(R.id.ClassTimeEditView_LocationEditText)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         val context = parent.context
         val view = LayoutInflater.from(context)
-                .inflate(R.layout.recycler_class_time_editor, parent, false)
+            .inflate(R.layout.recycler_class_time_editor, parent, false)
         val holder = ViewHolder(view)
 
         //初始化横向选择条
         holder.apply {
             daySeekBar.setOnSeekBarChangeListener(
-                    object : SeekBar.OnSeekBarChangeListener {
+                object : SeekBar.OnSeekBarChangeListener {
 
-                        override fun onProgressChanged(
-                                seekBar: SeekBar?,
-                                progress: Int,
-                                fromUser: Boolean
-                        ) {
-                            dayText.text = when (progress) {
-                                1 -> context.getString(R.string.data_Week1)
-                                2 -> context.getString(R.string.data_Week2)
-                                3 -> context.getString(R.string.data_Week3)
-                                4 -> context.getString(R.string.data_Week4)
-                                5 -> context.getString(R.string.data_Week5)
-                                6 -> context.getString(R.string.data_Week6)
-                                else -> context.getString(R.string.data_Week0)
-                            }
-
-                            //创建振动效果
-                            if (fromUser) {
-                                when {
-                                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-                                        val manager =
-                                                context.getSystemService(Service.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-                                        val effect =
-                                                VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
-                                        manager.defaultVibrator.vibrate(effect)
-                                    }
-                                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && Build.VERSION.SDK_INT < Build.VERSION_CODES.S -> {
-                                        @Suppress("DEPRECATION")
-                                        (context.getSystemService(Service.VIBRATOR_SERVICE) as Vibrator).vibrate(
-                                                VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
-                                        )
-                                    }
-                                    else -> {
-                                        @Suppress("DEPRECATION")
-                                        (context.getSystemService(Service.VIBRATOR_SERVICE) as Vibrator).vibrate(
-                                                VibrationEffect.createOneShot(
-                                                        VIBRATION_LENGTH,
-                                                        VIBRATION_STRENGTH
-                                                )
-                                        )
-                                    }
-                                }
-                            }
-
-                            holder.classTime.whichDay = progress
+                    override fun onProgressChanged(
+                        seekBar: SeekBar?,
+                        progress: Int,
+                        fromUser: Boolean
+                    ) {
+                        dayText.text = when (progress) {
+                            1 -> context.getString(R.string.data_Week1)
+                            2 -> context.getString(R.string.data_Week2)
+                            3 -> context.getString(R.string.data_Week3)
+                            4 -> context.getString(R.string.data_Week4)
+                            5 -> context.getString(R.string.data_Week5)
+                            6 -> context.getString(R.string.data_Week6)
+                            else -> context.getString(R.string.data_Week0)
                         }
 
-                        override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                        //创建振动效果
+                        if (fromUser) {
+                            when {
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                                    val manager =
+                                        context.getSystemService(Service.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+                                    val effect =
+                                        VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
+                                    manager.defaultVibrator.vibrate(effect)
+                                }
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && Build.VERSION.SDK_INT < Build.VERSION_CODES.S -> {
+                                    @Suppress("DEPRECATION")
+                                    (context.getSystemService(Service.VIBRATOR_SERVICE) as Vibrator).vibrate(
+                                        VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
+                                    )
+                                }
+                                else -> {
+                                    @Suppress("DEPRECATION")
+                                    (context.getSystemService(Service.VIBRATOR_SERVICE) as Vibrator).vibrate(
+                                        VibrationEffect.createOneShot(
+                                            VIBRATION_LENGTH,
+                                            VIBRATION_STRENGTH
+                                        )
+                                    )
+                                }
+                            }
+                        }
 
-                        override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+                        holder.classTime.whichDay = progress
                     }
+
+                    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+                    override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+                }
             )
         }
 
@@ -135,38 +136,38 @@ internal class EditCourseAdapter(
             Log.d("WeekText", "tapped")
 
             val items: Array<String> =
-                    Array(length) { item ->
-                        context.getString(R.string.view_ClassTimeEdit_WeekItem_ForKotlin)
-                                .format(item + 1)//索引对齐
-                    }
+                Array(length) { item ->
+                    context.getString(R.string.view_ClassTimeEdit_WeekItem_ForKotlin)
+                        .format(item + 1)//索引对齐
+                }
             val weekData = holder.classTime.copy()
 
             val builder =
-                    AlertDialog.Builder(context).setIcon(R.drawable.baseline_calendar_view_month_20)
-                            .setTitle(R.string.view_ClassTimeEdit_WeekChooseDialogTitle)
+                AlertDialog.Builder(context).setIcon(R.drawable.baseline_calendar_view_month_20)
+                    .setTitle(R.string.view_ClassTimeEdit_WeekChooseDialogTitle)
             //初始化Dialog中的RecyclerView
             val recyclerView = RecyclerView(builder.context)
             recyclerView.layoutManager = LinearLayoutManager(builder.context)
             recyclerView.adapter = ConcatAdapter(
-                    StaticViewHeaderAdapter(R.layout.widget_week_choose_dialig_header),
-                    WeekChooseDialogAdapter(weekData, items)
+                StaticViewHeaderAdapter(R.layout.widget_week_choose_dialig_header),
+                WeekChooseDialogAdapter(weekData, items)
             )
 
             builder.setView(recyclerView)
 
             //定义Dialog的2个按键
             builder.setPositiveButton(
-                    R.string.common_confirm
+                R.string.common_confirm
             ) { dialog, _ ->
                 holder.classTime.week = weekData.week
                 holder.weekChooseText.text = holder.classTime.getWeekDescriptionString(
-                        context.getString(R.string.view_ClassTimeEdit_WeekDescription),
-                        holder.weekChooseText.context.getString(R.string.view_ClassTimeEdit_WeekDescriptionWhenEmpty),
-                        this.maxWeeks
+                    context.getString(R.string.view_ClassTimeEdit_WeekDescription),
+                    holder.weekChooseText.context.getString(R.string.view_ClassTimeEdit_WeekDescriptionWhenEmpty),
+                    this.maxWeeks
                 )
                 dialog?.dismiss()
             }.setNegativeButton(
-                    R.string.common_cancel
+                R.string.common_cancel
             ) { dialog, _ -> dialog?.dismiss() }
 
             builder.create().show()
@@ -218,24 +219,24 @@ internal class EditCourseAdapter(
         holder.classTime = classTime
 
         holder.weekChooseText.text = classTime.getWeekDescriptionString(
-                holder.weekChooseText.context.getString(R.string.view_ClassTimeEdit_WeekDescription),
-                holder.weekChooseText.context.getString(R.string.view_ClassTimeEdit_WeekDescriptionWhenEmpty),
-                this.maxWeeks
+            holder.weekChooseText.context.getString(R.string.view_ClassTimeEdit_WeekDescription),
+            holder.weekChooseText.context.getString(R.string.view_ClassTimeEdit_WeekDescriptionWhenEmpty),
+            this.maxWeeks
         )
 
         holder.startEditText.setText(
-                if (classTime.start > 0) {
-                    classTime.start.toString()
-                } else {
-                    ""
-                }
+            if (classTime.start > 0) {
+                classTime.start.toString()
+            } else {
+                ""
+            }
         )
         holder.endEditText.setText(
-                if (classTime.end > 0) {
-                    classTime.end.toString()
-                } else {
-                    ""
-                }
+            if (classTime.end > 0) {
+                classTime.end.toString()
+            } else {
+                ""
+            }
         )
 
         holder.daySeekBar.progress = classTime.whichDay

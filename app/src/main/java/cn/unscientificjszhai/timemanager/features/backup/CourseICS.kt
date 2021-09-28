@@ -13,8 +13,8 @@ import cn.unscientificjszhai.timemanager.data.course.Course
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.data.tables.FormattedTime
-import cn.unscientificjszhai.timemanager.ui.main.fragments.CourseListFragment
 import cn.unscientificjszhai.timemanager.ui.others.ProgressDialog
+import cn.unscientificjszhai.timemanager.util.with0
 import java.io.IOException
 import java.lang.ref.WeakReference
 import java.nio.charset.StandardCharsets
@@ -265,19 +265,6 @@ class CourseICS(
 
         return builder.toString()
     }
-
-    /**
-     * 给一位或两位整数统一成两位数的字符形式。
-     *
-     * @return 如果值为一位数，则为0x，如果是两位数，就是xx。如果是负数或者超过99的数，则为空字符串。
-     */
-    private fun Int.with0() =
-        when {
-            this < 0 -> ""
-            this <= 9 -> "0$this"
-            this > 99 -> ""
-            else -> this.toString()
-        }
 
     /**
      * 将ics格式的字符串写入文件。在处理过程中，会在窗口上显示一个Dialog。

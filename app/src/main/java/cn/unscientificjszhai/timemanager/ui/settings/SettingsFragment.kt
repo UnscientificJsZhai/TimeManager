@@ -22,7 +22,7 @@ import java.util.*
  * @see SettingsActivity
  */
 internal class SettingsFragment : PreferenceFragmentCompat(),
-        Preference.SummaryProvider<Preference> {
+    Preference.SummaryProvider<Preference> {
 
     companion object {
 
@@ -113,14 +113,14 @@ internal class SettingsFragment : PreferenceFragmentCompat(),
             val parentActivity = activity
             if (parentActivity is SettingsActivity) {
                 DatePickerDialog(
-                        requireActivity(),
-                        { _, year, month, dayOfMonth ->
-                            dataStore.nowCourseTable.startDate.set(year, month, dayOfMonth)
-                            dataStore.updateCourseTable()
-                        },
-                        dataStore.nowCourseTable.startDate.get(Calendar.YEAR),
-                        dataStore.nowCourseTable.startDate.get(Calendar.MONTH),
-                        dataStore.nowCourseTable.startDate.get(Calendar.DAY_OF_MONTH)
+                    requireActivity(),
+                    { _, year, month, dayOfMonth ->
+                        dataStore.nowCourseTable.startDate.set(year, month, dayOfMonth)
+                        dataStore.updateCourseTable()
+                    },
+                    dataStore.nowCourseTable.startDate.get(Calendar.YEAR),
+                    dataStore.nowCourseTable.startDate.get(Calendar.MONTH),
+                    dataStore.nowCourseTable.startDate.get(Calendar.DAY_OF_MONTH)
                 ).show()
             }
             true
@@ -135,25 +135,25 @@ internal class SettingsFragment : PreferenceFragmentCompat(),
         this.updateCalendarPreference = findPreference(UPDATE_CALENDAR_KEY)
         updateCalendarPreference?.setOnPreferenceClickListener {
             AlertDialog.Builder(requireContext())
-                    .setTitle(R.string.preferences_UpdateCalendar_DialogTitle)
-                    .setMessage(R.string.preferences_UpdateCalendar_DialogMessage)
-                    .setNegativeButton(R.string.common_cancel) { dialog, _ ->
-                        dialog.dismiss()
-                    }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
-                        val progressDialog = ProgressDialog(requireActivity())
-                        progressDialog.show()
-                        viewModel.viewModelScope.launch {
-                            viewModel.updateCalendar(requireActivity())
-                            //完成后关闭ProgressDialog。
-                            progressDialog.postDismiss()
-                            Toast.makeText(
-                                    requireContext(),
-                                    R.string.preferences_UpdateCalendar_Complete,
-                                    Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        dialog.dismiss()
-                    }.show()
+                .setTitle(R.string.preferences_UpdateCalendar_DialogTitle)
+                .setMessage(R.string.preferences_UpdateCalendar_DialogMessage)
+                .setNegativeButton(R.string.common_cancel) { dialog, _ ->
+                    dialog.dismiss()
+                }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
+                    val progressDialog = ProgressDialog(requireActivity())
+                    progressDialog.show()
+                    viewModel.viewModelScope.launch {
+                        viewModel.updateCalendar(requireActivity())
+                        //完成后关闭ProgressDialog。
+                        progressDialog.postDismiss()
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.preferences_UpdateCalendar_Complete,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    dialog.dismiss()
+                }.show()
             true
         }
 
@@ -178,9 +178,9 @@ internal class SettingsFragment : PreferenceFragmentCompat(),
                     viewModel.updateCalendar(requireActivity())
                     progressDialog.postDismiss()
                     Toast.makeText(
-                            requireContext(),
-                            R.string.preferences_UpdateCalendar_Complete,
-                            Toast.LENGTH_SHORT
+                        requireContext(),
+                        R.string.preferences_UpdateCalendar_Complete,
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -234,9 +234,9 @@ internal class SettingsFragment : PreferenceFragmentCompat(),
             this.classesPerDayPreference -> dataStore.nowCourseTable.classesPerDay.toString() +
                     getString(R.string.preferences_CurrentTable_ClassesPerDaySummary)
             this.startDatePreference -> getString(R.string.preferences_CurrentTable_StartDateSummary).format(
-                    dataStore.nowCourseTable.startDate.get(Calendar.YEAR),
-                    dataStore.nowCourseTable.startDate.get(Calendar.MONTH) + 1,
-                    dataStore.nowCourseTable.startDate.get(Calendar.DATE)
+                dataStore.nowCourseTable.startDate.get(Calendar.YEAR),
+                dataStore.nowCourseTable.startDate.get(Calendar.MONTH) + 1,
+                dataStore.nowCourseTable.startDate.get(Calendar.DATE)
             )
             else -> ""
         }

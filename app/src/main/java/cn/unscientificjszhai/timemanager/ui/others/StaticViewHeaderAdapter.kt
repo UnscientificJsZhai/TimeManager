@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
  * @param listener 点击监听器。会添加给布局文件的根元素。默认为null。传入null时也不会添加监听器。
  */
 class StaticViewHeaderAdapter(
-        @LayoutRes private val layoutRes: Int,
-        private val listener: View.OnClickListener? = null
+    @LayoutRes private val layoutRes: Int,
+    private val listener: View.OnClickListener? = null
 ) : RecyclerView.Adapter<StaticViewHeaderAdapter.ViewHolder>() {
 
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)

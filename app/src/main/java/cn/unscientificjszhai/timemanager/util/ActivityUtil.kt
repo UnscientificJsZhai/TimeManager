@@ -1,4 +1,6 @@
-package cn.unscientificjszhai.timemanager.ui.others
+@file:JvmName("ActivityUtil")
+
+package cn.unscientificjszhai.timemanager.util
 
 import android.app.Activity
 import android.content.Context

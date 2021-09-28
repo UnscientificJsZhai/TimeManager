@@ -154,7 +154,6 @@ class FormattedTime {
         }
     }
 
-
     override fun toString(): String {
         val stringBuilder = StringBuilder()
         arrayOf(this.startH, this.startM, this.endH, this.endM).forEach { number ->

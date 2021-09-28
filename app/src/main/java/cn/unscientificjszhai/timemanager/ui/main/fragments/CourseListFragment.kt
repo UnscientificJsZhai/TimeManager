@@ -23,8 +23,8 @@ import cn.unscientificjszhai.timemanager.ui.main.CourseAdapter
 import cn.unscientificjszhai.timemanager.ui.main.MainActivity
 import cn.unscientificjszhai.timemanager.ui.main.MainActivityViewModel
 import cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
-import cn.unscientificjszhai.timemanager.ui.others.jumpToSystemPermissionSettings
-import cn.unscientificjszhai.timemanager.ui.others.runIfPermissionGranted
+import cn.unscientificjszhai.timemanager.util.jumpToSystemPermissionSettings
+import cn.unscientificjszhai.timemanager.util.runIfPermissionGranted
 import cn.unscientificjszhai.timemanager.ui.parse.ParseCourseActivity
 import cn.unscientificjszhai.timemanager.ui.settings.SettingsActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton

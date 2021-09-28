@@ -16,6 +16,8 @@ import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 import cn.unscientificjszhai.timemanager.ui.others.*
+import cn.unscientificjszhai.timemanager.util.runIfPermissionGranted
+import cn.unscientificjszhai.timemanager.util.setSystemUIAppearance
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 

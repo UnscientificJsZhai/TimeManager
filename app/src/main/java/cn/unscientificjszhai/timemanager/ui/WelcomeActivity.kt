@@ -21,9 +21,9 @@ import cn.unscientificjszhai.timemanager.features.calendar.CalendarOperator
 import cn.unscientificjszhai.timemanager.features.calendar.EmptyAuthenticator
 import cn.unscientificjszhai.timemanager.ui.main.MainActivity
 import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
-import cn.unscientificjszhai.timemanager.ui.others.jumpToSystemPermissionSettings
-import cn.unscientificjszhai.timemanager.ui.others.runIfPermissionGranted
-import cn.unscientificjszhai.timemanager.ui.others.setSystemUIAppearance
+import cn.unscientificjszhai.timemanager.util.jumpToSystemPermissionSettings
+import cn.unscientificjszhai.timemanager.util.runIfPermissionGranted
+import cn.unscientificjszhai.timemanager.util.setSystemUIAppearance
 import kotlin.concurrent.thread
 
 /**

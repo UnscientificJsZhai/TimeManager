@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 import kotlin.reflect.KProperty
 
 internal class SettingsActivityViewModel(private val dataStore: SettingsDataStore) : ViewModel(),
-        SettingsDataStore.Getter {
+    SettingsDataStore.Getter {
 
     class Factory(private val dataStore: SettingsDataStore) : ViewModelProvider.Factory {
 
@@ -35,17 +35,17 @@ internal class SettingsActivityViewModel(private val dataStore: SettingsDataStor
             CalendarOperator.deleteCalendarTable(context, courseTable)
             CalendarOperator.createCalendarTable(context, courseTable)
             val application =
-                    context.applicationContext as TimeManagerApplication
+                context.applicationContext as TimeManagerApplication
             val tableDao =
-                    application.getCourseTableDatabase().courseTableDao()
+                application.getCourseTableDatabase().courseTableDao()
             tableDao.updateCourseTable(courseTable)
             val courseDao = application.getCourseDatabase().courseDao()
             courseDao.getCourses().run {
                 for (courseWithClassTimes in this) {
                     EventsOperator.addEvent(
-                            context,
-                            courseTable,
-                            courseWithClassTimes
+                        context,
+                        courseTable,
+                        courseWithClassTimes
                     )
                     courseDao.updateCourse(courseWithClassTimes.course)
                 }

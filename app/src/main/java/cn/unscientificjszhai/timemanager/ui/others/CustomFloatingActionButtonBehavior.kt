@@ -16,7 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
  */
 @Suppress("UNUSED_PARAMETER")
 class CustomFloatingActionButtonBehavior(context: Context, attributes: AttributeSet) :
-        FloatingActionButton.Behavior() {
+    FloatingActionButton.Behavior() {
 
     /**
      * 动画实现对象。在这里实现动画效果。
@@ -39,16 +39,16 @@ class CustomFloatingActionButtonBehavior(context: Context, attributes: Attribute
             view.scaleX = 0f
 
             view.animate().scaleX(1f)
-                    .scaleY(1f)
-                    .alpha(1f)
-                    .setDuration(DURATION)
-                    .setInterpolator(linearInterpolator)
-                    .setListener(object : AnimatorListenerAdapter() {
+                .scaleY(1f)
+                .alpha(1f)
+                .setDuration(DURATION)
+                .setInterpolator(linearInterpolator)
+                .setListener(object : AnimatorListenerAdapter() {
 
-                        override fun onAnimationStart(animation: Animator?) {
-                            view.visibility = View.VISIBLE
-                        }
-                    }).start()
+                    override fun onAnimationStart(animation: Animator?) {
+                        view.visibility = View.VISIBLE
+                    }
+                }).start()
         }
 
         /**
@@ -59,60 +59,60 @@ class CustomFloatingActionButtonBehavior(context: Context, attributes: Attribute
         fun hideButton(view: View) {
             view.animate().cancel()
             view.animate().scaleX(0f)
-                    .scaleY(0f)
-                    .alpha(0f)
-                    .setDuration(DURATION)
-                    .setInterpolator(linearInterpolator)
-                    .setListener(object : AnimatorListenerAdapter() {
+                .scaleY(0f)
+                .alpha(0f)
+                .setDuration(DURATION)
+                .setInterpolator(linearInterpolator)
+                .setListener(object : AnimatorListenerAdapter() {
 
-                        private var mCanceled = false
+                    private var mCanceled = false
 
-                        override fun onAnimationStart(animation: Animator?) {
-                            view.visibility = View.VISIBLE
-                            mCanceled = false
+                    override fun onAnimationStart(animation: Animator?) {
+                        view.visibility = View.VISIBLE
+                        mCanceled = false
+                    }
+
+                    override fun onAnimationCancel(animation: Animator?) {
+                        mCanceled = true
+                    }
+
+                    override fun onAnimationEnd(animation: Animator?) {
+                        if (!mCanceled) {
+                            view.visibility = View.INVISIBLE
                         }
-
-                        override fun onAnimationCancel(animation: Animator?) {
-                            mCanceled = true
-                        }
-
-                        override fun onAnimationEnd(animation: Animator?) {
-                            if (!mCanceled) {
-                                view.visibility = View.INVISIBLE
-                            }
-                        }
-                    }).start()
+                    }
+                }).start()
         }
     }
 
     override fun onStartNestedScroll(
-            coordinatorLayout: CoordinatorLayout,
-            child: FloatingActionButton,
-            directTargetChild: View,
-            target: View,
-            axes: Int,
-            type: Int
+        coordinatorLayout: CoordinatorLayout,
+        child: FloatingActionButton,
+        directTargetChild: View,
+        target: View,
+        axes: Int,
+        type: Int
     ): Boolean {
         return super.onStartNestedScroll(
-                coordinatorLayout,
-                child,
-                directTargetChild,
-                target,
-                axes,
-                type
+            coordinatorLayout,
+            child,
+            directTargetChild,
+            target,
+            axes,
+            type
         ) || axes == ViewCompat.SCROLL_AXIS_VERTICAL
     }
 
     override fun onNestedScroll(
-            coordinatorLayout: CoordinatorLayout,
-            child: FloatingActionButton,
-            target: View,
-            dxConsumed: Int,
-            dyConsumed: Int,
-            dxUnconsumed: Int,
-            dyUnconsumed: Int,
-            type: Int,
-            consumed: IntArray
+        coordinatorLayout: CoordinatorLayout,
+        child: FloatingActionButton,
+        target: View,
+        dxConsumed: Int,
+        dyConsumed: Int,
+        dxUnconsumed: Int,
+        dyUnconsumed: Int,
+        type: Int,
+        consumed: IntArray
     ) {
         //隐藏
         if ((dyConsumed > 0 || dyUnconsumed > 0) && child.visibility == View.VISIBLE) {

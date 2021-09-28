@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.tables.FormattedTime
-import cn.unscientificjszhai.timemanager.ui.others.setSystemUIAppearance
+import cn.unscientificjszhai.timemanager.util.setSystemUIAppearance
 import kotlinx.coroutines.launch
 
 /**
@@ -80,7 +80,7 @@ class TimeTableEditorActivity : AppCompatActivity() {
                 }
             } else if (viewModel.courseTable.timeTable.typeConvert() != this.viewModel.originTimeTable) {
                 Toast.makeText(this, R.string.activity_EditCourse_DataError, Toast.LENGTH_SHORT)
-                        .show()
+                    .show()
                 finish()
             }
         }
@@ -89,13 +89,13 @@ class TimeTableEditorActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         AlertDialog.Builder(this).setTitle(R.string.activity_EditCourse_UnsavedAlertTitle)
-                .setPositiveButton(R.string.common_confirm) { dialog, _ ->
-                    dialog?.dismiss()
-                    finish()
-                }
-                .setNegativeButton(R.string.common_cancel) { dialog, _ ->
-                    dialog?.dismiss()
-                }.show()
+            .setPositiveButton(R.string.common_confirm) { dialog, _ ->
+                dialog?.dismiss()
+                finish()
+            }
+            .setNegativeButton(R.string.common_cancel) { dialog, _ ->
+                dialog?.dismiss()
+            }.show()
     }
 
     /**

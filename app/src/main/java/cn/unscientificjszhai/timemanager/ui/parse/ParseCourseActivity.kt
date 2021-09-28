@@ -5,7 +5,7 @@ import android.view.MenuItem
 import androidx.lifecycle.ViewModelProvider
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
-import cn.unscientificjszhai.timemanager.ui.others.setSystemUIAppearance
+import cn.unscientificjszhai.timemanager.util.setSystemUIAppearance
 import com.github.unscientificjszhai.unscientificcourseparser.core.factory.ParserFactory
 import kotlin.reflect.KProperty
 

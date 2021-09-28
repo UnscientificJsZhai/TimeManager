@@ -168,55 +168,6 @@ data class ClassTime(
     }
 
     /**
-     * 获取周数选择的描述字符串。
-     *
-     * @param template 模板，包含"%s"用于格式化。
-     * @param returnWhenEmpty 当没有选中任何一周时，返回的文字。
-     * @param rangeTo 最大范围，等于当前课程表定义的最大周数。
-     * @return 格式化后的周数描述字符串。
-     */
-    fun getWeekDescriptionString(template: String, returnWhenEmpty: String, rangeTo: Int) =
-        if (this.week == 0) {
-            returnWhenEmpty
-        } else {
-            val stringBuilder = StringBuilder()
-
-            var index = 1
-            do {
-                if (getWeekData(index)) {
-                    //如果非空则添加逗号分割
-                    if (stringBuilder.isNotBlank()) {
-                        stringBuilder.append(",")
-                    }
-
-                    //首先添加当前指向的周数
-                    stringBuilder.append(index.toString())
-                    //二级循环查找连续的值
-                    if (index < rangeTo) {
-                        for (subIndex in index + 1..rangeTo) {
-                            if (!getWeekData(subIndex)) {
-                                if (subIndex > index + 1) {
-                                    stringBuilder.append("-${subIndex - 1}")
-                                }
-                                index = subIndex + 1
-                                break
-                            } else if (subIndex >= rangeTo) {
-                                stringBuilder.append("-${subIndex}")
-                                index = subIndex + 1
-                            }
-                        }
-                    } else if (index == rangeTo) {
-                        break
-                    }
-                } else {
-                    index += 1
-                }
-            } while (index <= rangeTo)
-
-            template.format(stringBuilder.toString())
-        }
-
-    /**
      * 获得表示这节课这个上课时段的FormattedTime对象。
      *
      * @param courseTable 课程表对象，用于参照。

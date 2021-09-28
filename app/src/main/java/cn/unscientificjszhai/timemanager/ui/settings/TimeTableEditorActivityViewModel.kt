@@ -38,12 +38,12 @@ internal class TimeTableEditorActivityViewModel : ViewModel() {
 
         withContext(Dispatchers.Default) {
             timeManagerApplication.getCourseTableDatabase().courseTableDao()
-                    .updateCourseTable(this@TimeTableEditorActivityViewModel.courseTable)
+                .updateCourseTable(this@TimeTableEditorActivityViewModel.courseTable)
             timeManagerApplication.updateTableID(this@TimeTableEditorActivityViewModel.courseTable.id!!)
 
             EventsOperator.updateAllEvents(
-                    context,
-                    this@TimeTableEditorActivityViewModel.courseTable
+                context,
+                this@TimeTableEditorActivityViewModel.courseTable
             )
         }
     }

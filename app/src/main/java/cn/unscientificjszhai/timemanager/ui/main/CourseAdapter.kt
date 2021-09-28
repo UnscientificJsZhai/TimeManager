@@ -15,6 +15,7 @@ import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.course.Course
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.tables.FormattedTime
+import cn.unscientificjszhai.timemanager.util.with0
 
 /**
  * 供主界面的RecyclerView使用的适配器。
@@ -166,12 +167,6 @@ internal class CourseAdapter(private val activity: MainActivity) :
      * @param stringBuilder 传入一个StringBuilder对象用于构建文本。
      */
     private fun FormattedTime.getTimeDescriptionText(stringBuilder: StringBuilder) {
-        fun Int.with0() =
-            when {
-                this < 0 -> ""
-                this < 9 -> "0$this"
-                else -> this.toString()
-            }
 
         if (Settings.System.getString(
                 activity.contentResolver,

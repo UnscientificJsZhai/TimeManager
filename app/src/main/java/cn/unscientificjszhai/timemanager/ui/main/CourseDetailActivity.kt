@@ -20,9 +20,10 @@ import cn.unscientificjszhai.timemanager.data.course.Course
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.dao.CourseDao
 import cn.unscientificjszhai.timemanager.ui.editor.EditCourseActivity
-import cn.unscientificjszhai.timemanager.ui.others.jumpToSystemPermissionSettings
-import cn.unscientificjszhai.timemanager.ui.others.runIfPermissionGranted
-import cn.unscientificjszhai.timemanager.ui.others.setSystemUIAppearance
+import cn.unscientificjszhai.timemanager.util.getWeekDescriptionString
+import cn.unscientificjszhai.timemanager.util.jumpToSystemPermissionSettings
+import cn.unscientificjszhai.timemanager.util.runIfPermissionGranted
+import cn.unscientificjszhai.timemanager.util.setSystemUIAppearance
 import kotlinx.coroutines.launch
 import java.util.*
 
