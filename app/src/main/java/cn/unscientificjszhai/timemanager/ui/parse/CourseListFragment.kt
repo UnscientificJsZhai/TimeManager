@@ -1,7 +1,6 @@
 package cn.unscientificjszhai.timemanager.ui.parse
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -95,7 +94,7 @@ class CourseListFragment : Fragment() {
         this.viewModel = ViewModelProvider(this)[CourseListFragmentViewModel::class.java]
         if (savedInstanceState == null) {
             val jsonString = arguments?.getString(RESULT_KEY) ?: ""
-            Log.e("CourseListFragment", "\n$jsonString")
+            //Log.e("CourseListFragment", "\n$jsonString")
             this.viewModel.courseList =
                 ParserTypeConverter.fromJson(jsonString).generateConvertedCourse()
         }
