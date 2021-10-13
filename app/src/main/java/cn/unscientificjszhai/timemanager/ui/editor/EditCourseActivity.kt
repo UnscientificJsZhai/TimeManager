@@ -3,11 +3,12 @@ package cn.unscientificjszhai.timemanager.ui.editor
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -32,11 +33,6 @@ import kotlinx.coroutines.launch
 class EditCourseActivity : CalendarOperatorActivity() {
 
     companion object {
-
-        /**
-         * 保存数据时检查日历写入权限的请求码。
-         */
-        private const val SAVING_REQUEST_CODE = 3
 
         /**
          * 启动此Activity的通用方法。
@@ -78,6 +74,10 @@ class EditCourseActivity : CalendarOperatorActivity() {
     private lateinit var adapter: EditCourseAdapter
     private lateinit var headerAdapter: EditCourseHeaderAdapter
 
+    /**
+     * 保存数据时申请权限的回调。
+     */
+    private lateinit var requestWriteCalendarPermissionCallback: ActivityResultLauncher<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -156,6 +156,17 @@ class EditCourseActivity : CalendarOperatorActivity() {
 
             true
         }
+
+        // 注册申请权限回调
+        this.requestWriteCalendarPermissionCallback = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) {
+            if (it) {
+                viewModel.viewModelScope.launch {
+                    viewModel.saveData(this@EditCourseActivity)
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -179,10 +190,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
                         dialog.dismiss()
                     }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
                         if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_CALENDAR)) {
-                            requestPermissions(
-                                arrayOf(Manifest.permission.WRITE_CALENDAR),
-                                SAVING_REQUEST_CODE
-                            )
+                            requestWriteCalendarPermissionCallback.launch(Manifest.permission.WRITE_CALENDAR)
                         } else {
                             jumpToSystemPermissionSettings()
                         }
@@ -212,22 +220,6 @@ class EditCourseActivity : CalendarOperatorActivity() {
             .setNegativeButton(R.string.common_cancel) { dialog, _ ->
                 dialog?.dismiss()
             }.create().show()
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == SAVING_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED
-            ) {
-                viewModel.viewModelScope.launch {
-                    viewModel.saveData(this@EditCourseActivity)
-                }
-            }
-        } else super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     /**
