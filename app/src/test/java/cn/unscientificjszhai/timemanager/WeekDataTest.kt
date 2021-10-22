@@ -3,6 +3,7 @@ package cn.unscientificjszhai.timemanager
 import cn.unscientificjszhai.timemanager.data.course.ClassTime
 import org.junit.Test
 import java.util.*
+import kotlin.concurrent.thread
 
 class WeekDataTest {
 
