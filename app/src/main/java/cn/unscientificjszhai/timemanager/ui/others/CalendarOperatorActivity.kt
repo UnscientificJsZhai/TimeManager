@@ -54,7 +54,7 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
                 Manifest.permission.READ_CALENDAR
             ) == PackageManager.PERMISSION_DENIED
         ) {
-            //申请日历权限
+            // 申请日历权限
             this.requestPermissionCallback.launch(
                 arrayOf(
                     Manifest.permission.WRITE_CALENDAR,
@@ -75,11 +75,11 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
             if (it.values.contains(false)) {
                 // 权限申请不通过
                 fun dined() {
-                    //用户执意拒绝授权
+                    // 用户执意拒绝授权
                     this.finish()
                 }
                 if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_CALENDAR)) {
-                    //系统仍然提示权限请求
+                    // 系统仍然提示权限请求
                     AlertDialog.Builder(this)
                         .setTitle(R.string.activity_WelcomeActivity_AskPermissionTitle)
                         .setMessage(R.string.activity_WelcomeActivity_AskPermissionText)
@@ -95,7 +95,7 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
                                     Manifest.permission.READ_CALENDAR
                                 ) == PackageManager.PERMISSION_DENIED
                             ) {
-                                //申请日历权限
+                                // 申请日历权限
                                 this.requestPermissionCallback.launch(
                                     arrayOf(
                                         Manifest.permission.WRITE_CALENDAR,
@@ -106,7 +106,7 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
                             dialog.dismiss()
                         }.show()
                 } else {
-                    //系统不再提示权限请求
+                    // 系统不再提示权限请求
                     AlertDialog.Builder(this)
                         .setTitle(R.string.activity_WelcomeActivity_AskPermissionTitle)
                         .setMessage(
@@ -136,13 +136,13 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
             ) {
                 return super.onRequestPermissionsResult(requestCode, permissions, grantResults)
             } else {
-                //请求被拒绝
+                // 请求被拒绝
                 fun dined() {
-                    //用户执意拒绝授权
+                    // 用户执意拒绝授权
                     this.finish()
                 }
                 if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_CALENDAR)) {
-                    //系统仍然提示权限请求
+                    // 系统仍然提示权限请求
                     AlertDialog.Builder(this)
                         .setTitle(R.string.activity_WelcomeActivity_AskPermissionTitle)
                         .setMessage(R.string.activity_WelcomeActivity_AskPermissionText)
@@ -158,7 +158,7 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
                                     Manifest.permission.READ_CALENDAR
                                 ) == PackageManager.PERMISSION_DENIED
                             ) {
-                                //申请日历权限
+                                // 申请日历权限
                                 requestPermissions(
                                     arrayOf(
                                         Manifest.permission.WRITE_CALENDAR,
@@ -170,7 +170,7 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
                             dialog.dismiss()
                         }.show()
                 } else {
-                    //系统不再提示权限请求
+                    // 系统不再提示权限请求
                     AlertDialog.Builder(this)
                         .setTitle(R.string.activity_WelcomeActivity_AskPermissionTitle)
                         .setMessage(

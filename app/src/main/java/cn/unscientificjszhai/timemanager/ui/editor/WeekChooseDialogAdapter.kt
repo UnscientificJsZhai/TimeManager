@@ -29,12 +29,12 @@ internal class WeekChooseDialogAdapter(
             .inflate(R.layout.recycler_week_choose_dialog, parent, false)
         val holder = ViewHolder(view)
 
-        //短按实现单项选择
+        // 短按实现单项选择
         holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
             weekData.setWeekData(holder.bindingAdapterPosition + 1, isChecked)
         }
 
-        //长按实现多选
+        // 长按实现多选
         holder.checkBox.setOnLongClickListener {
             var position = holder.bindingAdapterPosition
 

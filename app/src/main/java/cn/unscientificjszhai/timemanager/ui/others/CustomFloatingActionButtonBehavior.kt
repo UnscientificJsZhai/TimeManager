@@ -114,11 +114,11 @@ class CustomFloatingActionButtonBehavior(context: Context, attributes: Attribute
         type: Int,
         consumed: IntArray
     ) {
-        //隐藏
+        // 隐藏
         if ((dyConsumed > 0 || dyUnconsumed > 0) && child.visibility == View.VISIBLE) {
             Animate.hideButton(child)
         }
-        //显示
+        // 显示
         else if ((dyConsumed < 0 || dyUnconsumed < 0) && child.visibility == View.INVISIBLE) {
             Animate.showButton(child)
         }

@@ -136,7 +136,7 @@ class CurrentTimeMarker(private var courseTable: CourseTable) {
     fun getTodayCourseList(originalList: List<CourseWithClassTimes>): ArrayList<CourseWithClassTimes> {
         val weekNumber = this.getWeekNumber()
         if (weekNumber == 0) {
-            //学期未开始的时候返回空表
+            // 学期未开始的时候返回空表
             return ArrayList()
         }
         val nowDate = Calendar.getInstance()

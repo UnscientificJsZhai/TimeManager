@@ -35,7 +35,7 @@ object CalendarOperator {
         val timeZone = TimeZone.getDefault()
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val color =
-            sharedPreferences.getString(SettingsFragment.CALENDAR_COLOR_KEY, "-1409017")//默认芒果色
+            sharedPreferences.getString(SettingsFragment.CALENDAR_COLOR_KEY, "-1409017")// 默认芒果色
 
         val values = ContentValues().apply {
             put(CalendarContract.Calendars.NAME, courseTable.getCalendarTableName())
@@ -63,7 +63,7 @@ object CalendarOperator {
         } else {
             ContentUris.parseId(uri)
         }
-        courseTable.calendarID = id//更新CalendarID
+        courseTable.calendarID = id// 更新CalendarID
         return id
     }
 
@@ -147,7 +147,7 @@ object CalendarOperator {
                 val calendarID = cursor.getLong(0)
 
                 if (calendarID != exception) {
-                    //删除日历表
+                    // 删除日历表
                     val deleteUri =
                         ContentUris.withAppendedId(
                             CalendarContract.Calendars.CONTENT_URI,
@@ -186,7 +186,7 @@ object CalendarOperator {
             while (cursor.moveToNext()) {
                 val calendarID = cursor.getLong(0)
 
-                //更改颜色
+                // 更改颜色
                 val values = ContentValues().apply {
                     put(CalendarContract.Calendars.CALENDAR_COLOR, color)
                 }

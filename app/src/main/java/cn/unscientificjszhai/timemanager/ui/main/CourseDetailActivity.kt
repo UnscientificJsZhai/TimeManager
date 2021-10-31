@@ -98,7 +98,7 @@ class CourseDetailActivity : AppCompatActivity() {
         val id = intent.getLongExtra(INTENT_EXTRA_COURSE, -1)
         val courseWithClassTimesLiveData = courseDao.getLiveCourse(id)
         if (courseWithClassTimesLiveData == null) {
-            //数据异常退出Activity
+            // 数据异常退出Activity
             Toast.makeText(this, R.string.activity_CourseDetail_DataError, Toast.LENGTH_SHORT)
                 .show()
             finish()
@@ -111,7 +111,7 @@ class CourseDetailActivity : AppCompatActivity() {
             CourseDetailActivityViewModel.Factory(courseWithClassTimesLiveData)
         )[CourseDetailActivityViewModel::class.java]
 
-        //监听数据变更
+        // 监听数据变更
         val courseTable by timeManagerApplication
         viewModel.courseWithClassTimes.observe(this) { courseWithClassTimes ->
             if (!Course.checkLegitimacy(courseWithClassTimes, courseTable)) {
@@ -136,7 +136,7 @@ class CourseDetailActivity : AppCompatActivity() {
             }
         }
 
-        //定义编辑按钮
+        // 定义编辑按钮
         findViewById<Button>(R.id.CourseDetailActivity_EditButton).setOnClickListener {
             val courseWithClassTimes = viewModel.courseWithClassTimes.value
             if (courseWithClassTimes != null) {
@@ -148,7 +148,7 @@ class CourseDetailActivity : AppCompatActivity() {
             }
         }
 
-        //定义删除按钮
+        // 定义删除按钮
         findViewById<Button>(R.id.CourseDetailActivity_DeleteButton).setOnClickListener {
 
             AlertDialog.Builder(this, R.style.Theme_TimeManager_AlertDialog)
@@ -164,10 +164,10 @@ class CourseDetailActivity : AppCompatActivity() {
                             .setTitle(R.string.activity_WelcomeActivity_AskPermissionTitle)
                             .setMessage(R.string.activity_CourseDetail_AskPermissionText)
                             .setNegativeButton(R.string.common_cancel) { permissionDialog, _ ->
-                                //拒绝授予日历权限。
+                                // 拒绝授予日历权限。
                                 permissionDialog.dismiss()
                             }.setPositiveButton(R.string.common_confirm) { permissionDialog, _ ->
-                                //同意授予日历权限，跳转到系统设置进行授权。
+                                // 同意授予日历权限，跳转到系统设置进行授权。
                                 this@CourseDetailActivity.jumpToSystemPermissionSettings()
                                 permissionDialog.dismiss()
                             }

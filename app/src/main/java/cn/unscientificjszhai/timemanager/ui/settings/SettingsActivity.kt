@@ -41,8 +41,8 @@ class SettingsActivity : CalendarOperatorActivity() {
 
         override fun onReceive(context: Context?, intent: Intent?) {
             if (context is SettingsActivity) {
-                //当在Selector中选择新的课程表时调用此方法更新DataStore中的courseTable对象
-                //并且会同时更新子Fragment中的数据简介
+                // 当在Selector中选择新的课程表时调用此方法更新DataStore中的courseTable对象
+                // 并且会同时更新子Fragment中的数据简介
                 settingsFragment?.updateCourseTable(timeManagerApplication.courseTable!!)
             }
         }
@@ -56,7 +56,7 @@ class SettingsActivity : CalendarOperatorActivity() {
         super.onCreate(null)
         setContentView(R.layout.activity_settings)
 
-        //设置SystemUI颜色
+        // 设置SystemUI颜色
         setSystemUIAppearance(this)
 
         this.timeManagerApplication = application as TimeManagerApplication
@@ -73,7 +73,7 @@ class SettingsActivity : CalendarOperatorActivity() {
             SettingsActivityViewModel.Factory(dataStore)
         )[SettingsActivityViewModel::class.java]
 
-        //替换Fragment
+        // 替换Fragment
 
         this.settingsFragment = SettingsFragment()
         supportFragmentManager
@@ -81,13 +81,13 @@ class SettingsActivity : CalendarOperatorActivity() {
             .replace(R.id.settings, this.settingsFragment!!)
             .commit()
 
-        //监听数据库变更
+        // 监听数据库变更
         val intentFilter = IntentFilter()
         intentFilter.addAction(MainActivity.COURSE_DATABASE_CHANGE_ACTION)
         this.databaseChangeReceiver = DatabaseChangeReceiver()
         registerReceiver(this.databaseChangeReceiver, intentFilter)
 
-        //定义保存备份的逻辑
+        // 定义保存备份的逻辑
         this.backupLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == RESULT_OK) {
@@ -98,7 +98,7 @@ class SettingsActivity : CalendarOperatorActivity() {
                 }
             }
 
-        //定义导入备份的逻辑
+        // 定义导入备份的逻辑
         this.importLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == RESULT_OK) {
@@ -109,7 +109,7 @@ class SettingsActivity : CalendarOperatorActivity() {
                 }
             }
 
-        //定义导出ICS的逻辑
+        // 定义导出ICS的逻辑
         this.exportIcsLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == RESULT_OK) {

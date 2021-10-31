@@ -100,12 +100,12 @@ internal class CourseAdapter(private val activity: MainActivity) :
 
         if (showTodayOnly()) {
             if (course.specificClassTime == null) {
-                //异常情况，如果设置为只显示今天的话所有的course对象中的这个成员都不是null。
+                // 异常情况，如果设置为只显示今天的话所有的course对象中的这个成员都不是null。
                 stringBuilder.append(activity.getString(R.string.activity_Main_TodayOnlyMode_DataError))
             } else {
                 val classTime = course.specificClassTime!!.get()
                 if (classTime != null) {
-                    //上课时间
+                    // 上课时间
                     val nowLessonNumber = timeTagger.nowLessonNumber(courseTable)
                     when {
                         nowLessonNumber >= classTime.start && nowLessonNumber <= classTime.end -> {
@@ -125,13 +125,13 @@ internal class CourseAdapter(private val activity: MainActivity) :
                     val formattedTime = classTime.getFormattedTime(courseTable)
                     formattedTime.getTimeDescriptionText(stringBuilder)
 
-                    //上课地点
+                    // 上课地点
                     if (classTime.location.isNotBlank()) {
                         stringBuilder.append(" @")
                         stringBuilder.append(classTime.location)
                     }
 
-                    //老师姓名
+                    // 老师姓名
                     if (classTime.teacherName.isNotBlank()) {
                         stringBuilder.append(" ")
                         stringBuilder.append(classTime.teacherName)
@@ -173,7 +173,7 @@ internal class CourseAdapter(private val activity: MainActivity) :
                 Settings.System.TIME_12_24
             ) != "24"
         ) {
-            //如果使用12小时的话
+            // 如果使用12小时的话
             val newStartH = if (this.startH > 12) {
                 stringBuilder.append(activity.getString(R.string.common_time_afternoon))
                 this.startH - 12

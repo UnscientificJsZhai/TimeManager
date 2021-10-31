@@ -102,16 +102,16 @@ class CourseICS(
                 calendarObject.set(Calendar.MINUTE, formattedEndTime.endM)
             }
 
-            //以上是周日为一周开始的情况，当周一为一周开始时，进行以下操作平移周日。
+            // 以上是周日为一周开始的情况，当周一为一周开始时，进行以下操作平移周日。
             if (courseTable.weekStart && calendarObject.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-                //向后平移7天。
+                // 向后平移7天。
                 calendarObject.set(
                     Calendar.WEEK_OF_YEAR,
                     calendarObject.get(Calendar.WEEK_OF_YEAR) + 1
                 )
             }
 
-            calendarObject.get(Calendar.HOUR_OF_DAY) //调用Calendar的complete()方法应用刚才的更新
+            calendarObject.get(Calendar.HOUR_OF_DAY) // 调用Calendar的complete()方法应用刚才的更新
             calendarObject.timeZone = TimeZone.getTimeZone("UTC")
 
             return "${calendarObject.get(Calendar.YEAR)}" +
@@ -139,7 +139,16 @@ class CourseICS(
             val formattedStartTime = FormattedTime(courseTable.timeTable[classTime.start - 1])
             calendarObject.set(Calendar.HOUR_OF_DAY, formattedStartTime.startH)
             calendarObject.set(Calendar.MINUTE, formattedStartTime.startM)
-            calendarObject.get(Calendar.HOUR_OF_DAY)//调用Calendar的complete()方法应用刚才的更新
+            calendarObject.get(Calendar.HOUR_OF_DAY)// 调用Calendar的complete()方法应用刚才的更新
+
+            // 以上是周日为一周开始的情况，当周一为一周开始时，进行以下操作平移周日。
+            if (courseTable.weekStart && calendarObject.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                // 向后平移7天。
+                calendarObject.set(
+                    Calendar.WEEK_OF_YEAR,
+                    calendarObject.get(Calendar.WEEK_OF_YEAR) + 1
+                )
+            }
 
             val until = "${calendarObject.get(Calendar.YEAR)}" +
                     (calendarObject.get(Calendar.MONTH) + 1).with0() +
@@ -218,7 +227,7 @@ class CourseICS(
             if (getWeekData(index)) {
                 val element = SplitClassTime(this, index)
                 if (index < range) {
-                    //如果当前指向的不是最后一个
+                    // 如果当前指向的不是最后一个
                     for (subIndex in index + 1..range) {
                         if (!getWeekData(subIndex)) {
                             element.end = subIndex - 1
@@ -226,7 +235,7 @@ class CourseICS(
                             index = subIndex + 1
                             break
                         } else if (subIndex >= range) {
-                            //进入此分支，则最后一周已经有效
+                            // 进入此分支，则最后一周已经有效
                             element.end = subIndex
                             list.add(element)
                             index = subIndex + 1

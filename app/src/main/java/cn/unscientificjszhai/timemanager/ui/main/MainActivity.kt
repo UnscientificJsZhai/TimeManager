@@ -71,18 +71,18 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
                 if (fragment is CourseListFragment && fragment.lifecycle.currentState == Lifecycle.State.STARTED) {
                     fragment.viewModel.courseList.removeObservers(fragment.viewLifecycleOwner)
                     viewModel.courseList = context.timeManagerApplication
-                        .getCourseDatabase().courseDao().getLiveCourses() //更新ViewModel中的LiveData
+                        .getCourseDatabase().courseDao().getLiveCourses() // 更新ViewModel中的LiveData
                     fragment.viewModel.courseList.observe(this@MainActivity) { courseList ->
                         fragment.bindData(courseList)
                     }
 
-                    //更新NowTimeTagger
+                    // 更新NowTimeTagger
                     val courseTable by context.timeManagerApplication
                     context.currentTimeMarker.setCourseTable(courseTable)
                     fragment.updateActionBarLabel()
                 } else {
                     viewModel.courseList = context.timeManagerApplication
-                        .getCourseDatabase().courseDao().getLiveCourses() //更新ViewModel中的LiveData
+                        .getCourseDatabase().courseDao().getLiveCourses() // 更新ViewModel中的LiveData
                 }
             }
         }
@@ -100,13 +100,13 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == Intent.ACTION_TIME_TICK) {
-                //检测日期是否发生变化
+                // 检测日期是否发生变化
                 val timeRightNow = Calendar.getInstance()
                 if (this.timeBeforeUpdate.get(Calendar.DAY_OF_YEAR) != timeRightNow.get(Calendar.DAY_OF_YEAR) ||
                     this.timeBeforeUpdate.get(Calendar.YEAR) != timeRightNow.get(Calendar.YEAR)
                 ) {
                     if (context is MainActivity) {
-                        //如果为只显示今天则更新数据集
+                        // 如果为只显示今天则更新数据集
                         val fragment =
                             context.supportFragmentManager.findFragmentById(R.id.SingleFragmentActivity_RootView)
                         if (fragment is CourseListFragment && fragment.lifecycle.currentState == Lifecycle.State.STARTED) {
@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
                     }
                 }
 
-                //最后更新新的当前时间
+                // 最后更新新的当前时间
                 this.timeBeforeUpdate = timeRightNow
             }
         }
@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
         super.onCreate(savedInstanceState)
 
         this.timeManagerApplication = application as TimeManagerApplication
-        //与初次启动判定有关
+        // 与初次启动判定有关
         if (this.timeManagerApplication.nowTableID < 0) {
             Toast.makeText(this, R.string.activity_Main_NoTableFound, Toast.LENGTH_SHORT).show()
             startActivity(Intent(this, WelcomeActivity::class.java))
@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
         setContentView(R.layout.activity_single_fragment)
 
-        //设置SystemUI颜色
+        // 设置SystemUI颜色
         setSystemUIAppearance(this)
 
         val courseDatabase = timeManagerApplication.getCourseDatabase()
@@ -152,7 +152,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
         this.rootView = findViewById(R.id.SingleFragmentActivity_RootView)
 
-        //加载首个Fragment
+        // 加载首个Fragment
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.SingleFragmentActivity_RootView, CourseListFragment())
@@ -163,19 +163,19 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
             getSharedPreferences(TimeManagerApplication.INITIAL, Context.MODE_PRIVATE)
         viewModel.showTodayOnly = sharedPreferences.getBoolean(SHOW_TODAY_ONLY_KEY, false)
 
-        //监听数据库变更
+        // 监听数据库变更
         this.databaseChangeReceiver = DatabaseChangeReceiver()
         registerReceiver(this.databaseChangeReceiver, IntentFilter().apply {
             addAction(COURSE_DATABASE_CHANGE_ACTION)
         })
 
-        //监听日期变更
+        // 监听日期变更
         this.dateChangeReceiver = DateChangeReceiver()
         registerReceiver(this.dateChangeReceiver, IntentFilter().apply {
             addAction(Intent.ACTION_TIME_TICK)
         })
 
-        //首次打开则显示帮助
+        // 首次打开则显示帮助
         if (!sharedPreferences.getBoolean(SHOW_GUIDE_KEY, false)) {
             Toast.makeText(this, R.string.activity_Main_GuideToast, Toast.LENGTH_LONG).show()
             sharedPreferences.edit().putBoolean(SHOW_GUIDE_KEY, true).apply()
@@ -193,7 +193,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
     override fun onStop() {
         super.onStop()
-        //保存是否只显示今天的情况
+        // 保存是否只显示今天的情况
         val sharedPreferences =
             getSharedPreferences(TimeManagerApplication.INITIAL, Context.MODE_PRIVATE)
         sharedPreferences.edit {
