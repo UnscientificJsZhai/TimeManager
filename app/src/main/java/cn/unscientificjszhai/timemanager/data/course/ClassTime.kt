@@ -177,20 +177,4 @@ data class ClassTime(
         FormattedTime(courseTable.timeTable[this.start - 1]),
         FormattedTime(courseTable.timeTable[this.end - 1])
     )
-
-    /**
-     * 生成Json字符串。
-     *
-     * @return 生成的字符串。
-     */
-    fun toJson(): JSONObject {
-        val jsonObject = JSONObject()
-        jsonObject.put("week", week)
-        jsonObject.put("whichDay", whichDay)
-        jsonObject.put("start", start)
-        jsonObject.put("end", end)
-        jsonObject.put("teacherName", teacherName)
-        jsonObject.put("location", location)
-        return jsonObject
-    }
 }

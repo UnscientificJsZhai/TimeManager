@@ -43,20 +43,4 @@ data class CourseWithClassTimes(
             return CourseWithClassTimes(course, classTimes)
         }
     }
-
-    /**
-     * 生成Json字符串。
-     *
-     * @return 生成的字符串。
-     */
-    fun toJson(): JSONObject {
-        val jsonObject = JSONObject()
-        jsonObject.put("course", course.toJson())
-        val jsonArray = JSONArray()
-        classTimes.forEach {
-            jsonArray.put(it.toJson())
-        }
-        jsonObject.put("classTimes", jsonArray)
-        return jsonObject
-    }
 }

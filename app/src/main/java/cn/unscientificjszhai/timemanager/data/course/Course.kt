@@ -84,17 +84,4 @@ data class Course(
      * 创建一个新的对象的方法。
      */
     constructor() : this(null, "", 0.0, "", ArrayList<Long>())
-
-    /**
-     * 生成Json字符串。
-     *
-     * @return 生成的字符串。
-     */
-    fun toJson(): JSONObject {
-        val jsonObject = JSONObject()
-        jsonObject.put("title", title)
-        jsonObject.put("credit", credit)
-        jsonObject.put("remarks", remarks)
-        return jsonObject
-    }
 }
