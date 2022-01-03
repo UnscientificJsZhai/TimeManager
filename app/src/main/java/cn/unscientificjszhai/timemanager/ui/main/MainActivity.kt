@@ -68,6 +68,10 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
             if (context is MainActivity) {
                 val fragment =
                     supportFragmentManager.findFragmentById(R.id.SingleFragmentActivity_RootView)
+
+                // 更新NowTimeTagger
+                val courseTable by context.timeManagerApplication
+                context.currentTimeMarker.setCourseTable(courseTable)
                 if (fragment is CourseListFragment && fragment.lifecycle.currentState == Lifecycle.State.STARTED) {
                     fragment.viewModel.courseList.removeObservers(fragment.viewLifecycleOwner)
                     viewModel.courseList = context.timeManagerApplication
@@ -76,9 +80,6 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
                         fragment.bindData(courseList)
                     }
 
-                    // 更新NowTimeTagger
-                    val courseTable by context.timeManagerApplication
-                    context.currentTimeMarker.setCourseTable(courseTable)
                     fragment.updateActionBarLabel()
                 } else {
                     viewModel.courseList = context.timeManagerApplication

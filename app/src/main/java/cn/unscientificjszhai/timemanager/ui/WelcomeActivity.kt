@@ -31,14 +31,6 @@ import kotlin.concurrent.thread
  */
 class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
 
-    companion object {
-
-        /**
-         * 创建第一个课程表的时候请求日历写入权限的请求码。
-         */
-        private const val CREATE_FIRST_TABLE_REQUEST_CODE = 2
-    }
-
     private lateinit var timeManagerApplication: TimeManagerApplication
 
     private lateinit var tableTitleEditText: EditText
@@ -47,6 +39,7 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
     private lateinit var textView: TextView
 
     private lateinit var importBackupLauncher: ActivityResultLauncher<Intent>
+    private lateinit var permissionRequestLauncher: ActivityResultLauncher<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,6 +91,22 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
                     }
                 }
             }
+
+        //注册权限请求
+        this.permissionRequestLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+                if (it) {
+                    //获得了写入日历的权限,继续写入日历。
+                    createFirstTable(
+                        if (tableTitleEditText.text.isBlank()) {
+                            //当输入为空时的默认课程表名
+                            getString(R.string.activity_Welcome_EditTextHint)
+                        } else {
+                            tableTitleEditText.text.toString()
+                        }
+                    )
+                }
+            }
     }
 
     override fun onClick(v: View?) {
@@ -127,10 +136,7 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
                             ) == PackageManager.PERMISSION_DENIED
                         ) {
                             //申请日历权限
-                            requestPermissions(
-                                arrayOf(Manifest.permission.WRITE_CALENDAR),
-                                CREATE_FIRST_TABLE_REQUEST_CODE
-                            )
+                            permissionRequestLauncher.launch(Manifest.permission.WRITE_CALENDAR)
                         }
                         dialog.dismiss()
                     }.show()
@@ -153,29 +159,6 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
         }) {
             createFirstTable(tableName)
         }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == CREATE_FIRST_TABLE_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED
-            ) {
-                //获得了写入日历的权限,继续写入日历。
-                createFirstTable(
-                    if (tableTitleEditText.text.isBlank()) {
-                        //当输入为空时的默认课程表名
-                        getString(R.string.activity_Welcome_EditTextHint)
-                    } else {
-                        tableTitleEditText.text.toString()
-                    }
-                )
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

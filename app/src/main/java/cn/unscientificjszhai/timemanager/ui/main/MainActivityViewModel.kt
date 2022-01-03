@@ -10,9 +10,12 @@ import cn.unscientificjszhai.timemanager.data.dao.CourseDao
 import cn.unscientificjszhai.timemanager.features.calendar.EventsOperator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import cn.unscientificjszhai.timemanager.ui.main.fragments.CourseListFragment
 
 /**
- * MainActivity的ViewModel。
+ * MainActivity的ViewModel。也用于[CourseListFragment]。
+ *
+ * 存放了主页状态数据和数据库中的数据。
  *
  * @param courseList 从RoomDatabase中获取的全部课程的LiveData对象。
  * @see MainActivity
