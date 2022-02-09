@@ -6,6 +6,8 @@ import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 
 /**
  * 查询[CourseTable]的Dao接口。
+ *
+ * @author UnscientificJsZhai
  */
 @Dao
 interface CourseTableDao {

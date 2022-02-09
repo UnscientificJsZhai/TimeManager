@@ -33,6 +33,7 @@ import java.util.*
  *
  * @see MainActivity
  * @see Course
+ * @author UnscientificJsZhai
  */
 class CourseDetailActivity : AppCompatActivity() {
 
@@ -180,7 +181,8 @@ class CourseDetailActivity : AppCompatActivity() {
                             viewModel.viewModelScope.launch {
                                 MainActivityViewModel.deleteCourse(
                                     this@CourseDetailActivity,
-                                    courseWithClassTimes
+                                    courseWithClassTimes,
+                                    timeManagerApplication.useCalendar
                                 )
                             }
                         } else {

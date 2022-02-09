@@ -12,6 +12,7 @@ import kotlinx.coroutines.withContext
  * 用于CourseListFragment的ViewModel。
  *
  * @see CourseListFragment
+ * @author UnscientificJsZhai
  */
 internal class CourseListFragmentViewModel : ViewModel() {
 

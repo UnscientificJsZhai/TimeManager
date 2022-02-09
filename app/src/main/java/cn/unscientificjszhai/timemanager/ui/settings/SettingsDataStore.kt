@@ -15,6 +15,7 @@ import kotlin.reflect.KProperty
  * @param nowCourseTable 当前正在修改的CourseTable对象，当当前的课程表更改的时候，[SettingsActivity]会更新这里的引用。
  * @param courseTableDao 操作数据库的Dao接口对象。
  * @param context 上下文，用于更新日历。
+ * @author UnscientificJsZhai
  */
 internal class SettingsDataStore(
     var nowCourseTable: CourseTable,

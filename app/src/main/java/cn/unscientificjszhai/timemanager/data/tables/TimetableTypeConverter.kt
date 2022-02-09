@@ -7,6 +7,7 @@ import java.util.*
  * TypeConverter类，用于将[CourseTable]类中的记录具体上课时间的StringArray转化为String来存储。
  *
  * @see CourseTable
+ * @author UnscientificJsZhai
  */
 class TimetableTypeConverter {
 

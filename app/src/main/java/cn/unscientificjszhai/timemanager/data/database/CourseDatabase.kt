@@ -11,6 +11,8 @@ import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 
 /**
  * Course对象的数据库。文件名为table1.db，其中1的位置应该为这个数据库文件对应的[CourseTable]对象的id。
+ *
+ * @author UnscientificJsZhai
  */
 @Database(
     entities = [Course::class, ClassTime::class],

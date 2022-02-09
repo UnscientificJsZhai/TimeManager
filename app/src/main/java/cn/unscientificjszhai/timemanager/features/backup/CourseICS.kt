@@ -26,7 +26,8 @@ import kotlin.concurrent.thread
  * 生成Course对象的ICS格式字符串的类。
  *
  * @param courseList 课程的集合。
- * @param courseTable 课程表对象，用于获取时间表.
+ * @param courseTable 课程表对象，用于获取时间表。
+ * @author UnscientificJsZhai
  */
 class CourseICS(
     private val courseList: List<CourseWithClassTimes>,

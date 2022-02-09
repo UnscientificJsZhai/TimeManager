@@ -2,6 +2,7 @@ package cn.unscientificjszhai.timemanager.ui.parse
 
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
@@ -15,6 +16,7 @@ import kotlin.reflect.KProperty
  * @see ParserListFragment
  * @see WebViewFragment
  * @see CourseListFragment
+ * @author UnscientificJsZhai
  */
 class ParseCourseActivity : CalendarOperatorActivity() {
 
@@ -33,6 +35,7 @@ class ParseCourseActivity : CalendarOperatorActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.SingleFragmentActivity_RootView, ParserListFragment())
                 .commit()
+            supportFragmentManager.commit {  }
         }
     }
 

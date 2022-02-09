@@ -18,6 +18,7 @@ import java.io.Serializable
  * @param end 上到第几节课。
  * @param teacherName 教师姓名。
  * @param location 上课地点。
+ * @author UnscientificJsZhai
  */
 @Entity(
     tableName = ClassTime.TABLE_NAME,

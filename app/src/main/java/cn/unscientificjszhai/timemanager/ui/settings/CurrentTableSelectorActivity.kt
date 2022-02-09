@@ -23,6 +23,8 @@ import kotlinx.coroutines.launch
 
 /**
  * 当前课程表的选择器。用于添加和选择当前的课程表。
+ *
+ * @author UnscientificJsZhai
  */
 class CurrentTableSelectorActivity : CalendarOperatorActivity() {
 

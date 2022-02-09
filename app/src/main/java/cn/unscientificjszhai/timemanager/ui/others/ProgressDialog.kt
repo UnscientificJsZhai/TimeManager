@@ -12,6 +12,7 @@ import cn.unscientificjszhai.timemanager.R
  * 自定义ProgressDialog。
  *
  * @param context 显示Dialog的Activity。
+ * @author UnscientificJsZhai
  */
 class ProgressDialog(private val context: Activity) {
 

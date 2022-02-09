@@ -17,6 +17,7 @@ import cn.unscientificjszhai.timemanager.data.tables.CourseTable
  * @param nowTableId 当前的Table的id。
  * @param setTable 一个选中、删除当前表的方法。此方法会在UI线程中执行。
  * @see CurrentTableSelectorActivity
+ * @author UnscientificJsZhai
  */
 internal class CurrentTableSelectorAdapter(
     private var nowTableId: Long,

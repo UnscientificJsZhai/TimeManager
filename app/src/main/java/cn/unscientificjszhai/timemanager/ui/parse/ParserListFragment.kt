@@ -16,6 +16,7 @@ import com.github.unscientificjszhai.unscientificcourseparser.core.factory.Parse
  * 展示解析器列表的Fragment。
  *
  * @see ParseCourseActivity
+ * @author UnscientificJsZhai
  */
 class ParserListFragment : Fragment() {
 

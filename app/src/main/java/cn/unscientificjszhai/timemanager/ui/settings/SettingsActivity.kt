@@ -26,6 +26,7 @@ import kotlinx.coroutines.withContext
  * 设置Activity，设置项的初始化在SettingsFragment中。使用了JetPack库的Preference库。
  *
  * @see SettingsFragment
+ * @author UnscientificJsZhai
  */
 class SettingsActivity : CalendarOperatorActivity() {
 

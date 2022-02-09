@@ -13,6 +13,7 @@ import org.json.JSONObject
  *
  * @receiver 上课时间数据类对象。
  * @return 生成的字符串。
+ * @author UnscientificJsZhai
  */
 private fun ClassTime.toJson(): JSONObject {
     val jsonObject = JSONObject()
@@ -30,6 +31,7 @@ private fun ClassTime.toJson(): JSONObject {
  *
  * @receiver 课程的数据类对象。
  * @return 生成的字符串。
+ * @author UnscientificJsZhai
  */
 private fun Course.toJson(): JSONObject {
     val jsonObject = JSONObject()
@@ -44,6 +46,7 @@ private fun Course.toJson(): JSONObject {
  *
  * @receiver 课程和上课时间的Json字符串。
  * @return 生成的字符串。
+ * @author UnscientificJsZhai
  */
 internal fun CourseWithClassTimes.toJson(): JSONObject {
     val jsonObject = JSONObject()

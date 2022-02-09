@@ -118,8 +118,12 @@
     <string name="preferences_WeekStart">教学周开始日</string>
     <string name="preferences_CurrentTable_StartDateSummary">%d年%d月%d日</string>
     <string name="preferences_CalendarOption_CategoryTitle">日历选项</string>
+    <string name="preferences_CalendarOption_UseCalendar">使用日历</string>
+    <string name="preferences_CalendarOption_UseCalendar_Summary">打开此开关以自动更新课表到日历</string>
+    <string name="preferences_CalendarOption_UseCalendar_TurnedOff">未获得授权，日历功能将被关闭\n可以前往应用设置重新开启</string>
+    <string name="preferences_CalendarOption_UseCalendar_NotGranted">未获得日历授权，开启失败\n可以前往应用设置重新开启</string>
     <string name="preferences_CalendarOption_UpdateCalendar">更新日历</string>
-    <string name="preferences_CalendarOption_UpdateCalendarSummary">将当前选中的课程表的内容更新到系统日历</string>
+    <string name="preferences_CalendarOption_UpdateCalendar_Summary">将当前选中的课程表的内容更新到系统日历</string>
     <string name="preferences_UpdateCalendar_DialogTitle">更新日历</string>
     <string name="preferences_UpdateCalendar_DialogMessage">进行此操作将删除当前课程表的日历并重新创建，是否继续？</string>
     <string name="preferences_UpdateCalendar_Processing">更新中……</string>

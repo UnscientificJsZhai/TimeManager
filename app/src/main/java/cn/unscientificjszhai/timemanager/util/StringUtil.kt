@@ -7,10 +7,12 @@ import cn.unscientificjszhai.timemanager.data.course.ClassTime
 /**
  * 获取周数选择的描述字符串。
  *
+ * @receiver 上课时间数据对象。
  * @param template 模板，包含"%s"用于格式化。
  * @param returnWhenEmpty 当没有选中任何一周时，返回的文字。
  * @param rangeTo 最大范围，等于当前课程表定义的最大周数。
  * @return 格式化后的周数描述字符串。
+ * @author UnscientificJsZhai
  */
 internal fun ClassTime.getWeekDescriptionString(
     template: String,
@@ -61,7 +63,9 @@ internal fun ClassTime.getWeekDescriptionString(
 /**
  * 给一位或两位整数统一成两位数的字符形式。
  *
- * @return 如果值为一位数，则为0x，如果是两位数，就是xx。如果是负数或者超过99的数，则为空字符串。
+ * @receiver 一个整型数，这个数应该大于0小于100。
+ * @return 如果输入值为一位数，则为0x，如果是两位数，就是xx。如果是负数或者超过99的数，则为空字符串。
+ * @author UnscientificJsZhai
  */
 internal fun Int.with0() = when {
     this < 0 -> ""

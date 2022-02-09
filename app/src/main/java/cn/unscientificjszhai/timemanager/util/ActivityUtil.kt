@@ -22,6 +22,7 @@ import cn.unscientificjszhai.timemanager.R
  * 为目标Activity设置浅色状态栏和导航栏。
  *
  * @param context Activity的上下文。
+ * @author UnscientificJsZhai
  */
 fun setSystemUIAppearance(context: Activity) {
     val window = context.window
@@ -43,6 +44,9 @@ fun setSystemUIAppearance(context: Activity) {
 
 /**
  * 判断当前是否处于深色模式中。
+ *
+ * @receiver 上下文。
+ * @author UnscientificJsZhai
  */
 private fun Context.isDarkMode(): Boolean =
     this.applicationContext.resources.configuration.uiMode == 0x21
@@ -50,9 +54,11 @@ private fun Context.isDarkMode(): Boolean =
 /**
  * 当获得权限时运行。
  *
+ * @receiver 要执行此操作的Activity。
  * @param permission 要检查的权限。
  * @param permissionDenied 当没有获得权限时运行的代码块。
  * @param block 当获得权限时运行的代码块。
+ * @author UnscientificJsZhai
  */
 inline fun <T> Activity.runIfPermissionGranted(
     permission: String,
@@ -69,6 +75,9 @@ inline fun <T> Activity.runIfPermissionGranted(
 
 /**
  *  跳转到系统设置来请求权限。
+ *
+ *  @receiver 发起跳转的Activity。
+ *  @author UnscientificJsZhai
  */
 fun Activity.jumpToSystemPermissionSettings() {
     try {
@@ -82,39 +91,5 @@ fun Activity.jumpToSystemPermissionSettings() {
             R.string.activity_WelcomeActivity_FailToJumpToSettings,
             Toast.LENGTH_SHORT
         ).show()
-    }
-}
-
-/**
- * RecyclerView滚动函数集。
- */
-object RecyclerScrollHelper {
-
-    /**
-     * 使参数中的RecyclerView滚动到指定位置。RecyclerView必须使用LinearLayoutManager作为LayoutManager。
-     *
-     * @param recyclerView 要滚动的RecyclerView。
-     * @param position 目标位置。
-     */
-    private fun scrollToPosition(recyclerView: RecyclerView, position: Int) {
-        val manager = recyclerView.layoutManager
-        if (manager is LinearLayoutManager) {
-            val scroller = LinearSmoothScroller(recyclerView.context)
-
-            scroller.targetPosition = position
-            manager.startSmoothScroll(scroller)
-        }
-    }
-
-    /**
-     * 使参数中的RecyclerView滚动到底部。
-     *
-     * @param recyclerView 要滚动的RecyclerView。
-     */
-    fun scrollToBottom(recyclerView: RecyclerView) {
-        recyclerView.adapter?.let {
-            val position = it.itemCount
-            scrollToPosition(recyclerView, position)
-        }
     }
 }

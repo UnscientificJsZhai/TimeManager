@@ -20,6 +20,7 @@ import kotlin.collections.ArrayList
  * 事件操作工具对象。对所有事件的操作都在这里完成。
  *
  * @see CalendarOperator
+ * @author UnscientificJsZhai
  */
 object EventsOperator {
 

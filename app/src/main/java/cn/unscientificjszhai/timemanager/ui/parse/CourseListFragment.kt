@@ -20,6 +20,8 @@ import com.github.unscientificjszhai.unscientificcourseparser.core.data.Course a
 
 /**
  * 展示解析结果的Fragment。
+ *
+ * @author UnscientificJsZhai
  */
 class CourseListFragment : Fragment() {
 

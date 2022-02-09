@@ -18,6 +18,7 @@ import java.util.*
  *
  * @see EmptyAuthenticator
  * @see EventsOperator
+ * @author UnscientificJsZhai
  */
 object CalendarOperator {
 

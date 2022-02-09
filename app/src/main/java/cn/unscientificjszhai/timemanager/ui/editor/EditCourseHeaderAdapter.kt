@@ -10,6 +10,11 @@ import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.data.course.Course
 import com.google.android.material.textfield.TextInputEditText
 
+/**
+ * 编辑单个课程信息的Activity中的RecyclerView中，头部的卡片。
+ *
+ * @author UnscientificJsZhai
+ */
 internal class EditCourseHeaderAdapter(private val course: Course) :
     RecyclerView.Adapter<EditCourseHeaderAdapter.HeaderViewHolder>() {
 

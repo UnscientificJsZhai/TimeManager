@@ -23,13 +23,15 @@ import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.database.CourseDatabase
 import cn.unscientificjszhai.timemanager.ui.main.CourseDetailActivity
 import cn.unscientificjszhai.timemanager.ui.others.*
-import cn.unscientificjszhai.timemanager.util.RecyclerScrollHelper
-import cn.unscientificjszhai.timemanager.util.jumpToSystemPermissionSettings
-import cn.unscientificjszhai.timemanager.util.runIfPermissionGranted
-import cn.unscientificjszhai.timemanager.util.setSystemUIAppearance
+import cn.unscientificjszhai.timemanager.util.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
+/**
+ * 编辑单个课程信息的Activity。
+ *
+ * @author UnscientificJsZhai
+ */
 class EditCourseActivity : CalendarOperatorActivity() {
 
     companion object {
@@ -83,7 +85,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_course)
 
-        //初始化ViewModel
+        // 初始化ViewModel
         this.viewModel = ViewModelProvider(this)[EditCourseActivityViewModel::class.java]
 
         setSystemUIAppearance(this)
@@ -95,7 +97,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
         val courseWithClassTimes =
             intent.getSerializableExtra(CourseDetailActivity.INTENT_EXTRA_COURSE)
         if (courseWithClassTimes is CourseWithClassTimes) {
-            //给ViewModel设定值
+            // 给ViewModel设定值
             this.viewModel.course = courseWithClassTimes.course
 
             if (!viewModel.classTimesInitialized) {
@@ -109,7 +111,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
                 viewModel.classTimes.add(ClassTime())
             }
         }
-        //保证ViewModel中的classTimes数组已经初始化
+        // 保证ViewModel中的classTimes数组已经初始化
         viewModel.classTimesInitialized = true
 
         this.headerAdapter = EditCourseHeaderAdapter(viewModel.course ?: Course())
@@ -122,10 +124,10 @@ class EditCourseActivity : CalendarOperatorActivity() {
         this.rootRecyclerView.layoutManager = linearLayoutManager
         this.rootRecyclerView.adapter = ConcatAdapter(headerAdapter, adapter)
 
-        //从Application获取Database的引用
+        // 从Application获取Database的引用
         this.courseDatabase = (application as TimeManagerApplication).getCourseDatabase()
 
-        //浮动按钮的监听器
+        // 浮动按钮的监听器
         val floatingActionButton: FloatingActionButton =
             findViewById(R.id.EditCourseActivity_PlusButton)
         floatingActionButton.setOnClickListener {
@@ -139,7 +141,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
             this.adapter.notifyItemInserted(adapter.itemCount - 1)
 
             //滚动到底部
-            RecyclerScrollHelper.scrollToBottom(this.rootRecyclerView)
+            this.rootRecyclerView.scrollToBottom()
         }
         floatingActionButton.setOnLongClickListener {
             viewModel.copyFromPrevious = !viewModel.copyFromPrevious
@@ -163,7 +165,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
         ) {
             if (it) {
                 viewModel.viewModelScope.launch {
-                    viewModel.saveData(this@EditCourseActivity)
+                    viewModel.saveData(this@EditCourseActivity, timeManagerApplication.useCalendar)
                 }
             }
         }
@@ -182,7 +184,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.EditCourseActivity_Done) {
             runIfPermissionGranted(Manifest.permission.WRITE_CALENDAR, {
-                //没有获得权限时。
+                // 没有获得权限时。
                 AlertDialog.Builder(this)
                     .setTitle(R.string.activity_WelcomeActivity_AskPermissionTitle)
                     .setMessage(R.string.activity_EditCourse_AskPermissionText)
@@ -199,11 +201,11 @@ class EditCourseActivity : CalendarOperatorActivity() {
             }) {
                 rootRecyclerView.clearFocus()
                 viewModel.viewModelScope.launch {
-                    viewModel.saveData(this@EditCourseActivity)
+                    viewModel.saveData(this@EditCourseActivity, timeManagerApplication.useCalendar)
                 }
             }
         } else if (item.itemId == android.R.id.home) {
-            //按下左上角返回箭头的逻辑
+            // 按下左上角返回箭头的逻辑
             this.onBackPressed()
         }
         return true
@@ -211,12 +213,12 @@ class EditCourseActivity : CalendarOperatorActivity() {
 
     override fun onBackPressed() {
         AlertDialog.Builder(this).setTitle(R.string.activity_EditCourse_UnsavedAlertTitle)
-            //确定按键
+            // 确定按键
             .setPositiveButton(R.string.common_confirm) { dialog, _ ->
                 dialog?.dismiss()
                 this.finish()
             }
-            //取消按键
+            // 取消按键
             .setNegativeButton(R.string.common_cancel) { dialog, _ ->
                 dialog?.dismiss()
             }.create().show()
@@ -239,13 +241,13 @@ class EditCourseActivity : CalendarOperatorActivity() {
         } else if (!viewModel.classTimes.contains(classTime)) {
             false
         } else {
-            //滚动到被删除项的前一个
+            // 滚动到被删除项的前一个
             val index = viewModel.classTimes.indexOf(classTime)
             if (index > -1) {
                 viewModel.classTimes.remove(classTime)
                 this.adapter.notifyItemRemoved(index)
                 if (classTime.id != null) {
-                    //当id为空时则说明该对象还未插入数据库
+                    // 当id为空时则说明该对象还未插入数据库
                     viewModel.removedClassTimes.add(classTime)
                 }
             }

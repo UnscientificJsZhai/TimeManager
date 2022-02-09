@@ -43,11 +43,17 @@
 
     <PreferenceCategory app:title="@string/preferences_CalendarOption_CategoryTitle">
 
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:title="@string/preferences_CalendarOption_UseCalendar"
+            app:key="useCalendar"
+            app:summary="@string/preferences_CalendarOption_UseCalendar_Summary" />
+
         <Preference
             android:icon="@drawable/outline_update_24"
             android:title="@string/preferences_CalendarOption_UpdateCalendar"
             app:key="createCalendar"
-            app:summary="@string/preferences_CalendarOption_UpdateCalendarSummary" />
+            app:summary="@string/preferences_CalendarOption_UpdateCalendar_Summary" />
 
         <ListPreference
             android:defaultValue="-1409017"

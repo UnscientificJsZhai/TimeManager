@@ -10,6 +10,8 @@ import cn.unscientificjszhai.timemanager.data.tables.CourseTable
 
 /**
  * CourseTable的数据库对象，文件名为database.db。
+ *
+ * @author UnscientificJsZhai
  */
 @Database(
     entities = [CourseTable::class],

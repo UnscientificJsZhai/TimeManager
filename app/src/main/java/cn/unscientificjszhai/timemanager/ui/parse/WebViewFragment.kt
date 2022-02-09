@@ -17,6 +17,7 @@ import kotlinx.coroutines.withContext
  * 显示网页的Fragment。
  *
  * @see ParseCourseActivity
+ * @author UnscientificJsZhai
  */
 class WebViewFragment : Fragment() {
 

@@ -13,6 +13,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 /**
  * 使悬浮按钮在上下滑动界面时显示和隐藏。需要悬浮按钮直接作为[CoordinatorLayout]的子控件。
  * 参数用于在xml中静态声明behavior使用。
+ *
+ * @author UnscientificJsZhai
  */
 @Suppress("UNUSED_PARAMETER")
 class CustomFloatingActionButtonBehavior(context: Context, attributes: AttributeSet) :

@@ -21,6 +21,7 @@ import kotlin.reflect.KProperty
  * @param timeTable 学期上课时间安排表。
  * @param startDate 学期开始日。
  * @param weekStart 教学周开始日。true为周一，false为周日。
+ * @author UnscientificJsZhai
  */
 @Entity(tableName = CourseTable.TABLE_NAME)
 @TypeConverters(TimetableTypeConverter::class)

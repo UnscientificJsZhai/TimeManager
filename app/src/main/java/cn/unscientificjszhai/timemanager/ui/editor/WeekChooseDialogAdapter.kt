@@ -15,6 +15,7 @@ import cn.unscientificjszhai.timemanager.data.course.ClassTime
  * @param weekData 核心数据源。
  * @param items 每个选项的标题，RecyclerView的长度由它决定。
  * @see ClassTime
+ * @author UnscientificJsZhai
  */
 internal class WeekChooseDialogAdapter(
     private val weekData: ClassTime,

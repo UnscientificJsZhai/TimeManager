@@ -10,6 +10,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.reflect.KProperty
 
+/**
+ * [SettingsActivity]的ViewModel。
+ *
+ * @see SettingsActivity
+ * @author UnscientificJsZhai
+ */
 internal class SettingsActivityViewModel(private val dataStore: SettingsDataStore) : ViewModel(),
     SettingsDataStore.Getter {
 
@@ -60,4 +66,16 @@ internal class SettingsActivityViewModel(private val dataStore: SettingsDataStor
         }
     }
 
+    /**
+     * 清空日历项表。
+     *
+     * 会删除所有本应用创建的日历表。
+     *
+     * @param context 执行本操作的Activity上下文。
+     */
+    suspend fun clearCalendar(context: Activity) {
+        withContext(Dispatchers.Default) {
+            CalendarOperator.deleteAllTables(context)
+        }
+    }
 }

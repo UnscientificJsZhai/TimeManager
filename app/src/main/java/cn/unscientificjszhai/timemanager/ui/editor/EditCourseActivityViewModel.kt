@@ -18,6 +18,7 @@ import kotlinx.coroutines.withContext
  * EditCourseActivity的ViewModel。
  *
  * @see EditCourseActivity
+ * @author UnscientificJsZhai
  */
 internal class EditCourseActivityViewModel : ViewModel() {
 
@@ -50,12 +51,13 @@ internal class EditCourseActivityViewModel : ViewModel() {
      * 保存数据的逻辑。调用时应该已经确定获得了日历写入权限。
      *
      * @param context 执行此次操作的Activity。
+     * @param useCalendar 是否使用日历功能。
      */
-    suspend fun saveData(context: EditCourseActivity) {
+    suspend fun saveData(context: EditCourseActivity, useCalendar: Boolean) {
         val application = context.application as TimeManagerApplication
         withContext(Dispatchers.Default) {
             val courseTable = application.courseTable!!
-            //创建可读取数据库对象
+            // 创建可读取数据库对象
             val courseDatabase = application.getCourseDatabase()
             val courseDao = courseDatabase.courseDao()
             val classTimeDao = courseDatabase.classTimeDao()
@@ -96,27 +98,32 @@ internal class EditCourseActivityViewModel : ViewModel() {
                         }
                     }
 
-                    //插入日历表
-                    val courseWithClassTimes =
-                        CourseWithClassTimes(course, this@EditCourseActivityViewModel.classTimes)
-                    EventsOperator.addEvent(context, courseTable, courseWithClassTimes)
+                    if (useCalendar) {
+                        // 插入日历表
+                        val courseWithClassTimes =
+                            CourseWithClassTimes(
+                                course,
+                                this@EditCourseActivityViewModel.classTimes
+                            )
+                        EventsOperator.addEvent(context, courseTable, courseWithClassTimes)
 
-                    //正式开始插入
-                    try {
-                        val courseId = courseDao.insertCourse(course)
-                        for (classTime in this@EditCourseActivityViewModel.classTimes) {
-                            classTime.courseId = courseId
-                            classTimeDao.insertClassTime(classTime)
+                        // 正式开始插入
+                        try {
+                            val courseId = courseDao.insertCourse(course)
+                            for (classTime in this@EditCourseActivityViewModel.classTimes) {
+                                classTime.courseId = courseId
+                                classTimeDao.insertClassTime(classTime)
+                            }
+                        } catch (e: Exception) {
+                            Log.e("EditCourseActivity", "saveData: Can not access Room database")
+                            EventsOperator.deleteEvent(context, courseTable, courseWithClassTimes)
                         }
-                    } catch (e: Exception) {
-                        Log.e("EditCourseActivity", "saveData: Can not access Room database")
-                        EventsOperator.deleteEvent(context, courseTable, courseWithClassTimes)
                     }
 
                     context.finish()
                 }
                 else -> {
-                    //修改现有Course对象时
+                    // 修改现有Course对象时
                     for (classTime: ClassTime in this@EditCourseActivityViewModel.classTimes) {
                         if (!classTime.isLegitimacy(courseTable)) {
                             withContext(Dispatchers.Main) {
@@ -138,10 +145,15 @@ internal class EditCourseActivityViewModel : ViewModel() {
                         classTimeDao.deleteClassTime(removedClassTime)
                     }
 
-                    //修改日历表
-                    val courseWithClassTimes =
-                        CourseWithClassTimes(course, this@EditCourseActivityViewModel.classTimes)
-                    EventsOperator.updateEvent(context, courseTable, courseWithClassTimes)
+                    if (useCalendar) {
+                        //修改日历表
+                        val courseWithClassTimes =
+                            CourseWithClassTimes(
+                                course,
+                                this@EditCourseActivityViewModel.classTimes
+                            )
+                        EventsOperator.updateEvent(context, courseTable, courseWithClassTimes)
+                    }
 
                     //写入数据库的Course表
                     courseDao.updateCourse(course)

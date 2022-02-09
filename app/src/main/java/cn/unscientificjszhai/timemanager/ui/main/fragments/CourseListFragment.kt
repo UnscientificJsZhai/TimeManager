@@ -41,10 +41,12 @@ class CourseListFragment : Fragment() {
     private lateinit var recyclerViewAdapter: CourseAdapter
 
     private lateinit var progressBar: ProgressBar
+    private lateinit var timeManagerApplication: TimeManagerApplication
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        this.timeManagerApplication = requireActivity().application as TimeManagerApplication
     }
 
     override fun onCreateView(
@@ -180,7 +182,8 @@ class CourseListFragment : Fragment() {
                                     viewModel.viewModelScope.launch {
                                         MainActivityViewModel.deleteCourse(
                                             requireActivity(),
-                                            courseWithClassTimes
+                                            courseWithClassTimes,
+                                            timeManagerApplication.useCalendar
                                         )
                                         val snackBar = Snackbar.make(
                                             rootView,
@@ -191,7 +194,8 @@ class CourseListFragment : Fragment() {
                                             viewModel.viewModelScope.launch {
                                                 MainActivityViewModel.undoDeleteCourse(
                                                     requireActivity(),
-                                                    courseWithClassTimes
+                                                    courseWithClassTimes,
+                                                    timeManagerApplication.useCalendar
                                                 )
                                             }
                                         }

@@ -7,6 +7,7 @@ import java.util.*
  *
  * @throws NumberFormatException 传入的字符串不是纯数字时抛出此异常。
  * @throws IndexOutOfBoundsException 传入的字符串长度小于8时抛出此异常。
+ * @author UnscientificJsZhai
  */
 class FormattedTime {
 

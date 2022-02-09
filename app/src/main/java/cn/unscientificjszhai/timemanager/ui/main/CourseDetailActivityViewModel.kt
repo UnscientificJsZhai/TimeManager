@@ -11,6 +11,7 @@ import kotlin.reflect.KProperty
  *
  * @param courseWithClassTimes 从RoomDatabase中获取的特定课程的LiveData对象。
  * @see CourseDetailActivity
+ * @author UnscientificJsZhai
  */
 class CourseDetailActivityViewModel(var courseWithClassTimes: LiveData<CourseWithClassTimes>) :
     ViewModel() {

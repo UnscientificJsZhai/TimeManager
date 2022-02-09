@@ -13,6 +13,7 @@ import kotlin.reflect.KProperty
  * 标注现在所处时间的标记类，也提供一些基于当前时间的实用功能，比如给课程排序。
  *
  * @param courseTable 课程表对象。
+ * @author UnscientificJsZhai
  */
 class CurrentTimeMarker(private var courseTable: CourseTable) {
 

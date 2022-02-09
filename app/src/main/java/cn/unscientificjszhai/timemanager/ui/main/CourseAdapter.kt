@@ -21,6 +21,7 @@ import cn.unscientificjszhai.timemanager.util.with0
  * 供主界面的RecyclerView使用的适配器。
  *
  * @see MainActivity
+ * @author UnscientificJsZhai
  */
 internal class CourseAdapter(private val activity: MainActivity) :
     ListAdapter<CourseWithClassTimes, CourseAdapter.ViewHolder>(CourseDiffCallback) {

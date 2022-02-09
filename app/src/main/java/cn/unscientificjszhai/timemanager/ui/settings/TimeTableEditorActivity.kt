@@ -19,6 +19,8 @@ import kotlinx.coroutines.launch
 
 /**
  * 修改上课时间的Activity。只会修改当前的CourseTable的属性。
+ *
+ * @author UnscientificJsZhai
  */
 class TimeTableEditorActivity : AppCompatActivity() {
 
@@ -69,13 +71,10 @@ class TimeTableEditorActivity : AppCompatActivity() {
         if (item.itemId == android.R.id.home) {
             onBackPressed()
         } else if (item.itemId == R.id.TimeTableEditorActivity_Done) {
-            viewModel.viewModelScope.launch {
-
-            }
             val id = viewModel.courseTable.id
             if (id != null && viewModel.courseTable.timeTable.typeConvert() != this.viewModel.originTimeTable) {
                 viewModel.viewModelScope.launch {
-                    viewModel.save(this@TimeTableEditorActivity)
+                    viewModel.save(this@TimeTableEditorActivity, timeManagerApplication.useCalendar)
                     finish()
                 }
             } else if (viewModel.courseTable.timeTable.typeConvert() != this.viewModel.originTimeTable) {

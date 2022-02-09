@@ -12,6 +12,8 @@ import kotlin.reflect.KProperty
 
 /**
  * 用于给[TimeTableEditorActivity]保存每节课间隔的ViewModel。
+ *
+ * @author UnscientificJsZhai
  */
 internal class TimeTableEditorActivityViewModel : ViewModel() {
 
@@ -33,7 +35,7 @@ internal class TimeTableEditorActivityViewModel : ViewModel() {
      *
      * @param context 执行此操作的Activity上下文。
      */
-    suspend fun save(context: Activity) {
+    suspend fun save(context: Activity, useCalendar: Boolean) {
         val timeManagerApplication = context.application as TimeManagerApplication
 
         withContext(Dispatchers.Default) {
@@ -41,10 +43,12 @@ internal class TimeTableEditorActivityViewModel : ViewModel() {
                 .updateCourseTable(this@TimeTableEditorActivityViewModel.courseTable)
             timeManagerApplication.updateTableID(this@TimeTableEditorActivityViewModel.courseTable.id!!)
 
-            EventsOperator.updateAllEvents(
-                context,
-                this@TimeTableEditorActivityViewModel.courseTable
-            )
+            if (useCalendar) {
+                EventsOperator.updateAllEvents(
+                    context,
+                    this@TimeTableEditorActivityViewModel.courseTable
+                )
+            }
         }
     }
 }

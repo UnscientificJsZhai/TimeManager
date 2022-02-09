@@ -7,6 +7,7 @@ import com.github.unscientificjszhai.unscientificcourseparser.core.factory.Parse
  * ParseCourseActivity的ViewModel。
  *
  * @see ParseCourseActivity
+ * @author UnscientificJsZhai
  */
 internal class ParseCourseActivityViewModel : ViewModel() {
 

@@ -17,7 +17,9 @@ import java.lang.ref.WeakReference
  * @param title 课程名。
  * @param credit 学分。
  * @param remarks 备注。
+ * @param associatedEventsId 日历中中所有和本课程相关的事件的ID。
  * @param specificClassTime 不在数据库中的列。用来在仅显示今天的情况下，判断上课时间。
+ * @author UnscientificJsZhai
  */
 @Entity(tableName = Course.TABLE_NAME)
 @TypeConverters(CourseEventsConverter::class)

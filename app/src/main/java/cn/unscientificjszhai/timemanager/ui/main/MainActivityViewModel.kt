@@ -19,6 +19,7 @@ import cn.unscientificjszhai.timemanager.ui.main.fragments.CourseListFragment
  *
  * @param courseList 从RoomDatabase中获取的全部课程的LiveData对象。
  * @see MainActivity
+ * @author UnscientificJsZhai
  */
 internal class MainActivityViewModel(var courseList: LiveData<List<CourseWithClassTimes>>) :
     ViewModel() {
@@ -33,18 +34,22 @@ internal class MainActivityViewModel(var courseList: LiveData<List<CourseWithCla
          */
         suspend fun deleteCourse(
             context: Activity,
-            courseWithClassTimes: CourseWithClassTimes
+            courseWithClassTimes: CourseWithClassTimes,
+            useCalendar: Boolean
         ) {
             val application = (context.application) as TimeManagerApplication
-            //从日历中删除。
             withContext(Dispatchers.IO) {
-                val courseTable = application.courseTable!!
-                EventsOperator.deleteEvent(
-                    context,
-                    courseTable,
-                    courseWithClassTimes
-                )
-                //从数据库中删除。
+                // 从日历中删除。
+                if (useCalendar) {
+                    val courseTable = application.courseTable!!
+                    EventsOperator.deleteEvent(
+                        context,
+                        courseTable,
+                        courseWithClassTimes
+                    )
+                }
+
+                // 从数据库中删除。
                 val database = application.getCourseDatabase()
                 val courseDao = database.courseDao()
                 val classTimeDao = database.classTimeDao()
@@ -61,15 +66,18 @@ internal class MainActivityViewModel(var courseList: LiveData<List<CourseWithCla
          */
         suspend fun undoDeleteCourse(
             context: Activity,
-            courseWithClassTimes: CourseWithClassTimes
+            courseWithClassTimes: CourseWithClassTimes,
+            useCalendar: Boolean
         ) {
             val application = (context.application) as TimeManagerApplication
             val courseTable by application
             withContext(Dispatchers.IO) {
-                //清理之前的关联日历项，并重新添加回日历
-                courseWithClassTimes.course.associatedEventsId.clear()
-                EventsOperator.addEvent(context, courseTable, courseWithClassTimes)
-                //重新添加回数据库
+                if (useCalendar) {
+                    // 清理之前的关联日历项，并重新添加回日历
+                    courseWithClassTimes.course.associatedEventsId.clear()
+                    EventsOperator.addEvent(context, courseTable, courseWithClassTimes)
+                }
+                // 重新添加回数据库
                 val database = application.getCourseDatabase()
                 val courseDao = database.courseDao()
                 val classTimeDao = database.classTimeDao()

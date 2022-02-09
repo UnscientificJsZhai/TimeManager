@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.CallSuper
@@ -11,11 +12,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import cn.unscientificjszhai.timemanager.R
+import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.util.jumpToSystemPermissionSettings
 
 /**
  * 所有需要用到日历权限的Activity的基类。
  * 这些Activity都会在每次onStart调用时确认自己的权限。
+ *
+ * @author UnscientificJsZhai
  */
 abstract class CalendarOperatorActivity : AppCompatActivity() {
 
@@ -31,6 +35,7 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
 
     }
 
+    @CallSuper
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
         this.requestPermissionCallback = registerPermissionCallback()
@@ -38,21 +43,23 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
 
     @CallSuper
     override fun onStart() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.WRITE_CALENDAR
-            ) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_CALENDAR
-            ) == PackageManager.PERMISSION_DENIED
-        ) {
-            // 申请日历权限
-            this.requestPermissionCallback.launch(
-                arrayOf(
-                    Manifest.permission.WRITE_CALENDAR,
+        if ((application as TimeManagerApplication).useCalendar) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.WRITE_CALENDAR
+                ) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(
+                    this,
                     Manifest.permission.READ_CALENDAR
+                ) == PackageManager.PERMISSION_DENIED
+            ) {
+                // 申请日历权限
+                this.requestPermissionCallback.launch(
+                    arrayOf(
+                        Manifest.permission.WRITE_CALENDAR,
+                        Manifest.permission.READ_CALENDAR
+                    )
                 )
-            )
+            }
         }
         super.onStart()
     }
@@ -65,11 +72,6 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
     private fun registerPermissionCallback() =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
             if (it.values.contains(false)) {
-                // 权限申请不通过
-                fun dined() {
-                    // 用户执意拒绝授权
-                    this.finish()
-                }
                 if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_CALENDAR)) {
                     // 系统仍然提示权限请求
                     AlertDialog.Builder(this)
@@ -115,4 +117,17 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
                 }
             }
         }
+
+    /**
+     * 权限申请不通过。
+     */
+    private fun dined() {
+        // 用户执意拒绝授权
+        (application as TimeManagerApplication).useCalendar = false
+        Toast.makeText(
+            this,
+            R.string.preferences_CalendarOption_UseCalendar_TurnedOff,
+            Toast.LENGTH_LONG
+        ).show()
+    }
 }

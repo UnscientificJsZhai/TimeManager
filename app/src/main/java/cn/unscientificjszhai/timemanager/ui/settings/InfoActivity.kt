@@ -13,6 +13,8 @@ import cn.unscientificjszhai.timemanager.util.setSystemUIAppearance
 
 /**
  * 显示App简介的Activity。
+ *
+ * @author UnscientificJsZhai
  */
 class InfoActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClickListener {
 
@@ -116,8 +118,8 @@ class InfoActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         }
     }
 
-    override fun onLongClick(p0: View?): Boolean {
-        when (p0) {
+    override fun onLongClick(view: View?): Boolean {
+        when (view) {
             mailButton -> {
                 Toast.makeText(this, MAIL_ADDRESS, Toast.LENGTH_LONG).show()
                 val clipboardManager =

@@ -28,6 +28,7 @@ import cn.unscientificjszhai.timemanager.util.getWeekDescriptionString
  * @param classTimes 被编辑的所有ClassTime的ArrayList。
  * @param maxWeeks 最大周数。
  * @see EditCourseActivity
+ * @author UnscientificJsZhai
  */
 internal class EditCourseAdapter(
     private val classTimes: ArrayList<ClassTime>,

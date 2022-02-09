@@ -22,6 +22,8 @@ import kotlin.concurrent.thread
 /**
  * 导出和导入备份的操作类。
  * 使用序列化和反序列化实现功能。
+ *
+ * @author UnscientificJsZhai
  */
 object BackupOperator {
 

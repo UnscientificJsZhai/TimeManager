@@ -12,6 +12,7 @@ import java.io.Serializable
  *
  * @param course Course对象。
  * @param classTimes Course对象关联的ClassTime的列表。
+ * @author UnscientificJsZhai
  */
 data class CourseWithClassTimes(
     @Embedded val course: Course,

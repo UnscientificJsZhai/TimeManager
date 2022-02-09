@@ -26,6 +26,7 @@ import kotlin.reflect.KProperty
  *
  * @see CourseAdapter
  * @see MainActivityViewModel
+ * @author UnscientificJsZhai
  */
 class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 

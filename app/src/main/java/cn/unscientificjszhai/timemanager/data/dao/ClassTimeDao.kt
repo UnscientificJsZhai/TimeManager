@@ -5,6 +5,8 @@ import cn.unscientificjszhai.timemanager.data.course.ClassTime
 
 /**
  * 查询[ClassTime]的Dao接口。
+ *
+ * @author UnscientificJsZhai
  */
 @Dao
 interface ClassTimeDao {

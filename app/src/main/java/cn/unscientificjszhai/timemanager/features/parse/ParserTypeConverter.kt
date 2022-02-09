@@ -11,6 +11,7 @@ import com.github.unscientificjszhai.unscientificcourseparser.core.data.Course a
  * 从课程表导入的课程，使用此类进行数据转换。
  *
  * @param coursesSource 源。
+ * @author UnscientificJsZhai
  */
 class ParserTypeConverter(private val coursesSource: List<SourceCourse>) :
     List<SourceCourse> by coursesSource {

@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 /**
  * 支持ContextMenu的RecyclerView。
+ *
+ * @author UnscientificJsZhai
  */
 class RecyclerViewWithContextMenu : RecyclerView {
 

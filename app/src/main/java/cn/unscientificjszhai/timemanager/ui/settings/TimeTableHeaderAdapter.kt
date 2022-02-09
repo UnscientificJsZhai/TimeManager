@@ -13,6 +13,8 @@ import com.google.android.material.textfield.TextInputEditText
 
 /**
  * 上课时间编辑Activity的头部。
+ *
+ * @author UnscientificJsZhai
  */
 internal class TimeTableHeaderAdapter(private val viewModel: TimeTableEditorActivityViewModel) :
     RecyclerView.Adapter<TimeTableHeaderAdapter.HeaderViewHolder>() {

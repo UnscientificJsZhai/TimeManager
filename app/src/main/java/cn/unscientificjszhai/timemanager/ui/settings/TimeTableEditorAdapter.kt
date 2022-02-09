@@ -11,6 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
 import cn.unscientificjszhai.timemanager.data.tables.FormattedTime
 
+/**
+ * 上课时间表中的RecyclerView的适配器。
+ *
+ * @see TimeTableEditorActivity
+ * @author UnscientificJsZhai
+ */
 internal class TimeTableEditorAdapter(
     private val viewModel: TimeTableEditorActivityViewModel
 ) :
@@ -31,7 +37,7 @@ internal class TimeTableEditorAdapter(
         val courseTable = viewModel.courseTable
 
         view.setOnClickListener {
-            //获取计时方法
+            // 获取计时方法
             val is24HourView = Settings.System.getString(
                 parent.context.contentResolver,
                 Settings.System.TIME_12_24
@@ -44,7 +50,7 @@ internal class TimeTableEditorAdapter(
                     formattedTime.startH = hourOfDay
                     formattedTime.startM = minute
 
-                    //从ViewModel中读取间隔时间
+                    // 从ViewModel中读取间隔时间
                     formattedTime.autoSetEndTime(viewModel.duration)
 
                     courseTable.timeTable[holder.bindingAdapterPosition] = formattedTime.toString()
@@ -58,7 +64,7 @@ internal class TimeTableEditorAdapter(
             timePickerDialog.show()
         }
         view.setOnLongClickListener {
-            //获取计时方法
+            // 获取计时方法
             val is24HourView = Settings.System.getString(
                 parent.context.contentResolver,
                 Settings.System.TIME_12_24

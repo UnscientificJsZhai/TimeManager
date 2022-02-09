@@ -15,6 +15,7 @@ import kotlinx.coroutines.withContext
  * CurrentTableSelectorActivity的ViewModel
  *
  * @see CurrentTableSelectorActivity
+ * @author UnscientificJsZhai
  */
 internal class CurrentTableSelectorActivityViewModel(val tableList: LiveData<List<CourseTable>>) :
     ViewModel() {

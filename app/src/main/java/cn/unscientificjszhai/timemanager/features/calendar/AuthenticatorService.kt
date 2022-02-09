@@ -8,6 +8,7 @@ import android.os.IBinder
  * 空白验证器的绑定服务。当验证器启动时该服务启动。
  *
  * @see EmptyAuthenticator
+ * @author UnscientificJsZhai
  */
 class AuthenticatorService : Service() {
 

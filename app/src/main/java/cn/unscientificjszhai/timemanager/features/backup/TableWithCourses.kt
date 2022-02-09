@@ -12,6 +12,7 @@ import java.io.Serializable
  *
  * @see CourseTable
  * @see CourseWithClassTimes
+ * @author UnscientificJsZhai
  */
 class TableWithCourses(val courseTable: CourseTable, val courses: List<CourseWithClassTimes>) :
     Serializable {
