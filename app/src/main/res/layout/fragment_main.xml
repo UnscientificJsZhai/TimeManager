@@ -24,6 +24,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/MainActivity_EmptyScreenTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_CourseList_EmptyList1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/MainActivity_RootRecyclerView"
+            app:layout_constraintStart_toStartOf="@+id/MainActivity_RootRecyclerView"
+            app:layout_constraintTop_toTopOf="@+id/MainActivity_RootRecyclerView" />
+
         <cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
             android:id="@+id/MainActivity_RootRecyclerView"
             android:layout_width="match_parent"
@@ -33,7 +43,9 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="1.0">
+
+        </cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -51,4 +63,5 @@
         app:layout_anchorGravity="end|bottom"
         app:layout_behavior=".ui.others.CustomFloatingActionButtonBehavior"
         tools:ignore="ContentDescription" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

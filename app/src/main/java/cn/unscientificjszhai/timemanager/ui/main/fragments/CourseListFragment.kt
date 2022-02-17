@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
@@ -23,10 +24,10 @@ import cn.unscientificjszhai.timemanager.ui.main.CourseAdapter
 import cn.unscientificjszhai.timemanager.ui.main.MainActivity
 import cn.unscientificjszhai.timemanager.ui.main.MainActivityViewModel
 import cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
-import cn.unscientificjszhai.timemanager.util.jumpToSystemPermissionSettings
-import cn.unscientificjszhai.timemanager.util.runIfPermissionGranted
 import cn.unscientificjszhai.timemanager.ui.parse.ParseCourseActivity
 import cn.unscientificjszhai.timemanager.ui.settings.SettingsActivity
+import cn.unscientificjszhai.timemanager.util.jumpToSystemPermissionSettings
+import cn.unscientificjszhai.timemanager.util.runIfPermissionGranted
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -42,6 +43,8 @@ class CourseListFragment : Fragment() {
 
     private lateinit var progressBar: ProgressBar
     private lateinit var timeManagerApplication: TimeManagerApplication
+
+    private lateinit var emptyTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +68,8 @@ class CourseListFragment : Fragment() {
         this.recyclerView.adapter = this.recyclerViewAdapter
         registerForContextMenu(recyclerView)
 
+        this.emptyTextView = view.findViewById(R.id.MainActivity_EmptyScreenTextView)
+
         view.findViewById<FloatingActionButton>(R.id.MainActivity_FloatingActionButton)
             .setOnClickListener {
                 EditCourseActivity.startThisActivity(requireContext())
@@ -79,7 +84,6 @@ class CourseListFragment : Fragment() {
 
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-
         val currentTimeMarker by requireActivity() as MainActivity
 
         menu.findItem(R.id.MainActivity_ShowTodayOnly).apply {
@@ -225,11 +229,28 @@ class CourseListFragment : Fragment() {
     fun bindData(courseList: List<CourseWithClassTimes>) {
         val currentTimeMarker by requireActivity() as MainActivity
         progressBar.visibility = View.GONE
-        if (viewModel.showTodayOnly) {
-            recyclerViewAdapter.submitList(currentTimeMarker.getTodayCourseList(courseList))
+        val listToSubmit = if (viewModel.showTodayOnly) {
+            currentTimeMarker.getTodayCourseList(courseList)
         } else {
-            recyclerViewAdapter.submitList(courseList)
+            courseList
         }
+        recyclerViewAdapter.submitList(listToSubmit)
+
+        if (listToSubmit.isEmpty()) {
+            this.emptyTextView.visibility = View.VISIBLE
+            changeText()
+        } else {
+            this.emptyTextView.visibility = View.GONE
+        }
+    }
+
+    /**
+     * 更改中心TextView的文字。
+     */
+    private fun changeText(){
+        val messagesList = context?.resources?.getStringArray(R.array.fragment_CourseList_Empty)
+        this.emptyTextView.text =
+            messagesList?.randomOrNull() ?: getString(R.string.fragment_CourseList_EmptyList1)
     }
 
     override fun onStart() {
@@ -244,6 +265,8 @@ class CourseListFragment : Fragment() {
         this.viewModel.courseList.observe(viewLifecycleOwner) {
             bindData(it)
         }
+
+        changeText()
     }
 
     override fun onPause() {

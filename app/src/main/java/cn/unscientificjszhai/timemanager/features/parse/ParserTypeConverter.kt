@@ -18,6 +18,13 @@ class ParserTypeConverter(private val coursesSource: List<SourceCourse>) :
 
     companion object {
 
+        /**
+         * 从Json字符串读取并转换成课程信息。
+         *
+         * @param jsonString Json字符串。
+         * @return 生成的课程信息转换对象。
+         */
+        @JvmStatic
         fun fromJson(jsonString: String): ParserTypeConverter {
             return ParserTypeConverter(CoursesJson.jsonToCourse(jsonString))
         }

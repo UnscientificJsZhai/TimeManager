@@ -131,7 +131,7 @@ class CourseListFragment : Fragment() {
                 val errorList =
                     viewModel.save(requireActivity().application as TimeManagerApplication)
                 dialog.postDismiss()
-                //显示确认按钮
+                // 显示确认按钮
                 if (errorList?.isNotEmpty() == true || errorList == null) {
                     AlertDialog.Builder(requireContext()).apply {
                         if (errorList == null) {
@@ -154,7 +154,7 @@ class CourseListFragment : Fragment() {
                         }
                     }.show()
                 } else {
-                    //完全正常导入
+                    // 完全正常导入
                     requireActivity().finish()
                 }
             }

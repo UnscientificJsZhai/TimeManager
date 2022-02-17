@@ -16,9 +16,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
  *
  * @author UnscientificJsZhai
  */
-@Suppress("UNUSED_PARAMETER")
 class CustomFloatingActionButtonBehavior(context: Context, attributes: AttributeSet) :
-    FloatingActionButton.Behavior() {
+    FloatingActionButton.Behavior(context, attributes) {
 
     /**
      * 动画实现对象。在这里实现动画效果。

@@ -71,6 +71,14 @@
     <string name="activity_Main_GuideToast">点击加号添加课程\n点击右上角查看更多</string>
     <string name="activity_Main_DeletedMessage">已删除</string>
 
+    <string name="fragment_CourseList_EmptyList1">本来无一物，何处染尘埃</string>
+    <string name="fragment_CourseList_EmptyList2">人生难得是清闲</string>
+    <string name="fragment_CourseList_EmptyList3">生命在于运动</string>
+    <string name="fragment_CourseList_EmptyList4">你这个年龄是怎么睡得着觉的</string>
+    <string name="fragment_CourseList_EmptyList5">作业写完了吗</string>
+    <string name="fragment_CourseList_EmptyList6">开门，反卷队查水表</string>
+    <string name="fragment_CourseList_EmptyList7">人闲桂花落，夜静春山空</string>
+
     <!-- 包ui.editor使用 -->
     <string name="activity_EditCourse_Label">编辑</string>
     <string name="activity_EditCourse_CourseTitle">课程名</string>

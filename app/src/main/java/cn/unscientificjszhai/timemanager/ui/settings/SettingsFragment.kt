@@ -304,7 +304,7 @@ internal class SettingsFragment : PreferenceFragmentCompat(),
         this.startDatePreference?.summaryProvider = this
     }
 
-    override fun provideSummary(preference: Preference?): String {
+    override fun provideSummary(preference: Preference): String {
         val dataStore by (requireActivity() as SettingsActivity).viewModel
         return when (preference) {
             this.currentTablePreference -> dataStore.nowCourseTable.name

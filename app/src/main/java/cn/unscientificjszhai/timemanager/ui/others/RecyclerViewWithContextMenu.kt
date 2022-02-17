@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 class RecyclerViewWithContextMenu : RecyclerView {
 
     /**
-     * 用于传递位置数据的MenuInfo
+     * 用于传递位置数据的MenuInfo。
      */
     class PositionMenuInfo(var position: Int) : ContextMenu.ContextMenuInfo
 

@@ -87,4 +87,14 @@
         <item>table</item>
         <item>today</item>
     </string-array>
+
+    <string-array name="fragment_CourseList_Empty">
+        <item>@string/fragment_CourseList_EmptyList1</item>
+        <item>@string/fragment_CourseList_EmptyList2</item>
+        <item>@string/fragment_CourseList_EmptyList3</item>
+        <item>@string/fragment_CourseList_EmptyList4</item>
+        <item>@string/fragment_CourseList_EmptyList5</item>
+        <item>@string/fragment_CourseList_EmptyList6</item>
+        <item>@string/fragment_CourseList_EmptyList7</item>
+    </string-array>
 </resources>

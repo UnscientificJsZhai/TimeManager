@@ -35,7 +35,7 @@ internal class SettingsActivityViewModel(private val dataStore: SettingsDataStor
      * @param context 执行本操作的Activity上下文。
      */
     suspend fun updateCalendar(context: Activity) {
-        //删除全部日历并重新创建。
+        // 删除全部日历并重新创建。
         withContext(Dispatchers.Default) {
             val courseTable = dataStore.nowCourseTable
             CalendarOperator.deleteCalendarTable(context, courseTable)
