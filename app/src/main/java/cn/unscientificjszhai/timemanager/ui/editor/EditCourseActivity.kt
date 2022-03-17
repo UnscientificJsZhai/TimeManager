@@ -2,7 +2,6 @@ package cn.unscientificjszhai.timemanager.ui.editor
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -22,7 +21,7 @@ import cn.unscientificjszhai.timemanager.data.course.Course
 import cn.unscientificjszhai.timemanager.data.course.CourseWithClassTimes
 import cn.unscientificjszhai.timemanager.data.database.CourseDatabase
 import cn.unscientificjszhai.timemanager.ui.main.CourseDetailActivity
-import cn.unscientificjszhai.timemanager.ui.others.*
+import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
 import cn.unscientificjszhai.timemanager.util.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
@@ -43,8 +42,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
          */
         @JvmStatic
         fun startThisActivity(context: Context) {
-            val intent = Intent(context, EditCourseActivity::class.java)
-            context.startActivity(intent)
+            startActivity<EditCourseActivity>(context)
         }
 
         /**
@@ -60,9 +58,9 @@ class EditCourseActivity : CalendarOperatorActivity() {
             context: Context,
             courseWithClassTimes: CourseWithClassTimes
         ) {
-            val intent = Intent(context, EditCourseActivity::class.java)
-            intent.putExtra(CourseDetailActivity.INTENT_EXTRA_COURSE, courseWithClassTimes)
-            context.startActivity(intent)
+            startActivity<EditCourseActivity>(context) {
+                putExtra(CourseDetailActivity.INTENT_EXTRA_COURSE, courseWithClassTimes)
+            }
         }
     }
 

@@ -78,7 +78,7 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
                         .setTitle(R.string.activity_WelcomeActivity_AskPermissionTitle)
                         .setMessage(R.string.activity_WelcomeActivity_AskPermissionText)
                         .setNegativeButton(R.string.common_cancel) { dialog, _ ->
-                            dined()
+                            showDeniedToast()
                             dialog.dismiss()
                         }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
                             if (ContextCompat.checkSelfPermission(
@@ -108,7 +108,7 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
                                     + getString(R.string.activity_WelcomeActivity_SettingsPermissionText)
                         )
                         .setNegativeButton(R.string.common_cancel) { dialog, _ ->
-                            dined()
+                            showDeniedToast()
                             dialog.dismiss()
                         }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
                             jumpToSystemPermissionSettings()
@@ -121,7 +121,7 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
     /**
      * 权限申请不通过。
      */
-    private fun dined() {
+    private fun showDeniedToast() {
         // 用户执意拒绝授权
         (application as TimeManagerApplication).useCalendar = false
         Toast.makeText(

@@ -56,7 +56,7 @@ internal class CourseAdapter(private val activity: MainActivity) :
         ) = false
     }
 
-    inner class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
+    class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
         val titleText: TextView = rootView.findViewById(R.id.CourseWidget_TitleText)
         val informationText: TextView = rootView.findViewById(R.id.CourseWidget_Information)
     }

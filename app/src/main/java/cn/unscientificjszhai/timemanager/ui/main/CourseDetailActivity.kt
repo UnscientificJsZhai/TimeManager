@@ -25,7 +25,6 @@ import cn.unscientificjszhai.timemanager.util.jumpToSystemPermissionSettings
 import cn.unscientificjszhai.timemanager.util.runIfPermissionGranted
 import cn.unscientificjszhai.timemanager.util.setSystemUIAppearance
 import kotlinx.coroutines.launch
-import java.util.*
 
 /**
  * Dialog形式的Activity。用于在[MainActivity]中点击一个项目的时候显示它的详情。
@@ -212,6 +211,7 @@ class CourseDetailActivity : AppCompatActivity() {
         finish()
     }
 
+    // 以下为文字格式化方法。
 
     /**
      * 生成第一行描述性文字。

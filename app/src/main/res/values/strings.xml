@@ -71,6 +71,8 @@
     <string name="activity_Main_GuideToast">点击加号添加课程\n点击右上角查看更多</string>
     <string name="activity_Main_DeletedMessage">已删除</string>
 
+    <string name="activity_Main_AddButtonDescription">添加课程</string>
+
     <string name="fragment_CourseList_EmptyList1">本来无一物，何处染尘埃</string>
     <string name="fragment_CourseList_EmptyList2">人生难得是清闲</string>
     <string name="fragment_CourseList_EmptyList3">生命在于运动</string>
@@ -103,6 +105,13 @@
     <string name="view_ClassTimeEdit_WeekDescription">第%s周</string>
     <string name='view_ClassTimeEdit_WeekDescriptionWhenEmpty'>选择上课周数</string>
     <string name="view_ClassTimeEdit_WeekChooseDialogHeader">长按可以向前连续选中直到最近一个已选中项</string>
+
+    <string name="view_ClassTimeEdit_ContentDescription">时间段，第%d个，共%d个</string>
+    <string name="view_ClassTimeEdit_DeleteButtonDescription">删除按钮，删除这个时间段</string>
+    <string name="view_ClassTimeEdit_SeekBarDescription">周数选择条，当前选中%s</string>
+    <string name="view_ClassTimeEdit_FromEditTextDescription">从第%d节课开始</string>
+    <string name="view_ClassTimeEdit_ToEditTextDescription">到第%d节课为止</string>
+    <string name="activity_EditCourse_AddButtonDescription">添加上课时间段</string>
 
     <string name="data_Week0">周日</string>
     <string name="data_Week1">周一</string>
@@ -164,6 +173,7 @@
     <string name="activity_CurrentTableSelector_ContextMenu_Delete">删除</string>
     <string name="activity_CurrentTableSelector_PermissionDeniedDialogMessage">没有授予日历写入权限，无法进行更改。</string>
     <string name="activity_CurrentTableSelector_CopyTimeTableCheckBox">从当前课程表复制上课时间</string>
+    <string name="activity_CurrentTableSelector_SelectedDescription">当前已经选中</string>
     <string name="activity_TimeTableEditor_RecyclerItemTitle">第%d节课</string>
     <string name="activity_TimeTableEditor_HeaderItemTitle">每节课时长%d分钟</string>
     <string name="activity_TimeTableEditor_HeaderSubtitle">长按可以手动设置下课时间</string>

@@ -16,8 +16,8 @@ import cn.unscientificjszhai.timemanager.TimeManagerApplication
 import cn.unscientificjszhai.timemanager.data.CurrentTimeMarker
 import cn.unscientificjszhai.timemanager.ui.WelcomeActivity
 import cn.unscientificjszhai.timemanager.ui.main.fragments.CourseListFragment
-import cn.unscientificjszhai.timemanager.ui.others.*
 import cn.unscientificjszhai.timemanager.util.setSystemUIAppearance
+import cn.unscientificjszhai.timemanager.util.startActivity
 import java.util.*
 import kotlin.reflect.KProperty
 
@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
         // 与初次启动判定有关
         if (this.timeManagerApplication.nowTableID < 0) {
             Toast.makeText(this, R.string.activity_Main_NoTableFound, Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, WelcomeActivity::class.java))
+            startActivity<WelcomeActivity>(this)
             finish()
             return
         }

@@ -2,9 +2,9 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/MainActivity_RootView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/MainActivity_RootView">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/MainActivity_RecyclerLayout"
@@ -56,6 +56,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         android:clickable="true"
+        android:contentDescription="@string/activity_Main_AddButtonDescription"
         android:src="@drawable/outline_add_24"
         android:theme="@style/Theme.TimeManager.Widget.FloatingButton"
         android:tint="@color/white"

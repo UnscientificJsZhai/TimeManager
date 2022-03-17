@@ -33,8 +33,7 @@ import cn.unscientificjszhai.timemanager.util.getWeekDescriptionString
 internal class EditCourseAdapter(
     private val classTimes: ArrayList<ClassTime>,
     private val maxWeeks: Int
-) :
-    RecyclerView.Adapter<EditCourseAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<EditCourseAdapter.ViewHolder>() {
 
     companion object {
 
@@ -45,7 +44,8 @@ internal class EditCourseAdapter(
         const val VIBRATION_STRENGTH = 5
     }
 
-    inner class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
+    inner class ViewHolder(val rootView: View) : RecyclerView.ViewHolder(rootView) {
+
         lateinit var classTime: ClassTime
 
         val weekChooseText: TextView = rootView.findViewById(R.id.ClassTimeEditView_WeekText)
@@ -66,7 +66,7 @@ internal class EditCourseAdapter(
             .inflate(R.layout.recycler_class_time_editor, parent, false)
         val holder = ViewHolder(view)
 
-        //初始化横向选择条
+        // 初始化横向选择条
         holder.apply {
             daySeekBar.setOnSeekBarChangeListener(
                 object : SeekBar.OnSeekBarChangeListener {
@@ -84,6 +84,13 @@ internal class EditCourseAdapter(
                             5 -> context.getString(R.string.data_Week5)
                             6 -> context.getString(R.string.data_Week6)
                             else -> context.getString(R.string.data_Week0)
+                        }
+
+                        // 更新控件描述
+                        seekBar?.run {
+                            contentDescription =
+                                this.context.getString(R.string.view_ClassTimeEdit_SeekBarDescription)
+                                    .format(dayText.text)
                         }
 
                         //创建振动效果
@@ -124,14 +131,14 @@ internal class EditCourseAdapter(
             )
         }
 
-        //初始化删除按钮
+        // 初始化删除按钮
         view.findViewById<ImageButton>(R.id.ClassTimeEditView_Cancel).setOnClickListener {
             if (context is EditCourseActivity) {
                 context.removeClassTime(holder.classTime)
             }
         }
 
-        //设置启动周数选择器的方法。
+        // 设置启动周数选择器的方法。
         holder.weekChooseText.setOnClickListener {
             val length = this.maxWeeks
             Log.d("WeekText", "tapped")
@@ -146,7 +153,7 @@ internal class EditCourseAdapter(
             val builder =
                 AlertDialog.Builder(context).setIcon(R.drawable.baseline_calendar_view_month_20)
                     .setTitle(R.string.view_ClassTimeEdit_WeekChooseDialogTitle)
-            //初始化Dialog中的RecyclerView
+            // 初始化Dialog中的RecyclerView
             val recyclerView = RecyclerView(builder.context)
             recyclerView.layoutManager = LinearLayoutManager(builder.context)
             recyclerView.adapter = ConcatAdapter(
@@ -156,7 +163,7 @@ internal class EditCourseAdapter(
 
             builder.setView(recyclerView)
 
-            //定义Dialog的2个按键
+            // 定义Dialog的2个按键
             builder.setPositiveButton(
                 R.string.common_confirm
             ) { dialog, _ ->
@@ -174,7 +181,7 @@ internal class EditCourseAdapter(
             builder.create().show()
         }
 
-        //初始化所有EditText
+        // 初始化所有EditText
         holder.apply {
             startEditText.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
@@ -244,6 +251,23 @@ internal class EditCourseAdapter(
 
         holder.teacherEditText.setText(classTime.teacherName)
         holder.locationEditText.setText(classTime.location)
+
+        holder.rootView.run {
+            contentDescription = context.getString(R.string.view_ClassTimeEdit_ContentDescription)
+                .format(position + 1, itemCount)
+        }
+
+        holder.startEditText.run {
+            contentDescription =
+                context.getString(R.string.view_ClassTimeEdit_FromEditTextDescription)
+                    .format(holder.classTime.start)
+        }
+
+        holder.endEditText.run {
+            contentDescription =
+                context.getString(R.string.view_ClassTimeEdit_ToEditTextDescription)
+                    .format(holder.classTime.end)
+        }
     }
 
     override fun getItemCount() = classTimes.size

@@ -28,6 +28,7 @@ import cn.unscientificjszhai.timemanager.ui.parse.ParseCourseActivity
 import cn.unscientificjszhai.timemanager.ui.settings.SettingsActivity
 import cn.unscientificjszhai.timemanager.util.jumpToSystemPermissionSettings
 import cn.unscientificjszhai.timemanager.util.runIfPermissionGranted
+import cn.unscientificjszhai.timemanager.util.startActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -95,10 +96,7 @@ class CourseListFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.MainActivity_Settings -> {
-                val intent = Intent(requireActivity(), SettingsActivity::class.java)
-                startActivity(intent)
-            }
+            R.id.MainActivity_Settings -> startActivity<SettingsActivity>(requireActivity())
             R.id.MainActivity_ShowTodayOnly -> {
                 viewModel.showTodayOnly = !item.isChecked
                 bindData(viewModel.courseList.value ?: ArrayList())
@@ -112,9 +110,7 @@ class CourseListFragment : Fragment() {
                 }
                 startActivity(startCalendarIntent)
             }
-            R.id.MainActivity_Parse -> {
-                startActivity(Intent(requireActivity(), ParseCourseActivity::class.java))
-            }
+            R.id.MainActivity_Parse -> startActivity<ParseCourseActivity>(requireActivity())
         }
         return super.onOptionsItemSelected(item)
     }
@@ -247,7 +243,7 @@ class CourseListFragment : Fragment() {
     /**
      * 更改中心TextView的文字。
      */
-    private fun changeText(){
+    private fun changeText() {
         val messagesList = context?.resources?.getStringArray(R.array.fragment_CourseList_Empty)
         this.emptyTextView.text =
             messagesList?.randomOrNull() ?: getString(R.string.fragment_CourseList_EmptyList1)

@@ -24,6 +24,7 @@ import cn.unscientificjszhai.timemanager.ui.others.CalendarOperatorActivity
 import cn.unscientificjszhai.timemanager.util.jumpToSystemPermissionSettings
 import cn.unscientificjszhai.timemanager.util.runIfPermissionGranted
 import cn.unscientificjszhai.timemanager.util.setSystemUIAppearance
+import cn.unscientificjszhai.timemanager.util.startActivity
 import kotlin.concurrent.thread
 
 /**
@@ -52,8 +53,7 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
         this.timeManagerApplication = application as TimeManagerApplication
 
         if (this.timeManagerApplication.nowTableID != TimeManagerApplication.DEFAULT_DATABASE_OBJECT_ID) {
-            val mainActivityIntent = Intent(this, MainActivity::class.java)
-            startActivity(mainActivityIntent)
+            startActivity<MainActivity>(this)
             finish()
         } else {
             // 如果当前所在表的ID为-1，就是没有初始化
@@ -86,8 +86,7 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
                         timeManagerApplication.updateTableID(tableID)
                         CalendarOperator.deleteAllTables(this, calendarID)
                         runOnUiThread {
-                            val mainActivityIntent = Intent(this, MainActivity::class.java)
-                            startActivity(mainActivityIntent)
+                            startActivity<MainActivity>(this)
                             finish()
                         }
                     }
@@ -208,8 +207,7 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
             timeManagerApplication.updateTableID(id)
 
             runOnUiThread {
-                val mainActivityIntent = Intent(this, MainActivity::class.java)
-                startActivity(mainActivityIntent)
+                startActivity<MainActivity>(this)
                 finish()
             }
         }

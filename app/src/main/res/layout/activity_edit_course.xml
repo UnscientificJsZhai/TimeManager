@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,13 +11,13 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         android:clickable="true"
+        android:contentDescription="@string/activity_EditCourse_AddButtonDescription"
         android:src="@drawable/outline_add_24"
         android:theme="@style/Theme.TimeManager.Widget.FloatingButton"
         android:tint="@color/white"
         app:layout_anchor="@+id/EditCourseActivity_RecyclerView"
         app:layout_anchorGravity="end|bottom"
-        app:layout_behavior=".ui.others.CustomFloatingActionButtonBehavior"
-        tools:ignore="ContentDescription" />
+        app:layout_behavior=".ui.others.CustomFloatingActionButtonBehavior" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/EditCourseActivity_RecyclerView"

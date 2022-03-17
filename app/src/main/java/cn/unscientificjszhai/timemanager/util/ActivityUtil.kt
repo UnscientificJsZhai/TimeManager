@@ -13,9 +13,6 @@ import android.util.Log
 import android.view.View
 import android.view.WindowInsetsController
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
-import androidx.recyclerview.widget.RecyclerView
 import cn.unscientificjszhai.timemanager.R
 
 /**
@@ -85,11 +82,38 @@ fun Activity.jumpToSystemPermissionSettings() {
             data = Uri.fromParts("package", packageName, null)
         })
     } catch (e: Exception) {
-        Log.e("WelcomeActivity", "onRequestPermissionsResult: \n$e")
+        Log.e("ActivityUtil", "jumpToSystemPermissionSettings: \n$e")
         Toast.makeText(
             this,
             R.string.activity_WelcomeActivity_FailToJumpToSettings,
             Toast.LENGTH_SHORT
         ).show()
     }
+}
+
+/**
+ * 启动指定的Activity。
+ *
+ * @param T 要启动的Activity
+ * @param context 启动这个Activity的上下文。
+ */
+inline fun <reified T : Activity> startActivity(context: Context) {
+    val intent = Intent(context, T::class.java)
+    context.startActivity(intent)
+}
+
+/**
+ * 启动指定的Activity。
+ *
+ * @param T 要启动的Activity
+ * @param context 启动这个Activity的上下文。
+ * @param doWithIntent 启动Activity前对Intent的操作，包括添加Flag等。
+ */
+inline fun <reified T : Activity> startActivity(
+    context: Context,
+    crossinline doWithIntent: Intent.() -> Unit
+) {
+    val intent = Intent(context, T::class.java)
+    doWithIntent(intent)
+    context.startActivity(intent)
 }

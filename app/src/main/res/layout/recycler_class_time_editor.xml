@@ -34,10 +34,10 @@
             android:layout_height="36dp"
             android:adjustViewBounds="false"
             android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/view_ClassTimeEdit_DeleteButtonDescription"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/baseline_remove_24"
-            tools:ignore="ContentDescription" />
+            app:srcCompat="@drawable/baseline_remove_24" />
 
         <ImageView
             android:id="@+id/WeekImage"
@@ -125,7 +125,7 @@
             app:layout_constraintStart_toEndOf="@+id/DayImage"
             app:layout_constraintTop_toTopOf="@+id/DayImage" />
 
-        <EditText
+        <cn.unscientificjszhai.timemanager.ui.others.ContentDescriptionEditText
             android:id="@+id/ClassTimeEditView_FromEditText"
             android:layout_width="36dp"
             android:layout_height="wrap_content"
@@ -147,7 +147,7 @@
             app:layout_constraintStart_toEndOf="@+id/ClassTimeEditView_FromEditText"
             app:layout_constraintTop_toTopOf="@+id/DayImage" />
 
-        <EditText
+        <cn.unscientificjszhai.timemanager.ui.others.ContentDescriptionEditText
             android:id="@+id/ClassTimeEditView_ToEditText"
             android:layout_width="36dp"
             android:layout_height="wrap_content"

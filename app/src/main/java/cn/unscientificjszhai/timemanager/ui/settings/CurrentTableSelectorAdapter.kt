@@ -34,7 +34,7 @@ internal class CurrentTableSelectorAdapter(
             false
     }
 
-    inner class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
+    inner class ViewHolder(val rootView: View) : RecyclerView.ViewHolder(rootView) {
         val textView: TextView = rootView.findViewById(R.id.CurrentTableSelector_TitleText)
         val mark: ImageView = rootView.findViewById(R.id.CurrentTableSelector_SelectedMark)
     }
@@ -57,8 +57,13 @@ internal class CurrentTableSelectorAdapter(
         val courseTable = getItem(position)
         holder.textView.text = courseTable.name
         holder.mark.visibility = if (courseTable.id == nowTableId) {
+            holder.rootView.run {
+                contentDescription =
+                    courseTable.name + context.getString(R.string.activity_CurrentTableSelector_SelectedDescription)
+            }
             View.VISIBLE
         } else {
+            holder.rootView.contentDescription = courseTable.name
             View.GONE
         }
     }
