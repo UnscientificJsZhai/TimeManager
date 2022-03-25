@@ -1,4 +1,7 @@
-# TimeManager
+# ~~TimeManager~~
+
+由于包名变更，本项目已经废弃。新项目参见[不科学的课程表](https://github.com/UnscientificJsZhai/UnscientficClassScheduler)。
+
 ## 简介：
 使用系统日历来帮你安排课程。
 
@@ -14,9 +17,6 @@
 
 横屏适配、深色模式适配。采用多个Jetpack库，尽可能提供优质的使用体验，未来还将第一时间针对新版本Android系统进行优化。
 
-其他功能陆续开发中，敬请期待。
-
 ## 关联项目：
 
-课程表解析：
-[不科学的课程表解析](https://github.com/UnscientificJsZhai/UnscientificCourseParser)
+课程表解析：[不科学的课程表解析](https://github.com/UnscientificJsZhai/UnscientificCourseParser)
